@@ -1,0 +1,30 @@
+<div class='progress'>
+  <div class='progress__bar'
+       [class]='"progress__bar_" + typeProps'
+  > <span *ngIf='valueDirectionTop'
+          class='progress__count_small'
+          [ngStyle]="{
+        'color': progressBarColorProps
+      }"
+  >
+      {{text }}
+    </span>
+    <div class="progress__item">
+      <div
+        class='progress__value'
+        [ngStyle]="{
+        width: getProgressValue(),
+        'background-color': progressBarColorProps
+      }"
+        [class]='"progress__value_" + typeProps'></div>
+    </div>
+    <span
+      *ngIf='!valueDirectionTop'
+      [ngStyle]="{'color': (valueProps && valueProps < 80) ? progressBarColorProps: '#ffffff'}"
+      class='progress__count'
+
+    >
+      {{ getProgressValue() }}
+    </span>
+  </div>
+</div>

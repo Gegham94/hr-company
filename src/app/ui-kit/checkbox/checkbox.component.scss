@@ -1,0 +1,38 @@
+@import 'src/assets/variables/variables';
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+
+  &__custom-input {
+    background: $white;
+    border: 1px solid #6F7985;
+    box-sizing: border-box;
+    border-radius: 1px;
+    color: $green;
+    min-width: 15px;
+    min-height: 15px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      margin-left: 1px;
+    }
+  }
+
+  &__input {
+    display: none;
+
+    &:checked ~ .checkbox__custom-input:after {
+      display: block;
+    }
+  }
+
+  &__label-text {
+    font-size: 11px;
+  }
+}

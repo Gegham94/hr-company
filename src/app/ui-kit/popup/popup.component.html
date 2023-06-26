@@ -1,0 +1,136 @@
+<ng-container>
+  <div
+    class='overlay'
+    [class.overlay_show]='isAcceptOrDeclineOpen'
+  ></div>
+  <div
+    class='popup'
+    [class.popup_open]='isAcceptOrDeclineOpen'
+  >
+    <svg (click)='closeModal()' width='16' height='16' viewBox='0 0 16 16' fill='none'
+         xmlns='http://www.w3.org/2000/svg'>
+      <path fill-rule='evenodd' clip-rule='evenodd'
+            d='M10.2623 8.0002L15.5308 2.73153C16.1564 2.10595 16.1564 1.09477 15.5308 0.469188C14.9053 -0.156396 13.8941 -0.156396 13.2685 0.469188L8 5.73786L2.73146 0.469188C2.10589 -0.156396 1.09475 -0.156396 0.469177 0.469188C-0.156392 1.09477 -0.156392 2.10595 0.469177 2.73153L5.73771 8.0002L0.469177 13.2689C-0.156392 13.8945 -0.156392 14.9056 0.469177 15.5312C0.781161 15.8432 1.19074 16 1.60032 16C2.0099 16 2.41948 15.8432 2.73146 15.5312L8 10.2625L13.2685 15.5312C13.5805 15.8432 13.9901 16 14.3997 16C14.8093 16 15.2188 15.8432 15.5308 15.5312C16.1564 14.9056 16.1564 13.8945 15.5308 13.2689L10.2623 8.0002Z'
+            fill='#6F7985'/>
+    </svg>
+
+    <div class="popup_content">
+      <div *ngIf='popupName === AcceptOrDeclineEnum.ACCEPTED'>
+        <div class="popup_content--accept custom-scrollbar" [formGroup]="offerForm">
+          <span class="popup_content--info">Все поля обязательны для заполнения</span>
+          <p class="popup_content--mb_30px">
+            Уважаемый <input formControlName="field_1"
+                             [class.input_invalid]="offerForm.controls['field_1'].touched ? offerForm.controls['field_1'].invalid : undefined"
+                             [class.input_valid]="offerForm.controls['field_1'].touched ? offerForm.controls['field_1'].valid : undefined"
+          > <span class="gray_text">(имя кандидата)</span>,
+          </p>
+          <p class="popup_content--mb_30px">
+            Мы все были очень рады встретиться и узнать вас за последние несколько дней.
+            Мы были впечатлены вашим опытом и хотели бы официально предложить вам должность
+            <input formControlName="field_2"
+                   [class.input_invalid]="offerForm.controls['field_2'].touched ? offerForm.controls['field_2'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_2'].touched ? offerForm.controls['field_2'].valid : undefined"
+            > <span class="gray_text">(должность)</span>.
+            Это <input formControlName="field_3"
+                       [class.input_invalid]="offerForm.controls['field_3'].touched ? offerForm.controls['field_3'].invalid : undefined"
+                       [class.input_valid]="offerForm.controls['field_3'].touched ? offerForm.controls['field_3'].valid : undefined"
+          >
+            <span class="gray_text">(полная/частичная)</span>
+            должность указать рабочие дни и часы. Вы будете подчиняться начальнику отдела
+            <input formControlName="field_4"
+                   [class.input_invalid]="offerForm.controls['field_4'].touched ? offerForm.controls['field_4'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_4'].touched ? offerForm.controls['field_4'].valid : undefined"
+            > <span class="gray_text">(название отдела)</span>.
+          </p>
+          <p class="popup_content--mb_30px">
+            Мы предложим вам годовую брутто-зарплату в размере
+            <input formControlName="field_5"
+                   [class.input_invalid]="offerForm.controls['field_5'].touched ? offerForm.controls['field_5'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_5'].touched ? offerForm.controls['field_5'].valid : undefined"
+            ><span class="gray_text">($X)</span>.
+            и <input formControlName="field_6"
+                     [class.input_invalid]="offerForm.controls['field_6'].touched ? offerForm.controls['field_6'].invalid : undefined"
+                     [class.input_valid]="offerForm.controls['field_6'].touched ? offerForm.controls['field_6'].valid : undefined"
+          > <span class="gray_text">(укажите бонусные программы, если применимо)</span>.
+            У вас также будет <input formControlName="field_7"
+                                     [class.input_invalid]="offerForm.controls['field_7'].touched ? offerForm.controls['field_7'].invalid : undefined"
+                                     [class.input_valid]="offerForm.controls['field_7'].touched ? offerForm.controls['field_7'].valid : undefined"
+          >
+            <span class="gray_text"> указать льготы в соответствии с политикой компании, такие как план медицинского обслуживания и страхования,
+              корпоративная мобильная связь или командировочные расходы</span> и
+            <input formControlName="field_8"
+                   [class.input_invalid]="offerForm.controls['field_8'].touched ? offerForm.controls['field_8'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_8'].touched ? offerForm.controls['field_8'].valid : undefined"
+            > <span class="gray_text">(X дней)</span>
+            оплачиваемого отпуска в году.
+          </p>
+          <p class="popup_content--mb_30px">
+            Ожидаемая дата начала:
+            <input formControlName="field_9"
+                   [class.input_invalid]="offerForm.controls['field_9'].touched ? offerForm.controls['field_9'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_9'].touched ? offerForm.controls['field_9'].valid : undefined"
+            > <span class="gray_text">(дата)</span>.
+          </p>
+          <p class="popup_content--mb_30px">
+            Мы хотели бы получить ваш ответ до
+            <input formControlName="field_10"
+                   [class.input_invalid]="offerForm.controls['field_10'].touched ? offerForm.controls['field_10'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_10'].touched ? offerForm.controls['field_10'].valid : undefined"
+            > <span class="gray_text">(дата)</span>.
+            А пока, если у вас возникнут какие-либо вопросы, не стесняйтесь обращаться ко мне или
+            <input formControlName="field_11"
+                   [class.input_invalid]="offerForm.controls['field_11'].touched ? offerForm.controls['field_11'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_11'].touched ? offerForm.controls['field_11'].valid : undefined">
+            <span class="gray_text">(имя_менеджера)</span>
+            по электронной почте или по телефону
+            <input formControlName="field_12"
+                   [class.input_invalid]="offerForm.controls['field_12'].touched ? offerForm.controls['field_12'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_12'].touched ? offerForm.controls['field_12'].valid : undefined">
+            <span class="gray_text"> укажите контактную информацию</span>.
+          </p>
+
+          <p class="popup_content--mb_30px">
+            Мы все с нетерпением ждем вас в нашей команде.
+          </p>
+
+          <p class="popup_content--mb_30px">
+            С наилучшими пожеланиями,
+            <br>
+            <input formControlName="field_13"
+                   [class.input_invalid]="offerForm.controls['field_13'].touched ? offerForm.controls['field_13'].invalid : undefined"
+                   [class.input_valid]="offerForm.controls['field_13'].touched ? offerForm.controls['field_13'].valid : undefined">
+            <span class="gray_text">(название компании)</span>.
+          </p>
+
+        </div>
+        <div class='popup_button'>
+          <div
+            [ngClass]="{'disabled': offerForm.invalid}"
+            (click)='acceptOrDecline()'>Подтвердить
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf='popupName === AcceptOrDeclineEnum.REJECTED'>
+        <h3 class='popup_title'> Lorem Ipsum is simply dummy text of the printing </h3>
+        <p class='popup_info'>
+          <ng-container *ngFor="let reason of reasonsOfResign | async">
+            <hr-checkbox
+              [checked]="reason.checked"
+              (changes)='select($event, reason)'
+              [label-text]="reason.value"
+            ></hr-checkbox>
+          </ng-container>
+
+          <textarea class="popup_info_textarea" *ngIf="isWritable"
+                    [(ngModel)]="resignText"
+                    rows="2"></textarea>
+        </p>
+        <div class='popup_button'>
+          <div (click)='acceptOrDecline()'>Отправить</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

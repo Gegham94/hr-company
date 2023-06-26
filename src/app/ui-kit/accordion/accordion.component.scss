@@ -1,0 +1,56 @@
+@import "src/assets/variables/variables";
+
+.accordion {
+  width: 940px;
+  user-select: none;
+  &__head {
+    background: #08A652;
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all .3s ease;
+    padding: 14px 0 12px 15px;
+    &_open {
+      border-radius: 8px 8px 0 0;
+    }
+  }
+  &__text {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.4px;
+    color: $white;
+    margin: 0;
+    white-space: inherit;
+  }
+  &__arrow {
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    transition: all .3s ease;
+    transform: translateY(-50%);
+    transform-origin: top ;
+    &_open {
+      transform: scaleY(-1) translateY(-50%);
+    }
+  }
+  &__section {
+    overflow-y: initial;
+    visibility: hidden;
+    max-height: 0;
+    background: $white;
+    border: 1px solid #E2E8F0;
+    border-radius: 0 0 8px 8px;
+    height: 0;
+    transition: all ease;
+    transform-origin: top;
+    padding: 0 37px;
+    &_open {
+      visibility: visible;
+      max-height: unset;
+      padding: 26px 37px;
+      height: auto;
+    }
+  }
+}

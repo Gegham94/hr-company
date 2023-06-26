@@ -1,0 +1,252 @@
+@import '../../../../assets/variables/variables';
+
+.login {
+  height: 550px;
+
+  &__wrapper {
+    margin: 169px 0 0 192px;
+    max-width: 460px;
+  }
+
+  &__title {
+    font-weight: $font-medium;
+    font-size: $text-2xl;
+    line-height: $text-4xl;
+    color: $black;
+  }
+
+  &__description {
+    font-weight: $font-lighter;
+    font-size: $text-base;
+    line-height: 19px;
+    color: $black;
+    opacity: 0.7;
+    margin-top: 14px;
+    margin-bottom: 49px;
+  }
+
+  &__phone-number {
+    margin-bottom: 15px;
+  }
+
+  &__password {
+    margin-bottom: 24px;
+  }
+
+  &__remember {
+    font-weight: $font-normal;
+    font-size: $text-xs;
+    line-height: $text-lg;
+    color: $black;
+
+    &-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__forget-password {
+    font-weight: $font-medium;
+    font-size: $text-xs;
+    line-height: $text-lg;
+    text-decoration-line: underline;
+    color: $black;
+    cursor: pointer;
+  }
+
+  &__button {
+    ::ng-deep button {
+      padding: 0;
+      width: 100%;
+    }
+
+    margin-top: 40px;
+  }
+
+  &__register {
+    &-wrapper {
+      margin-top: 28px;
+      color: #A0AEC0;
+      font-weight: $font-normal;
+    }
+
+    color: $green;
+    font-weight: $font-bold;
+  }
+
+  &__register,
+  &__register-wrapper {
+    text-align: center;
+    font-size: $text-sm;
+    line-height: 20px;
+  }
+
+  &__modal {
+    &-content {
+      padding: 25px 50px 10px;
+    }
+
+    &-title {
+      font-weight: $font-bold;
+      font-size: $text-lg;
+      line-height: 21px;
+      color: #016F5D;
+      margin-bottom: 22px;
+    }
+
+    &-description {
+      font-weight: $font-normal;
+      font-size: $text-sm;
+      line-height: 16px;
+      color: $black;
+      opacity: 0.7;
+      margin-bottom: 34px;
+    }
+
+    &-input {
+      max-width: 100%;
+      margin-bottom: 44px;
+    }
+
+    &-button {
+      text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .login {
+    &__wrapper {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .login {
+    &__wrapper {
+      margin-top: 60px;
+      max-width: 360px;
+    }
+
+    &__title {
+      font-size: 20px;
+      line-height: 22px;
+    }
+
+    &__description {
+      font-size: 14px;
+      line-height: 17px;
+      margin-bottom: 28px;
+    }
+
+    &__password {
+      margin-bottom: 24px;
+    }
+
+    &__button {
+      margin-top: 26px;
+    }
+
+    &__register-wrapper {
+      margin-top: 18px;
+    }
+
+    //&__modal ::ng-deep .modal {
+    //  min-width: 400px;
+    //}
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .login {
+    &__wrapper {
+      margin-top: 30px;
+      max-width: 290px;
+    }
+
+    &__modal ::ng-deep .modal {
+      padding: 40px 20px 20px;
+
+      &__close-button {
+        top: 18px;
+        right: 18px;
+      }
+
+      .login__modal-description {
+        margin-bottom: 24px;
+      }
+
+      .login__modal-input {
+        margin-bottom: 24px;
+
+        ::ng-deep input {
+          height: 38px;
+        }
+      }
+
+      .login__modal-button ::ng-deep button {
+        height: 38px;
+      }
+    }
+
+    &__description {
+      margin-bottom: 18px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    &__phone-number ::ng-deep input,
+    &__password ::ng-deep input {
+      height: 38px;
+    }
+
+    &__password {
+      margin-bottom: 24px;
+    }
+
+    &__button ::ng-deep button {
+      height: 38px;
+    }
+
+    &__button {
+      margin-top: 12px;
+    }
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 500px) {
+  .login {
+    &__wrapper {
+      margin-top: 30px;
+      max-width: 290px;
+    }
+
+    &__description {
+      margin-bottom: 18px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    &__phone-number ::ng-deep input,
+    &__password ::ng-deep input {
+      height: 38px;
+      padding: 0 28px 0 10px;
+    }
+
+    &__password {
+      margin-bottom: 6px;
+    }
+
+    &__button ::ng-deep button {
+      height: 38px;
+    }
+
+    &__button {
+      margin-top: 12px;
+    }
+  }
+}

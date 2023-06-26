@@ -1,0 +1,397 @@
+@import '../../../../assets/mixins/util/util';
+@import '../../../../assets/variables/variables';
+@import "src/assets/mixins/input/input-mixins";
+
+::ng-deep .filter {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    &__close {
+      @media screen and (max-width: 1000px) {
+        flex-direction: row;
+      }
+    }
+  }
+  @media screen and (max-width: 400px) {
+    flex-wrap: wrap;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+    }
+  }
+
+  &_close {
+    display: none;
+  }
+
+  &__search-input {
+    :host::ng-deep .input-wrapper {
+      height: 46px;
+
+      &__input_default {
+        width: 200px;
+        min-width: 150px;
+        font-size: 12px !important;
+        @media screen and (max-width: 1000px) {
+          width: 100%;
+        }
+      }
+    }
+
+    &_open {
+      ::ng-deep input {
+        width: 150px;
+      }
+    }
+  }
+
+  &__status-input {
+
+    ::ng-deep .searchable-select__arrow {
+      transform: translateY(-50%)
+    }
+
+    ::ng-deep label {
+      height: 46px;
+    }
+
+    &_close {
+      ::ng-deep input {
+        width: 171px;
+      }
+    }
+
+    &_open {
+      ::ng-deep input {
+        width: 267px;
+      }
+    }
+  }
+
+  &__open-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 100%;
+    img {
+      width: 25px;
+      height: 25px;
+      margin-top: 25px;
+      margin-left: 10px;
+    }
+  }
+
+  &__wrapper-input {
+    width: 171px;
+  }
+
+  &__date {
+    &-label {
+      width: 120px;
+      position: relative;
+      @media screen and (max-width: 1400px) {
+        width: 200px;
+      }
+      @media screen and (max-width: 1000px) {
+        &--hide {
+          visibility: hidden;
+        }
+        &--show {
+          visibility: visible;
+        }
+      }
+    }
+
+    &-input {
+      background: $white;
+      border: 1px solid $gray;
+      border-radius: 8px;
+      width: 120px;
+      height: 46px;
+      margin-right: 5px;
+      padding-left: 10px;
+      outline: none;
+      @media screen and (max-width: 1400px) {
+        width: 200px;
+      }
+    }
+
+    &-icon {
+      position: absolute;
+      right: 10px;
+      top: 17.5px;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    &__open {
+      flex-direction: column;
+
+      .filter__open-button {
+        margin-top: 10px;
+        margin-left: 0;
+      }
+    }
+    &__search {
+      margin-bottom: 10px;
+
+      &-input {
+        margin-bottom: 10px;
+
+        :host::ng-deep .input-wrapper {
+          height: 46px;
+        }
+
+        &_close, &_open {
+          ::ng-deep input {
+            width: 364px;
+          }
+        }
+      }
+    }
+    &__date {
+      &-label {
+        margin-left: 0;
+        width: 364px;
+      }
+
+      &-input {
+        width: 100%;
+      }
+    }
+    &__wrapper {
+      width: 364px;
+
+      &::ng-deep .searchable-select__input::-webkit-input-placeholder {
+        padding-left: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: 630px) {
+    &__search {
+      &-input {
+        :host::ng-deep .input-wrapper {
+          height: 46px;
+        }
+
+      }
+    }
+    &__date {
+      &-label {
+        width: 270px;
+      }
+    }
+    &__wrapper {
+      width: 270px;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    &__open-button, &__search ::ng-deep input, &__wrapper input {
+      height: 45px;
+    }
+    &__wrapper ::ng-deep .searchable-select__arrow {
+      top: 17px;
+    }
+
+    &__search {
+      &-input {
+        &_close, &_open {
+          ::ng-deep input {
+            width: 240px;
+          }
+        }
+      }
+    }
+    &__date {
+      &-label {
+        width: 240px;
+      }
+
+      &-input {
+        height: 40px;
+      }
+
+      &-icon {
+        top: 13px;
+      }
+    }
+    &__wrapper {
+      width: 240px;
+    }
+  }
+
+  @media screen and (max-width: 320px) {
+    &__search {
+      &-input {
+        &-default {
+          width: 150px;
+        }
+
+        &_close, &_open {
+          ::ng-deep input {
+            width: 150px;
+          }
+        }
+      }
+    }
+    &__date {
+      &-label {
+        width: 200px;
+      }
+
+      &-input {
+        height: 40px;
+      }
+
+      &-icon {
+        top: 13px;
+      }
+    }
+    &__wrapper {
+      width: 200px;
+    }
+  }
+}
+
+:host::ng-deep .searchable-select__input {
+  color: $medium-dark-gray;
+  font-size: 12px;
+}
+
+.datepicker {
+  position: relative;
+  margin-top: 3px;
+
+  &__img {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__text {
+    @include input-label-text;
+    font-size: 14px;
+  }
+
+  &__input {
+    padding-right: 46px;
+    text-overflow: ellipsis;
+    outline: none;
+    @include input-placeholder;
+
+    &_default {
+      width: 100%;
+      outline: none;
+      @include input;
+
+      &:hover {
+        @include input-hover;
+      }
+    }
+
+    &_valid {
+      @include input-valid;
+    }
+
+    &_invalid {
+      @include input-invalid;
+    }
+
+    &:not(&_invalid):focus {
+      border: 1px solid $green;
+    }
+  }
+}
+
+:host::ng-deep .input-wrapper__input_default {
+  font-size: 12px !important;
+}
+
+::ng-deep ngb-datepicker {
+  z-index: 1;
+  background: white;
+}
+
+::ng-deep .bg-primary {
+  background-color: $green !important;
+  color: white;
+  border-radius: 5px !important;
+}
+
+::ng-deep .ngb-dp-today {
+  background-color: $light-gray !important;
+  color: white;
+  border-radius: 5px !important;
+}
+
+::ng-deep .ngb-dp-navigation-select {
+  gap: 8px;
+
+  ::ng-deep .custom-select {
+    border: none !important;
+    outline: none;
+  }
+}
+
+::ng-deep .ngb-dp-navigation-chevron {
+  color: $medium-dark-gray;
+}
+
+::ng-deep .ngb-dp-weekday {
+  font-style: initial !important;
+  color: $dark-gray !important;
+}
+
+::ng-deep .ngb-dp-weekdays {
+  margin-bottom: 10px;
+}
+
+.label {
+  font-weight: $font-normal;
+  font-size: $text-xs;
+  line-height: 20px;
+  color: $black;
+  margin-bottom: 4px;
+}
+
+.removeBlock {
+  .removeInputValue {
+    margin-right: 5px;
+    position: absolute;
+    top: 20px;
+    right: 7px;
+    cursor: pointer;
+  }
+}
+
+:host::ng-deep hr-input {
+  .removeBlock {
+    .removeInputValue {
+      top: 43px !important;
+    }
+  }
+}

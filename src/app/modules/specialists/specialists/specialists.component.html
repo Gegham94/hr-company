@@ -1,0 +1,141 @@
+<section
+  class="specialists"
+  #specialistsContent
+  *ngLet="company$ | async as company"
+  [ngClass]="(isRobotHelper | async) ? 'content_under_robot-bg' : 'content_on_robot-bg'"
+>
+  <div class="specialists__filter">
+    <div class="specialists__filter--vacancy">
+      <p class="title">Фильтр вакансии</p>
+      <div class="fields">
+        <div class="wrapper">
+          <p class="subtitle">Откритые</p>
+          <hr-vacancies-list
+            [defaultValue]="getDefaultValue2()"
+            [status]="VacancyStatusEnum.NotArchived"
+            [isBorder]="true"
+            [isAll]="false"
+            [update]="update"
+            (vacancyList)="getAllVacancyList($event)"
+            (selectedVacancy)="setSelectedVacancy($event, VacancyStatusEnum.NotArchived)"
+          ></hr-vacancies-list>
+        </div>
+      </div>
+    </div>
+    <div class="specialists__filter--list">
+      <p class="title">Фильтр специлистов</p>
+      <div class="fields">
+        <hr-search-select
+          [isBorderGreen]="true"
+          [hasDefaultValue]="true"
+          [options]="options"
+          [defaultValue]="'Все'"
+          (selectedOptionOutput)="navOptions($event)"
+        ></hr-search-select>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div *ngIf="loader$ | async">
+      <hr-loader></hr-loader>
+    </div>
+    <ng-container class="specialists__block--center" *ngLet="specialists | async as specialists">
+      <div style="position: relative">
+        <div class="specialists-specialist" *ngIf="specialists.length; else emptyContentTmpl">
+          <ng-container *ngLet="isSpecialistAvailableAfterAcceptOrReject$ | async as isDisable">
+            <ng-container *ngFor="let item of specialists">
+              <div [class.specialists-specialist__item]="selectedItem.id !== 4">
+                <div
+                  [ngClass]="{
+                    'specialists__block--blur':
+                      company.packageCount < 1 && specialists?.length && !specialists[0].newSpecialist
+                  }"
+                  *ngIf="selectedItem.id !== 4"
+                >
+                  <hr-user-card
+                    [vacancy-status]="vacancyType"
+                    [vacancy-id]="selectedVacancy$.value?.uuid ?? ''"
+                    [isFavorite]="item['isFavorite']"
+                    [isNew]="item['newSpecialist']"
+                    [interviewStatus]="item['interviewStatus']"
+                    [disabled]="!item['availableSpecialist'] && isDisable && searchParams['status'] !== SpecialistInterviewStatusEnum.ACCEPTED"
+                    [user-name]="item['specialistName'] | mask"
+                    [user-surname]="item['specialistSurname'] | mask"
+                    [user-profession]="item['vacancyName']"
+                    [user-uuid]="item['specialistUuid']"
+                    [found-specialist-uuid]="item['uuid']"
+                    [progress-psychology]="item['specialistAnalytic']['Психологический тест'].point"
+                    [progress-professional]="item['specialistAnalytic']['Профессиональный тест'].point"
+                    [progress-interview]="item['specialistAnalytic']['Собеседование'].point"
+                  >
+                  </hr-user-card>
+                </div>
+                <div *ngIf="selectedItem.id === 4" [class.specialists-specialist__item-list]="selectedItem.id === 4">
+                  <hr-list
+                    [isNew]="item['newSpecialist'] && !item['availableSpecialist']"
+                    [disabled]="!item['availableSpecialist'] && isDisable && searchParams['status'] !== SpecialistInterviewStatusEnum.ACCEPTED"
+                    [found-specialist-uuid]="item['uuid']"
+                    [person-email]="item['specialistEmail']"
+                    [person-name]="item['specialistName']"
+                    [person-surname]="item['specialistSurname']"
+                    [person-position]="item['vacancyName']"
+                    [person-work-date]="item['specialistAcceptedDate']"
+                    [user-uuid]="item['specialistUuid']"
+                  ></hr-list>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div
+          class="specialists__pagination"
+          [ngClass]="{
+            'specialists__block--blur': company.packageCount < 1 && specialists?.length && !specialists[0].newSpecialist
+          }"
+        >
+          <hr-pagination *ngIf='specialistTotalPageCount > 1' #paginationComponent
+                         (selectPagination)='getFilteredSpecialistList($event); specialistsContent.scrollTo({top: 0})'
+                         [total-page-count]='specialistTotalPageCount'
+          ></hr-pagination>
+        </div>
+
+        <div
+          class="specialists__block--info"
+          *ngIf="
+            company.packageCount < 1 && specialists?.length && !specialists[0].newSpecialist &&
+            searchParams['status'] !== SpecialistInterviewStatusEnum.ACCEPTED
+          "
+        >
+          <div class="specialists__block--info-modal" (click)="navigateToBalance()">
+            <div class="title">
+              <img src="assets/img/icon/warning.svg" alt="info" />
+              <h1>внимание!</h1>
+            </div>
+            <div class="info">
+              <p>
+                Дорогой пользователь Ваш тарифный план истек. Чтобы продолжить воспользоваться преимуществами системы,
+                пожалуйста переходите на страницу баланса и выберите тариф.
+              </p>
+            </div>
+            <div>
+              <hr-button
+                [text]="'Перейти'"
+                [type]="ButtonTypeEnum.outlineGreen"
+                (clickEvent)="navigateToBalance()"
+              ></hr-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>
+
+<ng-container *ngIf="isChooseModalOpen | async as isOpen">
+  <hr-buy-tariff-modal [isOpen]="isOpen" (checkIsRobot)="isRobot()"></hr-buy-tariff-modal>
+</ng-container>
+
+<ng-template #emptyContentTmpl>
+  <hr-empty-content></hr-empty-content>
+</ng-template>

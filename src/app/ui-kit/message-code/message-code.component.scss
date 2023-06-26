@@ -1,0 +1,79 @@
+.message-code {
+  &__header {
+    display: flex;
+  }
+
+  &__wrapper {
+    margin-bottom: 32px;
+  }
+
+  &__send-again {
+    text-align: right;
+    width: 299px;
+    margin-top: 1px;
+
+    &__button {
+      background: none;
+      border: none;
+      text-decoration: underline;
+      color: #029A51;
+      font-family: Roboto;
+      cursor: pointer;
+    }
+
+    .disabled {
+      color: grey;
+      pointer-events: none;
+    }
+    @media screen and (min-width: 320px) and (max-width: 430px){
+      width: 208px;
+    }
+  }
+
+  &__input {
+    display: flex;
+    width: 303px;
+    justify-content: space-between;
+    margin-right: 15px;
+
+    @media screen and (min-width: 320px) and (max-width: 450px) {
+      width: 210px;
+    }
+
+    &_item {
+      width: 44px;
+      border-radius: 9px;
+      border: 1px solid #E2E8F0;
+      height: 47px;
+      font-size: 30px;
+      text-align: center;
+
+      @media screen and (min-width: 310px) and (max-width: 500px){
+        width: 32px;
+        height: 30px;
+        font-size: 20px;
+      }
+    }
+
+  }
+
+  ::ng-deep .login__modal-button {
+    display: flex;
+    justify-content: center;
+  }
+
+  ::ng-deep.button-wrapper__button_default {
+    width: 201px;
+  }
+
+  .new-password {
+    ::ng-deep .input-wrapper__input_default {
+      margin-bottom: 17px;
+    }
+  }
+
+  .message-code__error__msg {
+    color: red;
+  }
+
+}

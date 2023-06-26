@@ -1,0 +1,148 @@
+<div class="file-input">
+  <label class="file-input__label">
+    <span class="file-input__editor">
+      <img src="assets/img/icon/photo-edit.svg" alt="" srcset="" />
+    </span>
+    <input #fileInput type="file" (change)="fileChangeEvent($event)" class="file-input__input" accept="image/*" />
+    <div class="img-container">
+      <img
+        *ngIf="croppedImage"
+        [src]="croppedImage"
+        (load)="isLoading()"
+        class="file-input__image"
+        alt="Company logo"
+      />
+      <img *ngIf="!croppedImage" src="assets/img/icon/logo-placeholder.svg" alt="Logo placeholder" />
+    </div>
+    <span class="file-input__feedback" *ngIf="feedbackTextProps" [class]="'file-input__feedback_' + errorStatus">
+      {{ feedbackTextProps }}
+    </span>
+  </label>
+</div>
+<hr-modal
+  [is-open]="isModalOpen"
+  (whenModalClose)="modalToggle($event)"
+  [width]="imageProps.width"
+  [height]="imageProps.height"
+>
+  <div class="image-cropper">
+    <div class="image-cropper--content" [style.height]="heightExceptActions">
+      <div class="image-cropper--image">
+        <ng-container *ngIf="isCropperLoading$ | async">
+          <hr-loader [img]="true"></hr-loader>
+        </ng-container>
+        <image-cropper
+          #imageCropper
+          [format]="'png'"
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="4 / 3"
+          [containWithinAspectRatio]="containWithinAspectRatio"
+          [onlyScaleDown]="true"
+          [roundCropper]="false"
+          [canvasRotation]="canvasRotation"
+          [transform]="transform"
+          [alignImage]="'center'"
+          (loadImageFailed)="loadImageFailed()"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady($event)"
+        >
+        </image-cropper>
+      </div>
+    </div>
+
+    <div class="image-cropper-actions-wrapper" #cropperActionsWrapper>
+      <div class="image-cropper-actions">
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Сброс настроек'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="resetImage()"
+        >
+          <img src="\assets\img\image-cropper\refresh.png" alt="Сброс настроек" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Повернуть против часовой стрелки'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="rotateLeft()"
+        >
+          <img src="\assets\img\image-cropper\rotating-arrow-to-the-left.png" alt="Повернуть против часовой стрелки" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Повернуть по часовой стрелке'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="rotateRight()"
+        >
+          <img src="\assets\img\image-cropper\rotating-arrow-to-the-right.png" alt="Повернуть по часовой стрелке" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Отразить по горизонтали'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="flipHorizontal()"
+        >
+          <img src="\assets\img\image-cropper\left-and-right.png" alt="Отразить по горизонтали" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Отразить по вертикали'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item uniq"
+          (click)="flipVertical()"
+        >
+          <img src="\assets\img\image-cropper\up-and-down-arrows.png" alt="Отразить по вертикали" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Содержать в пределах соотношения сторон'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="toggleContainWithinAspectRatio()"
+        >
+          <img src="\assets\img\image-cropper\arrows-contain.svg" alt="Содержать в пределах соотношения сторон" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Уменьшить'"
+          [placement]="'top'"
+          [showDelay]="300"
+          [disabled]="isScaleDownDisabled"
+          [class.disabled]="isScaleDownDisabled"
+          class="image-cropper-actions__item"
+          (click)="zoomOut()"
+        >
+          <img src="\assets\img\image-cropper\minus.png" alt="Уменьшить" />
+        </button>
+        <button
+          [tooltipClass]="'tooltip--new-styles'"
+          [tooltip]="'Увеличить'"
+          [placement]="'top'"
+          [showDelay]="300"
+          class="image-cropper-actions__item"
+          (click)="zoomIn()"
+        >
+          <img src="\assets\img\image-cropper\plus.png" alt="Увеличить" />
+        </button>
+      </div>
+      <div class="image-cropper-actions__save-content">
+        <button class="image-cropper-actions__save" (click)="submitCroppedImage()">
+          {{ "ACTIONS.SAVE" | translate }}
+        </button>
+      </div>
+      <br />
+    </div>
+  </div>
+</hr-modal>

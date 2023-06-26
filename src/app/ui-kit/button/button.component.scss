@@ -1,0 +1,70 @@
+//@import "~assets/variables/variables";
+@import "src/assets/variables/variables";
+@import "src/assets/mixins/button/button-mixins";
+
+
+.button-wrapper {
+  margin: 10px 0;
+  display: inline;
+  width: auto;
+  cursor: pointer;
+
+  &__button {
+    @include default-button;
+    user-select: none;
+
+    &_default {
+      background-color: $orange;
+      border: 1px solid $orange;
+      color: $white;
+
+      &:hover {
+        @include button-hover;
+      }
+    }
+
+    &_disabled {
+      background-color: #C4C4C4;
+      border: 1px solid $light-gray;
+      color: white;
+      pointer-events: none;
+    }
+
+    &_outline {
+      background-color: $white;
+      border: 1px solid $green;
+      color: $green;
+
+      &:hover {
+        @include button-hover($green);
+      }
+
+      &-green {
+        background-color: $green;
+        border: 1px solid $green;
+        color: $white;
+
+        &:hover {
+          @include button-hover($white);
+        }
+      }
+    }
+
+    &_active {
+      @include button-hover($green);
+      width: 200px;
+    }
+
+    &_gradient {
+      background: linear-gradient(270.13deg, #1CC4A1 -4.76%, #49DA6C 106.15%);
+      color: $white;
+    }
+  }
+}
+
+.disabledProps {
+  background-color: #C4C4C4;
+  border: 1px solid $light-gray;
+  color: white;
+  //padding: 14px 28px;
+}

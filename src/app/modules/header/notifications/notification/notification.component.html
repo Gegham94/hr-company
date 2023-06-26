@@ -1,0 +1,160 @@
+<div class="header__notification" (click)="$event.stopPropagation()">
+  <div
+    class="header__notification-content"
+    (click)="openNotificationsListAction($event)"
+  >
+    <button class="header__notification-button" *ngIf="!mobile">
+      <svg
+        width="18"
+        height="22"
+        viewBox="0 0 18 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M17.4411 15.2217C16.0803 14.0715 15.3 12.3903 15.3 10.6092V8.1C15.3 4.9329 12.9474 2.3112 9.9 1.872V0.9C9.9 0.4023 9.4968 0 9 0C8.5032 0 8.1 0.4023 8.1 0.9V1.872C5.0517 2.3112 2.7 4.9329 2.7 8.1V10.6092C2.7 12.3903 1.9197 14.0715 0.5508 15.2289C0.2007 15.5286 0 15.9642 0 16.425C0 17.2935 0.7065 18 1.575 18H16.425C17.2935 18 18 17.2935 18 16.425C18 15.9642 17.7993 15.5286 17.4411 15.2217Z"
+          fill="white"
+        />
+        <path
+          d="M9 22C10.4788 22 11.7158 20.709 12 19H6C6.28416 20.709 7.52123 22 9 22Z"
+          fill="white"
+        />
+      </svg>
+    </button>
+    <button class="header__notification-button" *ngIf="mobile">
+      <svg
+        width="18"
+        height="22"
+        viewBox="0 0 18 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M17.4411 15.2217C16.0803 14.0715 15.3 12.3903 15.3 10.6092V8.1C15.3 4.9329 12.9474 2.3112 9.9 1.872V0.9C9.9 0.4023 9.4968 0 9 0C8.5032 0 8.1 0.4023 8.1 0.9V1.872C5.0517 2.3112 2.7 4.9329 2.7 8.1V10.6092C2.7 12.3903 1.9197 14.0715 0.5508 15.2289C0.2007 15.5286 0 15.9642 0 16.425C0 17.2935 0.7065 18 1.575 18H16.425C17.2935 18 18 17.2935 18 16.425C18 15.9642 17.7993 15.5286 17.4411 15.2217Z"
+          fill="#08a652"
+        />
+        <path
+          d="M9 22C10.4788 22 11.7158 20.709 12 19H6C6.28416 20.709 7.52123 22 9 22Z"
+          fill="#08a652"
+        />
+      </svg>
+    </button>
+    <span *ngIf="count > 0" class="header__notification-count">
+      {{ count > 99 ? 99 + "+" : count }}
+    </span>
+  </div>
+
+  <div
+    class="header__drop-menu"
+    *ngIf="isDropdownOpen$ | async"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="header__drop-menu-title">
+      <div>
+        <b>{{ "NOTIFICATIONS.COMPANY" | translate }}</b>
+      </div>
+      <img
+        class="header__drop-menu-close"
+        src="assets/img/icon/close-dropdown-icon.svg"
+        alt="close-icon"
+        (click)="openNotificationsListAction($event)"
+      />
+    </div>
+    <div
+      class="header__drop-menu-notification__block"
+      [class.mobile]="screenSize === 'MOBILE'"
+    >
+      <cdk-virtual-scroll-viewport
+        [itemSize]="virtualScrollItemSize"
+        [minBufferPx]="virtualScrollItemSize"
+        [maxBufferPx]="virtualScrollItemSize * 10"
+        (scrolledIndexChange)="getNextBatch($event)"
+        [style.height.px]="virtualContainerHeight"
+        class="viewport scrollbar-green"
+      >
+        <div *cdkVirtualFor="let item of (notificationData | async)">
+          <hr-notification-item
+            [item]="item"
+            [hasNotification]="hasNotification"
+            (selectedNotification)="selectNotification($event)"
+          ></hr-notification-item>
+        </div>
+        <hr-notification-item
+          *ngIf="hasNotification == 0"
+          [hasNotification]="hasNotification"
+        >
+        </hr-notification-item>
+        <ng-container *ngIf="loadingMoreNotifications$ | async">
+          <div class="loader-container">
+            <div class="loader"></div>
+            <p class="loader_text">Загрузка данных...</p>
+          </div>
+        </ng-container>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  </div>
+</div>
+
+<hr-modal [is-cross]="showVacancyStateStatus.value !==''" [is-click-outside]="showVacancyStateStatus.value !==''"
+          [is-open]="isDeadlineDateModal.value"
+          (whenModalClose)="closeModal()">
+  <div class="add-vacancy-description__modal">
+    <div class="add-vacancy-description__modal-title">
+      <span>Продление вакансии</span>
+    </div>
+    <div class="add-vacancy-description__modal__content">
+      <div class='add-vacancy-description__modal-description'>
+        <p *ngIf="showVacancyStateStatus.value === ''">Выберите новую дату окончания вакансии.</p>
+        <p class="vacancy-status-text">{{showVacancyStateStatus.value}}</p>
+      </div>
+      <ng-container *ngIf="showVacancyStateStatus.value === ''">
+        <div class="datepicker date-pickers_block"
+             [formGroup]="dateForm">
+          <ngb-datepicker
+            class="firstDate"
+            [disabled]="true"
+            [formControlName]="'first'"
+          >
+          </ngb-datepicker>
+          <ngb-datepicker
+            class="secondDate"
+            [disabled]="false"
+            [formControlName]="'second'"
+            [minDate]="calendar.getToday()"
+            (dateSelect)="selectedDate($event);"
+          >
+          </ngb-datepicker>
+        </div>
+        <div class="add-vacancy-description__modal-button-content">
+          <button class="add-vacancy-description__modal-field" (click)="postponeModal()">НЕТ
+          </button>
+          <button class="add-vacancy-description__modal-accept"
+                  [ngClass]="{'disabled': !this.newDateForVacancy}"
+                  (click)="changeVacancyDeadlineDate()">ДА
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</hr-modal>
+
+
+<hr-modal [is-open]="isCongratulationModal.value"
+          (whenModalClose)="closeCongratulationModal()">
+  <div class="congratulation">
+    <img src="assets/img/icon/congrats.svg" alt="congrats">
+    <p class="title"> Поздравление!</p>
+    <p class="text"> Графические и типографические операторы хорошо это знают ... </p>
+  </div>
+</hr-modal>
+
+<!--TODO -->
+<hr-modal [is-open]="isJobRequestModal.value"
+          (whenModalClose)="closeJobRequestModal()">
+  <div class="congratulation">
+    <img src="assets/img/avatar/list-man-avatar.svg" alt="specialist">
+    <p class="title"> Запрос на вакансию!</p>
+    <p class="text"> Lorem Ipsum является текст-заполнитель обычно используется в графических, печать и
+      издательской </p>
+  </div>
+</hr-modal>

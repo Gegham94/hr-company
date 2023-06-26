@@ -1,0 +1,574 @@
+@import '../../../../../assets/variables/variables';
+@import "src/assets/mixins/input/input-mixins";
+@import "src/assets/mixins/util/util";
+
+.add-vacancy-description {
+  max-width: 1132px;
+  width: 78.6%;
+  margin: 2px auto 145px;
+
+  @media screen and (max-width: 1024px) {
+    width: 85%;
+  }
+
+  @media screen and (max-width: 700px) {
+    width: 100%;
+  }
+
+  &__wrapper {
+    width: 100%;
+    padding: 43px 90px 48px;
+    background: $white;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    margin-bottom: 33px;
+
+    @media screen and (max-width: 1024px) {
+      padding: 40px;
+    }
+
+    @media screen and (max-width: 700px) {
+      padding: 30px;
+    }
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: $text-base;
+    line-height: 21px;
+    color: $black;
+  }
+
+  &__accordion {
+    width: 100%;
+    max-width: 1132px;
+
+    ::ng-deep .accordion {
+      width: auto !important;
+    }
+  }
+
+  &__vacancy-name {
+    padding-top: 20px;
+    padding-bottom: 13px;
+  }
+
+  &__monthly-income {
+    padding-bottom: 13px;
+    width: 100%;
+    @media screen and (max-width: 800px) {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    &--label {
+      margin-bottom: 8px;
+      font-size: 14px;
+
+      &:after {
+        content: "*";
+        color: $red;
+        font-size: $text-xs;
+      }
+    }
+
+    &--error {
+      @include input-invalid-text;
+    }
+
+    &--block {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+
+      &-item {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 10px;
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  &__completion-date {
+    padding-bottom: 13px;
+    max-width: 460px;
+    width: 35%;
+  }
+
+  &__editor {
+    &-conditions {
+      &--title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &--download {
+        font-size: 14px;
+        line-height: 16px;
+        color: $green;
+        border-bottom: 1px dotted $green;
+        cursor: pointer;
+        font-weight: 500;
+      }
+    }
+    &-conditions,
+    &-duties,
+    &-description {
+      width: 100%;
+      margin-left: auto;
+      margin-top: 13px;
+
+      &-label {
+        font-style: normal;
+        font-weight: $font-normal;
+        font-size: $text-sm;
+        line-height: 20px;
+        letter-spacing: 0.4px;
+        color: $black;
+        margin-bottom: 5px;
+
+        &:after {
+          content: "*";
+          color: #c83532;
+          font-size: 12px;
+        }
+      }
+
+      .not-required {
+        &:after {
+          content: "";
+          color: black;
+          font-size: 12px;
+        }
+      }
+
+      &::ng-deep .ck {
+        border: none;
+        padding: 0;
+
+        &-toolbar {
+          border: none;
+          padding: 0;
+
+          &__separator {
+            background-color: $black;
+          }
+        }
+
+        &-toolbar__items {
+          background: #E5EAEC;
+          border: 1px solid #D5D4DC;
+          border-radius: 8px 8px 0 0;
+          padding: 0 0 0 26px;
+          height: 46px;
+        }
+
+        &-content {
+          height: 123px;
+          border-radius: 0 0 8px 8px !important;
+          border: 1px solid #D5D4DC;
+          border-top: none;
+          outline: none;
+          padding: 0 18px;
+          top: -1px;
+
+          &_invalid {
+            ::ng-deep .ck-editor__editable_inline {
+              border: 1px solid $red !important;
+            }
+          }
+
+          &_valid {
+            ::ng-deep .ck-editor__editable_inline {
+              border: 1px solid $green !important;
+            }
+          }
+
+          &:focus {
+            border: 1px solid #D5D4DC;
+            border-top: none;
+          }
+        }
+
+      }
+    }
+  }
+
+  &__button {
+    display: flex;
+    column-gap: 15px;
+    justify-content: flex-end;
+    margin-top: 47px;
+    user-select: none;
+    @media screen and (min-width: 360px) and (max-width: 740px) {
+      justify-content: center;
+    }
+  }
+
+  &__modal {
+    max-width: 750px;
+
+    &-title {
+      font-style: normal;
+      font-weight: $font-black;
+      font-size: 18px;
+      line-height: 21px;
+      color: $green;
+      padding-bottom: 24px;
+      text-align: center;
+
+      &_small {
+        font-size: $text-sm;
+        line-height: 16px;
+      }
+    }
+
+    &-description,
+    &-text {
+      text-align: center;
+      font-style: normal;
+      font-weight: $font-normal;
+      font-size: $text-sm;
+      line-height: 16px;
+      color: $black;
+      opacity: 0.7;
+      padding-bottom: 24px;
+
+      &_bold {
+        font-weight: $font-bold;
+        opacity: 1;
+      }
+
+      &_medium {
+        font-weight: $font-medium;
+      }
+    }
+
+    &-button {
+      &_skip {
+        margin-right: 13px;
+
+        ::ng-deep .button-wrapper__button {
+          min-width: 201px !important;
+        }
+      }
+
+      &_send {
+        ::ng-deep .button-wrapper__button {
+          min-width: 201px !important;
+        }
+      }
+
+      &-wrapper {
+        padding-top: 36px;
+        display: flex;
+        justify-content: center;
+
+        &_payment {
+          padding-top: 0;
+        }
+      }
+    }
+
+    &-card {
+      display: flex;
+      align-items: center;
+      width: 150px;
+      max-width: 25%;
+
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 50px;
+      }
+
+      &-title {
+        font-style: normal;
+        font-weight: $font-normal;
+        font-size: $text-sm;
+        line-height: 16px;
+        margin-bottom: 24px;
+        margin-top: 43px;
+        text-align: left;
+      }
+
+      &-label {
+        margin-right: 14px;
+      }
+
+      &-image {
+        cursor: pointer;
+      }
+    }
+
+    &-input {
+      &-text {
+        padding: 10px 0;
+        font-style: normal;
+        font-weight: $font-normal;
+        font-size: $text-sm;
+        line-height: 16px;
+        color: $black;
+      }
+
+      &-wrapper {
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        .add-vacancy-description__modal-input {
+          margin-right: 11px;
+
+          &:last-child {
+            margin-left: 11px;
+          }
+        }
+      }
+
+      &_mini {
+        width: 124px;
+      }
+    }
+
+    &-image {
+      &-wrapper {
+        text-align: right;
+        margin-bottom: 6px;
+        margin-top: 28px;
+      }
+    }
+  }
+
+  .questions {
+    font-size: 16px;
+    @include flex-start;
+    gap: 5px;
+    margin-bottom: 10px;
+    .textarea-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      width: 100%;
+      border: 1px solid #d5d4dc;
+      border-radius: 8px;
+      padding: 5px 0 5px 10px;
+      .question {
+        min-width: calc(100% - 40px);
+        height: auto;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        border-style: none;
+        resize: none;
+        overflow: hidden;
+        &-number {
+          color: $dark-gray;
+          padding: 0 5px;
+          background: $white;
+          &-circule {
+            width: 22px;
+            height: 22px;
+            border: 1px solid $green;
+            color: $green;
+            padding: 9px 9px 10px 8px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+          }
+        }
+        &:focus-visible,
+        &:focus {
+          border: 1px solid $black;
+          outline: none;
+        }
+      }
+      .question:focus{
+        outline: none;
+        border: none;
+      }
+      .remove-question {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        img {
+          width: 15px;
+          height: 15px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .add-question {
+    width: 30px;
+    height: 30px;
+    color: white;
+    background-color: $green;
+    font-size: 16px;
+    border: 1px solid $green;
+    border-radius: 8px;
+
+    &--disabled {
+      background-color: $light-gray;
+      border: 1px solid $light-gray;
+    }
+
+    &_block {
+      width: 100%;
+      margin-top: 10px;
+      @include flex-end;
+    }
+  }
+}
+
+.add {
+  margin-left: 10px !important;
+}
+
+:host::ng-deep .searchable-select__input {
+  color: $medium-dark-gray;
+  font-size: 12px;
+
+}
+
+.datepicker {
+  position: relative;
+
+  &__img {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__text {
+    @include input-label-text;
+    font-size: 14px;
+  }
+
+  &__input {
+    padding-right: 46px;
+    text-overflow: ellipsis;
+    outline: none;
+    @include input-placeholder;
+
+    &_default {
+      width: 100%;
+      outline: none;
+      @include input;
+
+      &:hover {
+        @include input-hover;
+      }
+    }
+
+    &_valid {
+      @include input-valid;
+    }
+
+    &_invalid {
+      @include input-invalid;
+    }
+
+    &:not(&_invalid):focus {
+      border: 1px solid $green;
+    }
+  }
+}
+
+:host::ng-deep .input-wrapper__input_default {
+  font-size: 12px !important;
+}
+
+::ng-deep ngb-datepicker {
+  z-index: 1;
+  background: white;
+}
+
+::ng-deep .bg-primary {
+  background-color: $green !important;
+  color: white;
+  border-radius: 5px !important;
+}
+
+::ng-deep .ngb-dp-today {
+  background-color: $light-gray !important;
+  color: white;
+  border-radius: 5px !important;
+  border: none !important;
+  outline: none !important;
+}
+
+::ng-deep .ngb-dp-navigation-select {
+  gap: 8px;
+
+  ::ng-deep .custom-select {
+    border: none !important;
+    outline: none;
+  }
+}
+
+::ng-deep .ngb-dp-navigation-chevron {
+  color: $medium-dark-gray;
+}
+
+::ng-deep .ngb-dp-weekday {
+  font-style: initial !important;
+  color: $dark-gray !important;
+}
+
+::ng-deep .ngb-dp-weekdays {
+  margin-bottom: 10px;
+}
+
+.required {
+  display: flex;
+
+  &:after {
+    content: "*";
+    color: #c83532;
+    font-size: 12px;
+  }
+}
+
+.add-vacancy-description__monthly-income--block {
+  margin-bottom: 5px;
+
+  ::ng-deep .input-wrapper__input_default {
+    min-width: 150px;
+    width: 150px;
+  }
+}
+
+.salary ::ng-deep hr-search-select .searchable-select__input--content {
+  min-width: 100px;
+}
+
+.salary ::ng-deep hr-search-select .searchable-select {
+  width: 100px;
+}
+
+.salary ::ng-deep hr-search-select .searchable-select__search-list {
+  min-width: 100px;
+}

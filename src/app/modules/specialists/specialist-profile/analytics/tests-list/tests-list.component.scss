@@ -1,0 +1,120 @@
+@import 'src/assets/variables/variables';
+@import 'src/assets/mixins/util/util';
+
+.tests {
+  @include responsive-container;
+
+  &-title {
+    color: $green;
+    font-size: 18px;
+    line-height: 21px;
+    text-indent: 1rem;
+    margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+.test-block {
+  position: relative;
+  width: 280px;
+  min-height: 280px;
+  background: #FFFFFF;
+  border: 1px solid #08A652;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  &-level-icon {
+    position: absolute;
+    top: -5px;
+    left: 25px;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+  }
+}
+
+.test {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 35px;
+  margin-bottom: 80px;
+
+  &-point {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    span {
+      width: max-content;
+      text-align: right;
+      padding: 7px 15px;
+      background-color: #F28A1A;
+      border-radius: 20px;
+      color: white;
+      font-weight: 800;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
+
+  &-name {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    word-break: break-word;
+  }
+
+  &-level {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #08A652;
+    margin-bottom: 30px;
+  }
+
+  &-date,
+  &-answers {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    img {
+      margin-right: 12px;
+    }
+
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 14px;
+      color: #979797;
+    }
+
+    &_count {
+      font-weight: 700;
+      font-size:12px;
+      line-height: 14px;
+      color: #08A652;
+    }
+  }
+
+  &-see {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    cursor: pointer;
+    color: white;
+    background-color: #08A652;
+    padding: 18px 0;
+  }
+}

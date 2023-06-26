@@ -1,0 +1,205 @@
+@import 'src/assets/variables/variables';
+@import 'src/assets/mixins/util/util.scss';
+
+main {
+  overflow: hidden;
+}
+
+::ng-deep .slide {
+  padding: 0 20px;
+}
+
+::ng-deep .slick-prev,
+::ng-deep .slick-next,
+::ng-deep .slick-disabled {
+  width: 50px;
+  height: 120px;
+  padding: 19px;
+}
+
+::ng-deep .slick-next {
+  right: -45px;
+  z-index: 1;
+}
+
+::ng-deep .slick-prev {
+  right: 0;
+  z-index: 1;
+  left: -40px;
+}
+
+::ng-deep .slick-disabled {
+  opacity: 0.5;
+}
+
+.navigate-button {
+  &-wrapper {
+    width: 80%;
+    margin: 33px auto;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    min-height: 120px;
+
+    .carousel {
+      position: absolute;
+      z-index: 1;
+    }
+
+    &__web {
+      display: none;
+      position: absolute;
+      //z-index: 6;
+
+      @media screen and (min-width: 1500px) {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+
+        ::ng-deep .navigate-button__web {
+          margin: 0 19.5px !important;
+        }
+      }
+    }
+
+    &__tablet {
+      display: none;
+
+      @media screen and (min-width: 700px) and (max-width: 1500px) {
+        width: 80%;
+        display: flex;
+        justify-content: center;
+
+        ::ng-deep .navigate-button__tablet {
+          margin: 0 20px !important;
+        }
+      }
+    }
+
+    &__mobile {
+      display: none;
+
+      @media screen and (max-width: 700px) {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__carousel--tablet,
+  &__carousel--mobile {
+    width: 100%;
+    display: none;
+    z-index: 6 !important;
+  }
+
+  &__web {
+    //width: 210px;
+  }
+
+  &__tablet-and-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 1500px) {
+
+    &__carousel--tablet {
+      display: block;
+      margin: 0 auto;
+    }
+
+    &__carousel--mobile {
+      display: none;
+    }
+
+    &__web {
+      display: none;
+    }
+
+    &__tablet {
+      //width: 210px;
+      display: block;
+    }
+
+    &__mobile {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+
+    &__carousel--tablet {
+      display: none;
+    }
+
+    &__carousel--mobile {
+      display: block;
+      margin: 0 auto;
+    }
+
+    &__web {
+      display: none;
+    }
+
+    &__tablet {
+      display: none;
+    }
+
+    &__mobile {
+      //width: 210px;
+      display: block;
+    }
+  }
+
+}
+
+@media only screen and (max-width: 400px) {
+  ::ng-deep .carousel-arrow-next {
+    right: -30px !important;
+  }
+  ::ng-deep .carousel-arrow-prev {
+    left: -30px !important;
+  }
+  ::ng-deep .carousel-arrow {
+    top: 40% !important;
+  }
+}
+
+.home_robot-info {
+  position: fixed;
+  z-index: 20;
+  top: 220px;
+  right: 0;
+  cursor: pointer;
+}
+
+.home_chat-info {
+  @include flex-center;
+  position: fixed;
+  z-index: 20;
+  bottom: 25px;
+  right: 15px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: $green;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(8, 166, 82, 0.3);
+}
+
+.d_none {
+  width: 100%;
+  opacity: 0;
+}
+
+.red_circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background-color: #FF4560;
+  border: 2px solid white;
+  border-radius: 50%;
+}

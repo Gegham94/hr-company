@@ -1,0 +1,30 @@
+@import 'src/assets/variables/variables';
+
+
+.modal {
+  &_title {
+    display: flex;
+    justify-content: center;
+    color: $green;
+    margin-bottom: 20px;
+
+    h1 {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
+
+  &_content {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  &_actions {
+    display: flex;
+    justify-content: center;
+    & :first-child {
+      margin-right: 20px;
+    }
+  }
+}

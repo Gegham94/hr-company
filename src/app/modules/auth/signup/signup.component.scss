@@ -1,0 +1,185 @@
+@import "src/assets/variables/variables";
+
+.register {
+  height: 550px;
+
+  &__wrapper {
+    margin: 169px 0 0 192px;
+    max-width: 460px;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: $text-2xl;
+    line-height: 28px;
+    color: $black;
+  }
+
+  &__description {
+    font-style: normal;
+    font-weight: $font-lighter;
+    font-size: $text-base;
+    line-height: 19px;
+    color: $black;
+    opacity: 0.7;
+    margin-top: 14px;
+    margin-bottom: 49px;
+  }
+
+  &__phone-number {
+    margin-bottom: 15px;
+  }
+
+  &__password {
+    margin-bottom: 15px;
+  }
+
+  &__privacy-policy{
+    margin-bottom: 24px;
+    display: flex;
+    font-size: 11px;
+  }
+
+  &__remember {
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-xs;
+    line-height: 18px;
+    color: $black;
+  }
+
+  &__button {
+    ::ng-deep button {
+      padding: 0;
+      width: 100%;
+    }
+
+    margin-top: 40px;
+  }
+
+  &__login {
+    &-wrapper {
+      margin-top: 28px;
+      color: #A0AEC0;
+      font-weight: $font-normal;
+    }
+
+    color: $green;
+    font-weight: $font-bold;
+  }
+
+  &__login,
+  &__login-wrapper {
+    text-align: center;
+    font-style: normal;
+    font-size: $text-sm;
+    line-height: 20px;
+  }
+}
+
+.message-text {
+  margin: 10px;
+}
+
+.message-title {
+  text-align: center;
+  font-weight: bolder;
+}
+
+.error-message {
+  color: red;
+  margin-top: 25px;
+}
+
+@media screen and (max-width: 1200px) {
+  .register {
+    &__wrapper {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .register {
+    &__wrapper {
+      margin-top: 60px;
+      max-width: 360px;
+    }
+
+    &__title {
+      font-size: 20px;
+      line-height: 22px;
+    }
+
+    &__description {
+      font-size: 14px;
+      line-height: 17px;
+      margin-bottom: 28px;
+    }
+
+    &__password {
+      margin-bottom: 15px;
+    }
+
+    &__privacy-police {
+      margin-bottom: 24px;
+      cursor: pointer;
+      &__checkbox__label-text {
+        font-size: 11px;
+
+      }
+    }
+
+    &__button {
+      margin-top: 26px;
+    }
+
+    &__register-wrapper {
+      margin-top: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .register {
+    &__wrapper {
+      margin-top: 30px;
+      max-width: 290px;
+    }
+
+    &__description {
+      margin-bottom: 18px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    &__phone-number ::ng-deep input,
+    &__password ::ng-deep input {
+      height: 38px;
+    }
+
+    &__password {
+      margin-bottom: 15px;
+    }
+
+    &__privacy-police {
+      margin-bottom: 24px;
+    }
+
+
+    &__button ::ng-deep button {
+      height: 38px;
+    }
+
+    &__button {
+      margin-top: 12px;
+    }
+  }
+  .error-message {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,193 @@
+<div class="searchable-select">
+  <label class="searchable-select__label">
+    <div class="searchable-select__label-content">
+      <div class="searchable-select__edit" *ngIf="isEditModeActive">
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.32182 1.95547L9.71706 4.3507L3.65403 10.4137L1.26015 8.0185L7.32182 1.95547ZM11.5346 1.3778L10.4664 0.309613C10.0536 -0.103204 9.38326 -0.103204 8.96904 0.309613L7.94582 1.33283L10.3411 3.72808L11.5346 2.53455C11.8548 2.21434 11.8548 1.69798 11.5346 1.3778ZM0.00666541 11.3852C-0.036925 11.5814 0.140197 11.7571 0.336399 11.7094L3.0055 11.0623L0.61161 8.66706L0.00666541 11.3852Z"
+            fill="#08A652"
+          />
+        </svg>
+      </div>
+      <div
+        *ngIf="label"
+        class="searchable-select__title"
+        [class.searchable-select__title_disabled]="isInputDisabled"
+        [class.searchable-select__title_isRequared]="isRequared"
+      >
+        {{ label }}
+      </div>
+    </div>
+    <div
+      #select
+      class="searchable-select__input--content" [ngClass]="{'select-with-green-border': !isBorderGreen}"
+      [class.searchable-select__input--content_active]="isDropdownOpen"
+      [class.searchable-select__input--content_disabled]="isInputDisabled"
+      [class.searchable-select__input--content_valid]='valid !== undefined && valid'
+      [class.searchable-select__input--content_invalid]='valid !== undefined && !valid'
+    >
+      <div
+        *ngIf="selectedOptions?.length || selectedOptionsForDisplay.length && isSearch"
+        class="searchable-select__input_selected-items"
+        [class.max-width-100]="!isSearch"
+        [tooltipClass]="'tooltip--default-styles'"
+        [tooltip]="
+          showTooltip(displaySelected) ? selectedOptionsForDisplay : ''
+        "
+        [placement]="'top'"
+        [showDelay]="300"
+        [class.searchable-select__input_selected-items_limited]="isDropdownOpen"
+      >
+        <p class="items" #displaySelected>
+          {{ selectedOptionsForDisplay }}
+        </p>
+        <p *ngIf="showTooltip(displaySelected)">
+          {{ " (" + selectedOptions.length + ")" }}
+        </p>
+      </div>
+      <input
+        #input
+        class="searchable-select__input"
+        autocomplete="off"
+        [readonly]="isInputReadOnly"
+        [(ngModel)]="filterQuery"
+        [disabled]="isInputDisabled || isEditModeActive"
+        [placeholder]="placeholder"
+        [class.hidden]="!isSearch"
+        [class.searchable-select__input_disabled]="isInputDisabled"
+        [class.searchable-select__input_active]="isDropdownOpen"
+        (input)="filterOptions()"
+        [type]="inputTypeNumber ? 'number': 'text'"
+      />
+      <div
+        class="searchable-select__search-icon"
+        *ngIf="
+          !isDropdownOpen && !isInputReadOnly && !selectedOptionsForDisplay && isSearch
+        "
+      >
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11.6167 10.9301L8.76068 7.95969C9.49501 7.08675 9.89736 5.98841 9.89736 4.845C9.89736 2.17351 7.72385 0 5.05236 0C2.38087 0 0.207367 2.17351 0.207367 4.845C0.207367 7.51648 2.38087 9.68999 5.05236 9.68999C6.05528 9.68999 7.011 9.38749 7.82812 8.81326L10.7058 11.8062C10.8261 11.9311 10.9879 12 11.1613 12C11.3254 12 11.481 11.9374 11.5992 11.8237C11.8503 11.5821 11.8583 11.1814 11.6167 10.9301ZM5.05236 1.26391C7.02701 1.26391 8.63344 2.87034 8.63344 4.845C8.63344 6.81965 7.02701 8.42608 5.05236 8.42608C3.07771 8.42608 1.47128 6.81965 1.47128 4.845C1.47128 2.87034 3.07771 1.26391 5.05236 1.26391Z"
+            fill="#6F7985"
+          />
+        </svg>
+      </div>
+
+      <div
+        *ngIf="!isInputDisabled && (selectedOptionsForDisplay || filterQuery) && isCross"
+        class="removeBlock"
+        [class.removeBlock_disabled]="isInputDisabled"
+        (click)="handleInputClear()"
+      >
+        <svg
+          class="removeInputValue"
+          width="9"
+          height="6"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M10.2623 8.0002L15.5308 2.73153C16.1564 2.10595 16.1564 1.09477 15.5308 0.469188C14.9053 -0.156396 13.8941 -0.156396 13.2685 0.469188L8 5.73786L2.73146 0.469188C2.10589 -0.156396 1.09475 -0.156396 0.469177 0.469188C-0.156392 1.09477 -0.156392 2.10595 0.469177 2.73153L5.73771 8.0002L0.469177 13.2689C-0.156392 13.8945 -0.156392 14.9056 0.469177 15.5312C0.781161 15.8432 1.19074 16 1.60032 16C2.0099 16 2.41948 15.8432 2.73146 15.5312L8 10.2625L13.2685 15.5312C13.5805 15.8432 13.9901 16 14.3997 16C14.8093 16 15.2188 15.8432 15.5308 15.5312C16.1564 14.9056 16.1564 13.8945 15.5308 13.2689L10.2623 8.0002Z"
+            fill="#6F7985"
+          />
+        </svg>
+      </div>
+      <div
+        *ngIf="!selectedOptionsForDisplay && !filterQuery"
+        class="searchable-select__arrow"
+        [class.searchable-select__arrow_rotate]="isDropdownOpen"
+        [class.searchable-select__arrow_disabled]="isInputDisabled"
+      >
+        <svg
+          width="8"
+          height="5"
+          viewBox="0 0 8 5"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3.9795 4.21955L7.26487 0.934123C7.34092 0.858135 7.38281 0.756698 7.38281 0.648538C7.38281 0.540379 7.34092 0.438941 7.26487 0.362953L7.02298 0.121004C6.86536 -0.0364334 6.60919 -0.0364334 6.45181 0.121004L3.69296 2.87986L0.931044 0.117943C0.854996 0.0419551 0.753618 -2.89771e-07 0.645518 -2.94496e-07C0.537299 -2.99227e-07 0.435921 0.0419551 0.359813 0.117943L0.117985 0.359892C0.0419364 0.43594 4.14613e-05 0.537317 4.14566e-05 0.645477C4.14519e-05 0.753637 0.0419364 0.855074 0.117985 0.931062L3.40635 4.21955C3.48264 4.29572 3.5845 4.33755 3.69278 4.33731C3.80148 4.33755 3.90327 4.29572 3.9795 4.21955Z"
+            fill="#6F7985"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div
+      #dropdownList
+      class="searchable-select__search-list"
+      [class.searchable-select__search-list--isLoading]="isLoading"
+      [class.searchable-select__search-list_active]="isDropdownOpen"
+      [style.height.px]="dropdownHeight"
+      [style.width.px]="selectWidth"
+    >
+      <ng-container *ngIf="!isLoading; else loadingTpl">
+        <ng-container *ngIf="(dropdownOptions && dropdownOptions.length) && isSelectOptionsVisible.value; else noDataTpl">
+          <cdk-virtual-scroll-viewport
+            [itemSize]="46"
+            [minBufferPx]="184"
+            [maxBufferPx]="184"
+            class="searchable-select__virtual-container"
+          >
+            <div
+              *cdkVirtualFor="let option of dropdownOptions"
+              class="searchable-select__search-element"
+              [class.searchable-select__search-element_active]="
+                isOptionChecked(option)
+              "
+              (click)="toggleCheckedState(option)"
+            >
+              <div class="searchable-select__content">
+                <span class="searchable-select__checkbox" *ngIf="isMultiSelect">
+                  <hr-checkbox
+                    [checked]="isOptionChecked(option)"
+                    (changes)="toggleCheckedState(option)"
+                  ></hr-checkbox>
+                </span>
+                <span
+                  #optionLabel
+                  class="searchable-select__content-label"
+                  [tooltipClass]="'tooltip--default-styles'"
+                  [tooltip]="showTooltip(optionLabel) && option.displayName"
+                  [placement]="'top'"
+                  [showDelay]="300"
+                >
+                  {{ option.displayName}}
+                </span>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #loadingTpl>
+        <div class="loader-container">
+          <div class="loader"></div>
+          <!-- TODO: add translation for loading text -->
+          <p class="loader_text">Загрузка данных...</p>
+        </div>
+      </ng-template>
+
+      <ng-template #noDataTpl>
+        <div class="no-data">
+          <p class="no-data_text">Нет данных.</p>
+        </div>
+      </ng-template>
+    </div>
+  </label>
+</div>

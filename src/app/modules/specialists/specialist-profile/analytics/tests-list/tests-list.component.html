@@ -1,0 +1,48 @@
+<section class="tests" *ngIf="isObjectData(tests); else emptyContentTmpl">
+    <div *ngFor="let group of tests | keyvalue; let i=index">
+      <h1 class="tests-title">{{group.key}}</h1>
+      <ng-container *ngFor="let test of tests[group.key]; let i=index">
+        <div class="test-block">
+          <div class="test-block-level-icon">
+            <img *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.easy"
+                 src="../../../../../../assets/img/tests/medal-3.svg" alt="medal">
+            <img *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.normal"
+                 src="../../../../../../assets/img/tests/medal-2.svg" alt="medal">
+            <img *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.hard"
+                 src="../../../../../../assets/img/tests/medal-1.svg" alt="medal">
+          </div>
+          <div class="test">
+            <div class="test-point"><span> {{test.correctAnswerCount}} балла </span></div>
+            <h1 class="test-name">{{test?.interviewTest?.name}}</h1>
+            <p class="test-level"
+               *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.easy">
+              {{TestLevel.easy}}
+            </p>
+            <p class="test-level"
+               *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.normal">
+              {{TestLevel.normal}}
+            </p>
+            <p class="test-level"
+               *ngIf="test?.interviewTest?.difficulty === TestLevelEnum.hard">
+              {{TestLevel.hard}}
+            </p>
+            <div class="test-date">
+              <img src="../../../../../../assets/img/tests/date.svg" alt="date">
+              <p>{{getDate(test?.interviewTest?.updatedAt)  | date:'shortDate' }}</p>
+            </div>
+            <div class="test-answers">
+              <img src="../../../../../../assets/img/tests/answers.svg" alt="count">
+              <p>Количество вопросов: <span class="test-answers_count">
+        {{test?.correctAnswerCount + test?.wrongAnswerCount}}
+        </span></p>
+            </div>
+          </div>
+          <div class="test-see" (click)="openSpecialistTest(test?.testUuid)"><p>Посмотреть</p></div>
+        </div>
+      </ng-container>
+    </div>
+</section>
+
+<ng-template #emptyContentTmpl>
+  <hr-empty-content></hr-empty-content>
+</ng-template>

@@ -1,0 +1,310 @@
+@import "/src/assets/variables/variables";
+
+.fill-information {
+  width: 78.6%;
+  max-width: 1132px;
+  margin: 0 auto 210px;
+  padding: 32px 95px 64px;
+  background: $white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  &__title {
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: 18px;
+    line-height: 21px;
+    color: $black;
+    padding-bottom: 63px;
+  }
+
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__input {
+    margin-bottom: 11px;
+  }
+
+  &__inputs-wrapper {
+    max-width: 748px;
+    width: 100%;
+  }
+
+  &__file-input {
+
+    &--invalid ::ng-deep .file-input__label{
+      border: 1px solid $red;
+    }
+
+    &::ng-deep .modal {
+      padding: 0 30px 0 30px;
+      max-height: 80vh !important;
+      overflow-x: hidden !important;
+      width: 70%;
+      height: 80vh;
+
+      @media screen and (max-width: 500px) {
+        width: 100%;
+      }
+
+      &__content {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        height: 86%;
+        justify-content: space-between;
+        max-height: 100%;
+
+        & > image-cropper {
+          width: auto;
+          max-height: 60vh !important;
+
+          & > div {
+            width: auto;
+            max-height: 60vh !important;
+          }
+        }
+      }
+
+      &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar {
+        width: 4px;
+        height: 6px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: #fff;
+        background-image: linear-gradient(
+            89.99deg,
+            #029a51 1.43%,
+            #41d852 105.51%,
+            #029a51 47.83%
+        );
+      }
+
+      .modal__header {
+        .modal__close-button {
+          top: 20px;
+          right: 0;
+          border: 0.3px solid #6f7985;
+          box-shadow: 0 2px 5.5px rgba(0, 0, 0, 0.06);
+          border-radius: 8px;
+          width: 28px;
+          height: 28px;
+          z-index: 1001;
+          background: $white;
+        }
+      }
+    }
+  }
+
+  &__searchable-select {
+    width: 364px;
+
+    &__inn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    &-wrapper {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 13px;
+    }
+  }
+
+  &__searchable-select {
+    &:last-child {
+      margin-left: 20px;
+    }
+  }
+
+  &__editor {
+    &-label {
+      font-style: normal;
+      font-weight: $font-normal;
+      font-size: $text-sm;
+      line-height: 20px;
+      letter-spacing: 0.4px;
+      color: $black;
+      margin-bottom: 5px;
+
+      &:after {
+        content: "*";
+        color: #c83532;
+        font-size: 12px;
+      }
+    }
+
+    &-input {
+      max-width: 748px;
+      width: 100%;
+      margin-left: auto;
+      margin-top: 13px;
+
+      &::ng-deep .ck {
+        border: none;
+        padding: 0;
+
+        .ck-toolbar {
+          border: none;
+          padding: 0;
+
+          &__separator {
+            background-color: $black;
+          }
+        }
+
+        &-toolbar__items {
+          background: #e5eaec;
+          border: 1px solid #d5d4dc;
+          border-radius: 8px 8px 0 0;
+          padding: 0 0 0 26px;
+          height: 46px;
+        }
+
+        &-content {
+          height: 227px;
+          border-radius: 0 0 8px 8px !important;
+          border: 1px solid #d5d4dc;
+          border-top: none;
+          outline: none;
+          padding: 0 18px;
+          top: -1px;
+
+          &_invalid {
+            :host ::ng-deep .ck-editor__editable_inline {
+              border: 1px solid $red !important;
+            }
+          }
+
+          &_valid {
+            :host ::ng-deep .ck-editor__editable_inline {
+              border: 1px solid $green !important;
+            }
+          }
+
+          &:focus {
+            border: 1px solid #d5d4dc;
+            border-top: none;
+          }
+        }
+      }
+    }
+  }
+
+  &__button {
+    text-align: right;
+    margin-top: 45px;
+    user-select: none;
+  }
+
+  @media screen and (max-width: 1435px) {
+    padding: 32px 60px 64px;
+    .fill-information {
+      &__file-input {
+        margin-right: 21px;
+      }
+
+      &__searchable-select {
+        width: 70%;
+      }
+    }
+  }
+  @media screen and (max-width: 1230px) {
+    padding: 32px 40px 64px;
+  }
+  @media screen and (max-width: 1100px) {
+    padding: 32px 30px 64px;
+
+    .fill-information {
+      &__editor-input::ng-deep .NgxEditor {
+        height: 150px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    &__section {
+      flex-direction: column;
+    }
+
+    &__title {
+      padding-bottom: 35px;
+      font-size: 16px;
+    }
+
+    .fill-information {
+      &__file-input {
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 25px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .fill-information {
+    position: relative;
+    padding: 20px 30px 30px;
+    width: 90%;
+
+    &__searchable-select {
+      &-wrapper {
+        flex-direction: column;
+        gap: 10px;
+
+        .fill-information__searchable-select {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+    }
+
+    &__button {
+      margin-top: 25px;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .ck-content {
+    &_invalid {
+      .ck-editor__editable_inline {
+        border: 1px solid $red !important;
+      }
+    }
+
+    &_valid {
+      .ck-editor__editable_inline {
+        border: 1px solid $green !important;
+      }
+    }
+  }
+}
+
+::ng-deep
+.ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners {
+  padding: 0 16px !important;
+}
+
+.disabled-editor {
+  pointer-events: none;
+
+  ::ng-deep
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners {
+    background-color: #f5f8ff;
+  }
+}

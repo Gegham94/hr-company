@@ -1,0 +1,16 @@
+<label class='checkbox'>
+  <input
+    type='checkbox'
+    class='checkbox__input'
+    [checked]='checkedProps'
+    (change)='fileChangeEvent($event)'
+  >
+  <span class='checkbox__custom-input'>
+    <svg width='8' height='7' viewBox='0 0 8 7' fill='none' xmlns='http://www.w3.org/2000/svg' *ngIf='checkedProps'>
+        <path
+          d='M2.375 6.65752L0.0462494 4.32877L1.1075 3.26752L2.375 4.53877L6.08 0.830017L7.14125 1.89127L2.375 6.65752Z'
+          fill='#08A652'/>
+    </svg>
+  </span>
+  <span class='checkbox__label-text'>{{labelText}}</span>
+</label>

@@ -1,0 +1,9 @@
+@mixin background-image-style {
+  width: 40px;
+  background-repeat: no-repeat;
+  background-position: right;
+  position: absolute;
+  top: 5px;
+  height: 40px;
+  left: 0;
+}

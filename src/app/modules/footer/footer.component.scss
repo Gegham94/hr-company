@@ -1,0 +1,145 @@
+@import "src/assets/mixins/util/util";
+@import "src/assets/variables/variables";
+
+/* Default styles */
+.footer {
+  &_wrapper {
+    width: 100%;
+    height: fit-content;
+    background: linear-gradient(
+        89.99deg,
+        #029a51 1.43%,
+        #41d852 105.51%,
+        #029a51 47.83%
+    );
+    color: $white;
+    font-size: 16px;
+    padding: 50px 50px 0;
+  }
+
+  &_block-1 {
+    @include flex-space-between;
+    margin-bottom: 40px;
+
+    &--title {
+      font-size: 24px;
+      line-height: 30px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    &--info {
+      @include flex-end;
+      gap: 40px;
+
+      &-block {
+        @include flex-center;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+      }
+
+      img {
+        width: 30px;
+        height: 30px;
+      }
+
+      &-hrefText {
+        color: $white;
+      }
+    }
+  }
+
+  &_block-2 {
+    width: 100%;
+    @include flex-column-end;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 30px;
+
+    a {
+      color: $white;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  &_block-3 {
+    @include flex-center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 60px 0 30px 0;
+    color: $white;
+    font-size: 14px;
+    p {
+      text-align: center;
+    }
+  }
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .footer {
+    &_wrapper {
+      padding: 50px 20px 0;
+    }
+
+    &_block-1 {
+      flex-direction: column;
+
+      &--title {
+        margin-bottom: 20px;
+      }
+
+      &--info {
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+    }
+
+    &_block-2 {
+      padding: 14px 20px;
+    }
+
+    &_block-3 {
+      padding: 60px 0 20px 0;
+    }
+  }
+}
+
+/* Media query for even smaller screens */
+@media (max-width: 576px) {
+  .footer {
+    &_wrapper {
+      padding: 50px 10px 0;
+    }
+
+    &_block-1 {
+      &--title {
+        font-size: 20px;
+        line-height: 26px;
+      }
+
+      &--info {
+        gap: 20px;
+
+        &-block {
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    &_block-2 {
+      padding: 14px 10px;
+    }
+
+    &_block-3 {
+      padding: 40px 0 10px 0;
+    }
+  }
+}

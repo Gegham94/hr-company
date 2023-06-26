@@ -1,0 +1,52 @@
+<div class='user-card' [class.watched]="!isNew" [ngClass]="{'user-card--disabled': disabled}" (click)="specProfile()">
+  <div class='user-card__header'>
+    <div class='user-card__name'>{{userNameProps}} {{userSurnameProps}}</div>
+    <div *ngIf='isNew; else interviewStatusBlock' class='user-card__new'> Новый </div>
+    <ng-template #interviewStatusBlock>
+      <div class='user-card__interviewStatus'>{{ specalistStatus }}</div>
+    </ng-template>
+  </div>
+  <div class='user-card__profession'>{{userProfessionProps}}</div>
+  <div class='user-card__post'>{{userPostProps}}</div>
+  <div class='user-card__test-wrapper'>
+    <div class='user-card__test-title'>Психологический тест</div>
+    <hr-progress-bar
+      [value]='progressPsychologyProps'
+      [max-value]='100'
+      progress-bar-color='#4FD1C5'
+      [value-direction-top]='true'
+      [type-props]='typeProps.small'
+    ></hr-progress-bar>
+  </div>
+  <div class='user-card__test-wrapper'>
+    <div class='user-card__test-title'>Профессиональный тест</div>
+    <hr-progress-bar
+      [value]='progressProfessionalProps'
+      [max-value]='100'
+      progress-bar-color='#0F62FE'
+      [value-direction-top]='true'
+      [type-props]='typeProps.small'
+    ></hr-progress-bar>
+  </div>
+  <div class='user-card__test-wrapper'>
+    <div class='user-card__test-title'>Собеседование</div>
+    <hr-progress-bar
+      [value]='progressInterviewProps'
+      [max-value]='100'
+      progress-bar-color='$orange'
+      [value-direction-top]='true'
+      [type-props]='typeProps.small'
+    ></hr-progress-bar>
+  </div>
+  <div class="user-card__actions" >
+    <button *ngIf="vacancyStatus !== VacancyStatusEnum.Archived" class='user-card__add-favorites-button' (click)="updateFavorites($event)">
+      <img *ngIf="!isFavorite" src="assets/img/icon/heart-1.svg" alt="heart">
+      <img *ngIf="isFavorite" src="assets/img/icon/heart-2.svg" alt="heart">
+    </button>
+    <button
+      *ngIf="vacancyStatus !== VacancyStatusEnum.Archived"
+      class='user-card__view-profile-button' (click)="specProfile()">
+      <img src="/assets/img/icon/spec-profile.svg" alt="spec-profile">
+    </button>
+  </div>
+</div>

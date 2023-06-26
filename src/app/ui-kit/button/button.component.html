@@ -1,0 +1,11 @@
+<div class="button-wrapper">
+  <button
+    [ngClass]="{'disabledProps':disabledProps}"
+    class="button-wrapper__button"
+    [class]="!disabledProps ? 'button-wrapper__button_' + typeProps : 'button-wrapper__button_disabled'"
+    [disabled]='!!disabledProps'
+    (click)='clickEvent.emit($event)'
+  >
+    {{textProps}}
+  </button>
+</div>

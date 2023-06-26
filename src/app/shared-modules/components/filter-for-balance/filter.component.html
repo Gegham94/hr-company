@@ -1,0 +1,33 @@
+<div
+  class="filter"
+  [class.filter__open]="isOpen"
+  [class.filter__close]="!isOpen"
+>
+  <div class="filter__wrapper">
+    <div >
+      <hr-search-select
+        *ngIf="filterFromPaidVacancyBalance && !filterFromUnpaidVacancyBalance"
+        class="filter__status-input"
+        [isCross]="false"
+        [placeholder]="'MY_VACANCY.SEARCH.BY_STATUS' | translate"
+        [class.filter__search-input_close]="!isOpen"
+        [class.filter__search-input_open]="isOpen"
+        [options]="statusList"
+        [defaultValue]="defaultValue"
+        (selectedOptionOutput)="handleStatusChange($event)"
+      ></hr-search-select>
+    </div>
+
+    <div>
+      <hr-input
+        *ngIf="!filterFromPaidVacancyBalance && filterFromUnpaidVacancyBalance"
+        class="filter__search-input"
+        [class.filter__search-input_close]="!isOpen"
+        [class.filter__search-input_open]="isOpen"
+        [placeholder-text]="'MY_VACANCY.SEARCH.BY_NAME' | translate"
+        (textInput)="nameChanged.emit($event)"
+      >
+      </hr-input>
+    </div>
+  </div>
+</div>

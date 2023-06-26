@@ -1,0 +1,420 @@
+<section class='add-vacancy-description'>
+  <section class='add-vacancy-description__wrapper'>
+    <div class='add-vacancy-description__title'>{{"VACANCY.SEARCH_SPECIALIST.TITLE.STEP_2" | translate}}</div>
+    <hr-progress-bar-for-steps
+      [edit]='true'
+      [form-group]='vacancyFormGroup'
+      [updateProgressBar]='updateProgressBar | async'
+    ></hr-progress-bar-for-steps>
+    <div class='add-vacancy-description__accordion'>
+      <hr-accordion-group>
+        <hr-accordion
+          [head-text]='"VACANCY.SEARCH_SPECIALIST.ACCORDION.TITLE" | translate' [vacancyUuId]='vacancyUuId'
+        >
+          <hr-create-vacancy-filter [edit]='true'></hr-create-vacancy-filter>
+        </hr-accordion>
+      </hr-accordion-group>
+    </div>
+    <div class='add-vacancy-description__vacancy-name'>
+      <hr-input
+        [label-text]='"VACANCY.SEARCH_SPECIALIST.FILTER.NAME" | translate'
+        [placeholder-text]="''"
+        [feedback-text]="''"
+        [formControl]='vacancyCompanyNameControl'
+        [valid]='vacancyCompanyNameControl.touched ? vacancyCompanyNameControl.valid : undefined'
+      >
+      </hr-input>
+    </div>
+    <div class='add-vacancy-description__monthly-income'>
+      <p class="add-vacancy-description__monthly-income--label">Предполагаемый уровень дохода в месяц</p>
+      <div class='add-vacancy-description__monthly-income--block'>
+        <div class='add-vacancy-description__monthly-income--block-item salaryCount'>
+          <hr-input
+            [placeholder-text]="'от'"
+            [currency-input]="true"
+            [valid]="vacancySalaryIncomeControl.touched ? vacancySalaryIncomeControl.valid : undefined"
+            [formControl]='vacancySalaryIncomeControl'>
+          </hr-input>
+        </div>
+        <div class='add-vacancy-description__monthly-income--block-item salary'>
+          <hr-search-select
+            [isSearch]="false"
+            [options]="salary"
+            [formControl]='vacancyCurrencyIncomeControl'
+            [valid]="vacancyCurrencyIncomeControl.touched ? vacancyCurrencyIncomeControl.valid : undefined"
+          >
+          </hr-search-select>
+        </div>
+      </div>
+      <p class="add-vacancy-description__monthly-income--error" *ngIf="isError.value"> Минимальная цена не может
+        превышать максимальную.</p>
+    </div>
+    <div class='add-vacancy-description__completion-date'>
+      <div class='add-vacancy-description__editor-description-label'>
+        {{"VACANCY.SEARCH_SPECIALIST.FILTER.COMPLETION_DATE" | translate}} (от 7 до 70 дней)
+      </div>
+
+      <div class='datepicker filter__date-label'>
+        <hr-input
+          [input-type]="'number'"
+          [formControl]='vacancyCompletionDateControl'
+          [valid]="
+              vacancyCompletionDateControl.touched
+                ? vacancyCompletionDateControl.valid
+                : undefined
+            "
+          [feedback-text]="
+              vacancyCompletionDateControl.touched
+                ? vacancyFormGroup.getError('deadlineDate')
+                : ''
+            "
+          [error-status]="
+              !!vacancyFormGroup.getError('deadlineDate')
+                ? inputStatusList.invalid
+                : inputStatusList.valid
+            "
+        >
+        </hr-input>
+      </div>
+
+    </div>
+    <div class='add-vacancy-description__editor-description'>
+      <div class='add-vacancy-description__editor-description-label'>
+        {{"VACANCY.SEARCH_SPECIALIST.FILTER.COMPANY_DESCRIPTION" | translate}}
+      </div>
+      <ckeditor
+        [editor]='Editor'
+        [config]='editorConfig'
+        (ready)='onReady($event)'
+        [formControl]='vacancyDescriptionControl'
+        [class.ck-content_invalid]='vacancyDescriptionControl.invalid && vacancyDescriptionControl.touched'
+        [class.ck-content_valid]='vacancyDescriptionControl.valid && vacancyDescriptionControl.touched'
+      ></ckeditor>
+    </div>
+    <div class='add-vacancy-description__editor-duties'>
+      <div class='add-vacancy-description__editor-duties-label'>
+        {{"VACANCY.SEARCH_SPECIALIST.FILTER.RESPONSIBILITIES" | translate}}
+      </div>
+      <ckeditor
+        [editor]='Editor'
+        [config]='editorConfig'
+        (ready)='onReady($event)'
+        [formControl]='vacancyDutiesControl'
+        [class.ck-content_invalid]='vacancyDutiesControl.invalid && vacancyDutiesControl.touched'
+        [class.ck-content_valid]='vacancyDutiesControl.valid && vacancyDutiesControl.touched'
+      ></ckeditor>
+    </div>
+    <div class='add-vacancy-description__editor-conditions'>
+      <div class='add-vacancy-description__editor-conditions-label'>
+        {{"VACANCY.SEARCH_SPECIALIST.FILTER.TERMS" | translate}}
+      </div>
+      <ckeditor
+        [editor]='Editor'
+        [config]='editorConfig'
+        (ready)='onReady($event)'
+        [formControl]='vacancyConditionsControl'
+        [class.ck-content_invalid]='vacancyConditionsControl.invalid && vacancyConditionsControl.touched'
+        [class.ck-content_valid]='vacancyConditionsControl.valid && vacancyConditionsControl.touched'
+      ></ckeditor>
+    </div>
+
+    <div class="add-vacancy-description__editor-conditions">
+      <div class="add-vacancy-description__editor-conditions--title" (click)="downloadPdf()">
+        <div class="add-vacancy-description__editor-conditions-label not-required">
+          {{ "VACANCY.SEARCH_SPECIALIST.FILTER.QUESTIONS" | translate }}
+        </div>
+        <div class="add-vacancy-description__editor-conditions--download" >
+          <p>Скачать вопросы</p>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let input of questionsFields; let k = index">
+        <div class="questions">
+          <fieldset class="textarea-wrapper">
+            <legend class="question-number">
+              <div class="question-number-circule">{{ k + 1 }}</div>
+            </legend>
+            <textarea #myTextarea class="question" (input)="autoResize(myTextarea)"
+                      [(ngModel)]="questionsFields[k].question"></textarea>
+            <div [hidden]="questionsFields.length <= 1" (click)="removeInputField(k)" class="remove-question">
+              <img src="assets/img/icon/delete.png" alt="delete"/>
+            </div>
+          </fieldset>
+        </div>
+      </ng-container>
+      <div class="add-question_block">
+        <button (click)="addInputField()" class="add-question"
+                [ngClass]="{'add-question--disabled': isAddQuestionDisable}"> +
+        </button>
+      </div>
+    </div>
+
+    <div class='add-vacancy-description__button'>
+      <hr-button
+        [disabled]='vacancyFormGroup.invalid || isError.value'
+        [text]='vacancyUuId ? ("ACTIONS.REFRESH" | translate) : ("ACTIONS.ADD" | translate)'
+        (clickEvent)='onFormSubmit(vacancyFormGroup)'
+      ></hr-button>
+    </div>
+  </section>
+
+  <hr-modal
+    [is-open]='isPaidModalOpen'
+    (whenModalClose)='paidModal($event)'
+  >
+    <div class='add-vacancy-description__modal'>
+      <div class='add-vacancy-description__modal-title'>
+        Внимание !
+      </div>
+      <div class='add-vacancy-description__modal-description'>
+        Для того,чтобы добавить вакансию вам нужно оплатить добавление вакансии.
+      </div>
+      <div class='add-vacancy-description__modal-text'>
+        Сумма к оплате
+        <span class='add-vacancy-description__modal-text_bold add-vacancy-description__modal-text'>
+          6000.00 руб .
+        </span>
+      </div>
+      <div class='add-vacancy-description__modal-button-wrapper'>
+        <div class='add-vacancy-description__modal-button_skip'>
+          <hr-button
+            [text]='"ACTIONS.POSTPONE" | translate'
+            [type]='buttonTypesList.outline'
+            (click)='postponeModal()'
+          >
+          </hr-button>
+        </div>
+        <div class='add-vacancy-description__modal-button_send'>
+          <hr-button
+            [text]="'Оплатить'"
+            [type]='buttonTypesList.outlineGreen'
+            (click)='paidChooseModal()'
+          >
+          </hr-button>
+        </div>
+      </div>
+    </div>
+  </hr-modal>
+
+  <hr-modal
+    [is-open]='isPostponeModalOpen'
+    (whenModalClose)='postponeModal($event)'
+  >
+    <div class='add-vacancy-description__modal'>
+      <div class='add-vacancy-description__modal-title'>
+        Внимание !
+      </div>
+      <div class='add-vacancy-description__modal-description'>
+        Вы отложили оплату вакансии. Данные которые вы заполнили будут сохранены.
+        Для того,что бы оплатить вакансию позже перейдите в раздел
+        <a class='add-vacancy-description__modal-text_link'>Баланс</a>
+        в список не оплаченых вакансих
+      </div>
+      <div class='add-vacancy-description__modal-button-wrapper'>
+        <div class='add-vacancy-description__modal-button_send'>
+          <a [routerLink]="'/balance'">
+            <hr-button
+              [text]="'Перейти'"
+              [type]='buttonTypesList.outlineGreen'
+            >
+            </hr-button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </hr-modal>
+
+  <hr-modal
+    [is-open]='isPaidChooseModalOpen'
+    (whenModalClose)='paidChooseModal($event)'
+  >
+    <div class='add-vacancy-description__modal'>
+      <div class='add-vacancy-description__modal-title'>
+        Выберите способ оплаты !
+      </div>
+      <div class='add-vacancy-description__modal-description'>
+        Вы собираетесь оплатить вакансию
+        <span class='add-vacancy-description__modal-text_bold add-vacancy-description__modal-text'>
+         Angular Developer .
+        </span>
+      </div>
+      <div class='add-vacancy-description__modal-description'>
+        Сумма к оплате
+        <span class='add-vacancy-description__modal-text_bold add-vacancy-description__modal-text'>
+         6000.00 руб .
+        </span>
+      </div>
+      <div class='add-vacancy-description__modal-card-title'>Банковской картой</div>
+      <div class='add-vacancy-description__modal-card-wrapper'>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]='"visa"' [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/visa-icon.png' alt='visa'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'maestro'" [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/maestro-icon.png' alt='maestro'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'master-card'"
+                      [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/master-card-icon.png' alt='master-card'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'mir'" [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/mir-icon.png' alt='mir'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+      </div>
+      <div class='add-vacancy-description__modal-card-title'>Электронной валютой</div>
+      <div class='add-vacancy-description__modal-card-wrapper'>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'yandex'" [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/yandex-icon.png' alt='yandex'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'webmoney'" [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/webmoney-icon.png' alt='webMoney'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+        <label class='add-vacancy-description__modal-card'>
+          <div class='add-vacancy-description__modal-card-label'>
+            <hr-radio [group-name]='"payment-choose"' [value]="'qiwi'" [formControl]='cardTypeControl'></hr-radio>
+          </div>
+          <img src='../../../../../assets/img/paid-icons/qiwi-icon.png' alt='qiwi'
+               class='add-vacancy-description__modal-card-image'>
+        </label>
+      </div>
+      <div class='add-vacancy-description__modal-button-wrapper'>
+        <div class='add-vacancy-description__modal-button_send'>
+          <hr-button
+            [disabled]='cardTypeControl.invalid'
+            [text]="'ACTIONS.NEXT' | translate"
+            [type]='buttonTypesList.outlineGreen'
+            (click)='cardInfoModal()'
+          >
+          </hr-button>
+        </div>
+      </div>
+    </div>
+  </hr-modal>
+
+  <hr-modal
+    [is-open]='isCardInfoModalOpen'
+    (whenModalClose)='cardInfoModal($event)'
+  >
+    <div class='add-vacancy-description__modal'>
+      <div class='add-vacancy-description__modal-title'>
+        Внимание !
+      </div>
+      <div class='add-vacancy-description__modal-description'>
+        Заполните данные вашей карты ,что бы оплатить вакансию.
+      </div>
+      <div class='add-vacancy-description__modal-input'>
+        <div class='add-vacancy-description__modal-input-text'>
+          Номер карты
+        </div>
+        <hr-input
+          [placeholder-text]="'XXXX  XXXX  XXXX  XXXX'"
+          [card-input]='true'
+          [formControl]='cardNumberControl'
+          [valid]='cardNumberControl.touched ? cardNumberControl.valid : undefined'
+        ></hr-input>
+      </div>
+      <div class='add-vacancy-description__modal-input-text'>
+        Срок действия
+      </div>
+      <div class='add-vacancy-description__modal-input-wrapper'>
+        <div class='add-vacancy-description__modal-input add-vacancy-description__modal-input_mini'>
+          <hr-input
+            [formControl]='cardMonthControl'
+            [mask-pattern]='"0{2}"'
+            [valid]='cardMonthControl.touched ? cardMonthControl.valid : undefined'
+          ></hr-input>
+        </div>
+        /
+        <div class='add-vacancy-description__modal-input add-vacancy-description__modal-input_mini'>
+          <hr-input
+            [formControl]='cardYearControl'
+            [mask-pattern]='"0{2}"'
+            [valid]='cardYearControl.touched ? cardYearControl.valid : undefined'
+          ></hr-input>
+        </div>
+      </div>
+      <div class='add-vacancy-description__modal-input add-vacancy-description__modal-input_mini'>
+        <div class='add-vacancy-description__modal-input-text'>
+          Код CVC /CVV
+        </div>
+        <hr-input
+          [formControl]='cardCvvControl'
+          [mask-pattern]='"0{3}"'
+          [valid]='cardCvvControl.touched ? cardCvvControl.valid : undefined'
+        ></hr-input>
+      </div>
+      <div class='add-vacancy-description__modal-image-wrapper'>
+        <img [src]='"/assets/img/paid-icons/" + paymentType + "-icon.png"' alt=''
+             class='add-vacancy-description__modal-image' *ngIf='paymentType'>
+      </div>
+      <div class='add-vacancy-description__modal-button-wrapper add-vacancy-description__modal-button-wrapper_payment'>
+        <div class='add-vacancy-description__modal-button_send'>
+          <hr-button
+            [text]="'ACTIONS.SAVE' | translate"
+            [type]='buttonTypesList.outlineGreen'
+            (click)='notificationModal()'
+            [disabled]='cardForm.invalid'
+          >
+          </hr-button>
+        </div>
+      </div>
+    </div>
+  </hr-modal>
+
+  <hr-modal
+    [is-open]='isNotificationModalOpen'
+    (whenModalClose)='notificationModal($event)'
+  >
+    <div class='add-vacancy-description__modal'>
+      <div class='add-vacancy-description__modal-title'>
+        Вакансия добавлена.
+      </div>
+      <div class='add-vacancy-description__modal-title add-vacancy-description__modal-title_small'>
+        Внимание!
+      </div>
+      <!--      <div class='add-vacancy-description__modal-description add-vacancy-description__modal-description_medium'>-->
+      <!--        Сотридники будут получать уведомления в течении нескольких дней-->
+      <!--        в список не оплаченых вакансих-->
+      <!--      </div>-->
+      <div class='add-vacancy-description__modal-text'>
+        Вы можете наблюдать за списком кандидатов на
+        данную вакансию в разделе Специалисты.
+      </div>
+      <div class='add-vacancy-description__modal-button-wrapper'>
+        <div class='add-vacancy-description__modal-button_send'>
+          <hr-button
+            [text]="'Перейти'"
+            [type]='buttonTypesList.outlineGreen'
+            [routerLink]="'/vacancies'"
+          >
+          </hr-button>
+        </div>
+      </div>
+    </div>
+  </hr-modal>
+
+</section>
+

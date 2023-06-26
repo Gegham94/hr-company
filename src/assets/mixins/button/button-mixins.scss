@@ -1,0 +1,40 @@
+@import "src/assets/variables/variables";
+
+
+@mixin default-button {
+  height: 48px;
+  padding: 0 22px;
+  font-size: $text-sm;
+  cursor: pointer;
+  border: none;
+  font-weight: $font-bold;
+  -webkit-border-radius: $radius-base;
+  -moz-border-radius: $radius-base;
+  border-radius: $radius-base;
+  transition: all 0.25s ease;
+  outline: none;
+  @media screen and (max-width:280px ){
+    padding: 0 36px;
+  }
+}
+
+@mixin button-hover($color: $orange) {
+  box-shadow: $shadow-low;
+}
+
+@mixin navigate-button {
+  @include default-button;
+  height: 114px;
+  max-width: 210px;
+  width: 100%;
+  font-weight: $font-medium;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 31px 0;
+
+  @media only screen and (max-width: 400px) {
+    max-width: 170px;
+  }
+}

@@ -1,0 +1,81 @@
+<ng-container *ngIf="screenSizeType === 'DESKTOP'; else mobileRobotTpl">
+  <div class="robot">
+    <div class="robot-bg" [@bgOpacity]="state"></div>
+    <div class="robot-content">
+      <img
+        (load)="isRobotLoaded()"
+        class="robot-img"
+        [@fadeInOut]="state"
+        src="../../../assets/img/icon/robot.svg"
+        alt="robot"
+      />
+      <div
+        class="robot-item"
+        [hidden]="!isReadyImages()"
+        [@blockInfo]="infoState"
+      >
+        <div class="robot-item_container">
+          <div (click)="close()" class="robot-close">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M10.2623 8.0002L15.5308 2.73153C16.1564 2.10595 16.1564 1.09477 15.5308 0.469188C14.9053 -0.156396 13.8941 -0.156396 13.2685 0.469188L8 5.73786L2.73146 0.469188C2.10589 -0.156396 1.09475 -0.156396 0.469177 0.469188C-0.156392 1.09477 -0.156392 2.10595 0.469177 2.73153L5.73771 8.0002L0.469177 13.2689C-0.156392 13.8945 -0.156392 14.9056 0.469177 15.5312C0.781161 15.8432 1.19074 16 1.60032 16C2.0099 16 2.41948 15.8432 2.73146 15.5312L8 10.2625L13.2685 15.5312C13.5805 15.8432 13.9901 16 14.3997 16C14.8093 16 15.2188 15.8432 15.5308 15.5312C16.1564 14.9056 16.1564 13.8945 15.5308 13.2689L10.2623 8.0002Z"
+                fill="#A0AEC0"
+              />
+            </svg>
+          </div>
+          <ng-container *ngIf="helperInfo | async as helperInfo">
+            <hr-slider [helperInfo]="helperInfo" (close)="close()"></hr-slider>
+          </ng-container>
+          <img
+            class="polygon"
+            src="../../../assets/img/icon/polygon.svg"
+            alt="polygon"
+            (load)="isPolygonLoaded()"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #mobileRobotTpl>
+  <div class="mobile-robot-bg" [@bgOpacity]="state"></div>
+  <div
+    class="mobile-robot"
+    [@toast]="state"
+    (swipeDown)="checkForValidSwipe($event)"
+  >
+    <div class="mobile-robot_header">
+      <div class="arrow">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="mobile-robot_content">
+      <div class="mobile-robot_content__text">
+        <ng-container *ngIf="helperInfo | async as helperInfo">
+          <hr-slider
+            [helperInfo]="helperInfo"
+            [controlsUnder]="true"
+            (close)="close()"
+          ></hr-slider>
+        </ng-container>
+      </div>
+      <div class="mobile-robot_content__img">
+        <img
+          (load)="isRobotLoaded()"
+          src="../../../assets/img/icon/robot-slim.svg"
+          alt="robot"
+        />
+      </div>
+    </div>
+  </div>
+</ng-template>

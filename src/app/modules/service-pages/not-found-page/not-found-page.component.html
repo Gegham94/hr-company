@@ -1,0 +1,11 @@
+<div class='page'>
+  <h1 class='page__img'> 404 </h1>
+  <h2 class='page__title'> {{"SERVICE_PAGES.NOT_FOUND.TITLE" | translate}} <hr></h2>
+  <p class='page__subtitle'> {{"SERVICE_PAGES.NOT_FOUND.SUBTITLE" | translate}} </p>
+  <hr-button
+    class='page__link'
+    [text]="'SERVICE_PAGES.NO_ACCESS.LINK' | translate"
+    [type]='buttonTypesList.gradient'
+    (clickEvent)='goBack()'
+  ></hr-button>
+</div>

@@ -1,0 +1,170 @@
+<hr-loader *ngIf="isSendCompanyInfo$ | async"></hr-loader>
+<section class="fill-information">
+  <form autocomplete="off" [formGroup]="companyRegisterForm">
+    <div class="fill-information__title">
+      {{ "PROFILE.TITLE" | translate }}
+    </div>
+    <div class="fill-information__section">
+      <div
+        class="fill-information__file-input"
+        [ngClass]="{ 'fill-information__file-input--invalid': isLogo.value !== undefined && !isLogo.value }"
+      >
+        <hr-file-input
+          [logo]="(logo() | async) ?? ''"
+          [formControl]="companyForm.getFormControl('logo')"
+          [feedback-text]="isLogo.value !== undefined && !isLogo.value ? 'Логотип обязательное' : ''"
+          [error-status]="isLogo.value !== undefined && !isLogo.value ? inputStatusList.invalid : inputStatusList.valid"
+        ></hr-file-input>
+      </div>
+      <div class="fill-information__inputs-wrapper" *ngLet="isInnSelected$ | async as isInn">
+        <div class="fill-information__searchable-select__inn" *ngLet="isInnRegistered$ | async as isRegistered">
+          <hr-search-select
+            [inputTypeNumber]="true"
+            [label]="'PROFILE.COMPANY.INN' | translate"
+            [formControl]="companyForm.getFormControl('inn')"
+            [isLoading]="(isInnLoading$ | async) ?? false"
+            [dataInputAsString]="true"
+            [isInn]="true"
+            [options]="getCompanyInn$ | async"
+            (filterQueryChange)="searchByInn($event)"
+            [valid]="companyForm.getFormControl('inn').touched ? companyForm.getFormControl('inn').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="fill-information__input">
+          <hr-input
+            [disabled]="isInn"
+            [label-text]="'PROFILE.COMPANY.NAME' | translate"
+            [placeholder-text]="''"
+            [formControl]="companyForm.getFormControl('name')"
+            [valid]="companyForm.getFormControl('name').touched ? companyForm.getFormControl('name').valid : undefined"
+            [feedback-text]="companyForm.getFormControl('name').touched ? companyForm.getErrorMessages('name') : ''"
+            [error-status]="!!companyForm.getErrorMessages('name') ? inputStatusList.invalid : inputStatusList.valid"
+          >
+          </hr-input>
+        </div>
+        <div class="fill-information__input">
+          <hr-input
+            [disabled]="true"
+            [prefix]="'+7 '"
+            [label-text]="'PROFILE.COMPANY.PHONE' | translate"
+            [phone-input]="true"
+            [placeholder-text]="'+7  (_____)  _______ -- _______'"
+            [formControl]="companyForm.getFormControl('phone')"
+            [valid]="
+              companyForm.getFormControl('phone').touched ? companyForm.getFormControl('phone').valid : undefined
+            "
+            [feedback-text]="companyForm.getFormControl('phone').touched ? companyForm.getErrorMessages('phone') : ''"
+            [error-status]="!!companyForm.getErrorMessages('phone') ? inputStatusList.invalid : inputStatusList.valid"
+          >
+          </hr-input>
+        </div>
+        <div class="fill-information__input">
+          <hr-input
+            [disabled]="isInn"
+            [label-text]="'PROFILE.COMPANY.EMAIL' | translate"
+            [placeholder-text]="''"
+            [feedback-text]="companyForm.getFormControl('email').touched ? companyForm.getErrorMessages('email') : ''"
+            [formControl]="companyForm.getFormControl('email')"
+            [valid]="
+              companyForm.getFormControl('email').touched ? companyForm.getFormControl('email').valid : undefined
+            "
+            [error-status]="!!companyForm.getErrorMessages('email') ? inputStatusList.invalid : inputStatusList.valid"
+          >
+          </hr-input>
+        </div>
+        <div class="fill-information__input">
+          <hr-input
+            [disabled]="isInn"
+            [label-text]="'PROFILE.COMPANY.ADDRESS' | translate"
+            [placeholder-text]="''"
+            [feedback-text]="
+              companyForm.getFormControl('address').touched ? companyForm.getErrorMessages('address') : ''
+            "
+            [formControl]="companyForm.getFormControl('address')"
+            [valid]="
+              companyForm.getFormControl('address').touched ? companyForm.getFormControl('address').valid : undefined
+            "
+            [error-status]="!!companyForm.getErrorMessages('address') ? inputStatusList.invalid : inputStatusList.valid"
+          >
+          </hr-input>
+        </div>
+        <div class="fill-information__searchable-select-wrapper">
+          <div class="fill-information__searchable-select">
+            <hr-search-select
+              [label]="'PROFILE.COMPANY.COUNTRY' | translate"
+              [isInputDisabled]="isInn"
+              [formControlName]="'country'"
+              [isLoading]="(isSelectionLoader | async) ?? false"
+              [dataInputAsString]="true"
+              [options]="searchListCountry$ | async"
+              [valid]="
+                companyForm.getFormControl('country').touched ? companyForm.getFormControl('country').valid : undefined
+              "
+            ></hr-search-select>
+          </div>
+          <div class="fill-information__searchable-select">
+            <hr-search-select
+              [label]="'PROFILE.COMPANY.CITY' | translate"
+              [isInputDisabled]="isCityDisabled || isInn"
+              [formControlName]="'city'"
+              [isLoading]="(isSelectionLoader | async) ?? false"
+              [dataInputAsString]="true"
+              [options]="searchListCity$ | async"
+              [valid]="
+                companyForm.getFormControl('city').touched ? companyForm.getFormControl('city').valid : undefined
+              "
+            ></hr-search-select>
+          </div>
+        </div>
+        <hr-input
+          [disabled]="isInn"
+          [label-text]="'PROFILE.COMPANY.LINK' | translate"
+          [placeholder-text]="'https://example.com'"
+          [formControl]="companyForm.getFormControl('webSiteLink')"
+          [valid]="
+            companyForm.getFormControl('webSiteLink').touched
+              ? companyForm.getFormControl('webSiteLink').valid
+              : undefined
+          "
+          [feedback-text]="
+            companyForm.getFormControl('webSiteLink').touched ? companyForm.getErrorMessages('webSiteLink') : ''
+          "
+          [error-status]="
+            !!companyForm.getErrorMessages('webSiteLink') ? inputStatusList.invalid : inputStatusList.valid
+          "
+        >
+        </hr-input>
+        <div class="fill-information__editor-input">
+          <div class="fill-information__editor-label">
+            {{ "PROFILE.COMPANY.DESCRIPTION" | translate }}
+          </div>
+          <ckeditor
+            [ngClass]="{ 'disabled-editor': isInn }"
+            [editor]="Editor"
+            [config]="editorConfig"
+            (ready)="onReady($event)"
+            [formControl]="companyForm.getFormControl('description')"
+            [class.ck-content_invalid]="
+              companyForm.getFormControl('description').invalid && companyForm.getFormControl('description').touched
+            "
+            [class.ck-content_valid]="
+              companyForm.getFormControl('description').valid && companyForm.getFormControl('description').touched
+            "
+          ></ckeditor>
+        </div>
+      </div>
+    </div>
+    <div class="fill-information__button">
+      <hr-button
+        *ngLet="disabledSendBtn$ | async as disabledSendBtn"
+        [disabled]="companyRegisterForm.invalid || disabledSendBtn"
+        [text]="'ACTIONS.SAVE' | translate"
+        (clickEvent)="onFormSubmit(companyRegisterForm, disabledSendBtn, $event)"
+      ></hr-button>
+    </div>
+  </form>
+</section>
+
+<ng-container *ngIf="isChooseModalOpen | async as isOpen">
+  <hr-buy-tariff-modal [isOpen]="isOpen" (checkIsRobot)="checkIsRobot()"></hr-buy-tariff-modal>
+</ng-container>

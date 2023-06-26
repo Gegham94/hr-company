@@ -1,0 +1,51 @@
+<section class="balance" *ngIf="!isTariffInfo">
+  <section class='balance__card-wrapper'>
+    <ng-container *ngFor="let balanceTariff of (getBalanceTariff$ | async); let i=index">
+      <hr-tariff-list
+        [balanceTariff]="balanceTariff"
+        [listCardInfo]="balanceTariff.listCardInfo"
+        (buyTariffEmitter)="buyTariff($event)"
+      ></hr-tariff-list>
+    </ng-container>
+  </section>
+</section>
+
+<hr-modal [is-open]="isTariffInfo" (whenModalClose)="close.emit(true)">
+
+  <div class="packages-content" *ngIf="!isLoader$.value; else packagesTmpl">
+    <div class="packages-content__title" *ngIf="packageInfo$ | async as packageInfo">
+      <ng-container *ngIf="packageInfo.allActivePackages; else noTariffTmpl">
+        <h1>{{packageInfo.activeTariffsNames}}</h1>
+      </ng-container>
+      <ng-template #noTariffTmpl>
+        <h1>Нет активного тарифа</h1>
+      </ng-template>
+
+      <div class="packages-content__info">
+        <div class="packages-content__all">
+          <p class="packages-content__all--text">Все</p>
+          <p class="packages-content__all--value">{{packageInfo.allActivePackages}}</p>
+        </div>
+        <div class="packages-content__stayed">
+          <p class="packages-content__stayed--text">Неиспользованные</p>
+          <p class="packages-content__stayed--value">{{packageInfo.stayedPackages}}</p>
+        </div>
+      </div>
+
+      <hr-button
+        *ngIf="!packageInfo.allActivePackages"
+        (click)="navigateToBalance()"
+        [text]="'Купить сейчас'"
+        [type]='buttonTypesList.outlineGreen'
+      ></hr-button>
+    </div>
+  </div>
+
+  <ng-template #packagesTmpl>
+    <div class="loader-content">
+      <div class="loader"></div>
+    </div>
+  </ng-template>
+</hr-modal>
+
+

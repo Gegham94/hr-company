@@ -1,0 +1,116 @@
+@import "src/assets/variables/variables";
+
+@mixin input {
+  height: 46px;
+  border: 1px solid $gray;
+  text-indent: 1rem;
+  -webkit-border-radius: $radius-base;
+  -moz-border-radius: $radius-base;
+  border-radius: $radius-base;
+}
+
+@mixin input-valid {
+  @include input;
+  &:focus {
+    @include input-focus;
+  }
+  border: 1px solid $green;
+  background: $light-green;
+}
+
+@mixin input-invalid {
+  @include input;
+  &:focus {
+    @include input-focus($red);
+  }
+  border: 1px solid $red;
+  background: $light-red;
+}
+
+@mixin input-hover {
+  background-color: $very-light-gray;
+}
+
+@mixin input-focus($color: $green) {
+  outline: 1px solid $color;
+}
+
+@mixin input-valid-text {
+  font-weight: $font-normal;
+  font-size: $text-xs;
+  line-height: 18px;
+  letter-spacing: 0.2px;
+  color: $green;
+
+  &:before {
+    content: "";
+    display: block;
+    float: left;
+    background-image: url('../../img/icon/success_icon.svg');
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+}
+
+@mixin input-invalid-text {
+  font-weight: $font-normal;
+  font-size: $text-xs;
+  line-height: 18px;
+  letter-spacing: 0.2px;
+  color: red;
+
+  &:before {
+    content: "";
+    display: block;
+    float: left;
+    background-image: url('../../img/icon/error_icon.svg');
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+}
+
+@mixin input-label-text {
+  //font-weight: $font-normal;
+  //font-size: $text-xs;
+  //line-height: 20px;
+  //color: $black;
+  //margin-bottom: 4px;
+
+  &:after {
+    content: "*";
+    color: $red;
+    font-size: $text-xs;
+  }
+}
+
+@mixin input-placeholder-text {
+  font-weight: $font-normal;
+  font-size: $text-xs;
+  line-height: 20px;
+  color: $medium-dark-gray;
+}
+
+@mixin input-placeholder {
+  &.placeholder {
+    @content;
+    @include input-placeholder-text;
+  }
+  &:-moz-placeholder {
+    @content;
+    @include input-placeholder-text;
+  }
+  &::-moz-placeholder {
+    @content;
+    @include input-placeholder-text;
+  }
+  &:-ms-input-placeholder {
+    @content;
+    @include input-placeholder-text;
+  }
+  &::-webkit-input-placeholder {
+    @content;
+    @include input-placeholder-text;
+  }
+}

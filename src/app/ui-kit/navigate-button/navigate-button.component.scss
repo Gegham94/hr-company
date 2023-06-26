@@ -1,0 +1,149 @@
+@import 'src/assets/variables/variables';
+@import 'src/assets/mixins/util/util';
+@import 'src/assets/mixins/button/button-mixins';
+
+.navigate-button {
+  position: relative;
+  overflow: hidden;
+  -webkit-border-radius: $radius-base;
+  -moz-border-radius: $radius-base;
+  border-radius: $radius-base;
+  display: inline-flex;
+  width: 100%;
+
+  &__link {
+    text-decoration: none;
+    color: $green;
+  }
+
+  &__notification {
+    @include flex-center;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 26.4px;
+    height: 22px;
+    background: url('../../../assets/img/icon/navigation_button-notification.svg') no-repeat right top;
+    background-size: contain;
+    color: $white;
+    font-size: $text-sm;
+
+    &_disabled {
+      @include flex-center;
+      background: url('../../../assets/img/icon/lock.svg') no-repeat right top;
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 26.4px;
+      height: 22px;
+      background-size: contain;
+    }
+  }
+
+  &__button {
+    @include navigate-button;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+
+    &_isActive {
+      z-index: 6;
+    }
+
+    &_notActive {
+      z-index: 1;
+    }
+
+    &_default {
+      background-color: $white;
+      border: 1px solid $green;
+      color: $green;
+      font-size: $text-sm;
+      font-weight: $font-medium;
+
+      ::ng-deep {
+        .navigate-button__icon {
+          svg {
+            fill: $green;
+          }
+        }
+      }
+
+      &:hover {
+        background-color: $green;
+        color: $white;
+
+        ::ng-deep {
+          .navigate-button__icon {
+            svg {
+              fill: $white;
+            }
+          }
+        }
+      }
+
+      &:active,
+      &:focus {
+        background-color: $green;
+        color: $white;
+
+        ::ng-deep {
+          .navigate-button__icon {
+            svg {
+              fill: $white;
+            }
+          }
+        }
+      }
+    }
+
+    &_disabled {
+      background: $light-gray;
+      cursor: auto;
+
+      ::ng-deep {
+        .navigate-button__icon {
+          svg {
+            fill: $dark-gray;
+          }
+        }
+      }
+    }
+
+    &_no-icon {
+      background-color: $white;
+      border: 1px solid $green;
+      color: $green;
+      font-size: $text-sm;
+      font-weight: $font-medium;
+      height: unset;
+      padding: 13px 0;
+
+      &:hover {
+        background-color: $green;
+        color: $white;
+
+        ::ng-deep {
+          .navigate-button__icon {
+            svg {
+              fill: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.active {
+  background-color: $green;
+  color: $white;
+
+  ::ng-deep {
+    .navigate-button__icon {
+      svg {
+        fill: $white;
+      }
+    }
+  }
+}

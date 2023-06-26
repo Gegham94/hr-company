@@ -1,0 +1,46 @@
+@import "src/assets/variables/variables";
+
+.vacancy {
+  background: #E2E8F0;
+  border: 0.3px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0 25px 0 29px;
+  display: flex;
+  align-items: center;
+  max-width: 1005px;
+  height: 47px;
+  cursor: pointer;
+  &:hover {
+    background: #F8F9FA;
+    .vacancy__name,
+    .vacancy__status,
+    .vacancy__date {
+      font-weight: 500;
+    }
+  }
+  &__name,
+  &__status,
+  &__date {
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-sm;
+    line-height: 20px;
+    color: $black;
+  }
+  &__name {
+    min-width: 200px;
+    width: 29.13%;
+  }
+  &__date {
+    width: 19.2%;
+  }
+  &__status {
+    width: 20.5%;
+  }
+  &__progress {
+    width: 28.7%;
+  }
+  &__image {
+    width: 2.47%;
+  }
+}

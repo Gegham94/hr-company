@@ -1,0 +1,150 @@
+<hr-modal [is-open]="isOpen" [is-click-outside]="isHelper" [is-cross]="isHelper" (whenModalClose)="closeModal.emit()">
+  <div class="modal-content-container">
+    <hr-slider
+      [isTemplateRef]="true"
+      [centerContent]="true"
+      [helperInfo]="[step1, step2, step3, step4]"
+      (isOpenChat)="openChat($event)"
+    ></hr-slider>
+  </div>
+</hr-modal>
+
+<ng-template #step1>
+  <div>
+    <h3 class="chat_slider_title">Внимание!</h3>
+    <p class="chat_slider_info">
+      Вы собираетесь начать чат с данным кандидатом. После подтверждения
+      действия, информация о других кандидатах в списке временно будут скрыты.
+      Если данный кандидат вам не подойдет вы сможете отменить действие и снова
+      получить доступ к списку.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #step1>
+  <div>
+    <h3 class="chat_slider_title">Внимание!</h3>
+    <p class="chat_slider_info">
+      Вы собираетесь начать чат с данным кандидатом. После подтверждения
+      действия, информация о других кандидатах в списке временно будут скрыты.
+      Если данный кандидат вам не подойдет вы сможете отменить действие и снова
+      получить доступ к списку.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #step2>
+  <div>
+    <h3 class="chat_slider_title">Внимание!</h3>
+    <p class="chat_slider_info chat_slider_info-item">
+      Вы начали чат с {{ specialistName }} {{ specialistSurname }}
+    </p>
+    <p class="chat_slider_info">
+      На данном этапе остальные результаты других кандидатов будут временно не
+      доступны. Список будет снова доступен, если вы решите, что данный кандидат
+      не подходит вам и закоройте чат с ним.
+    </p>
+    <div class="chat_slider_img">
+      <img
+        src="../../../../assets/img/avatar/candidates.svg"
+        alt="candidates"
+      />
+    </div>
+    <div class="chat_slider_img_mobile">
+      <img src="../../../../assets/img/avatar/candidate.svg" alt="candidates" />
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #step3>
+  <div>
+    <h3 class="chat_slider_title">Внимание!</h3>
+    <p class="chat_slider_info chat_slider_info-item">
+      Вы начали чат с {{ specialistName }} {{ specialistSurname }} для вакансии
+    </p>
+    <p class="chat_slider_info">
+      В левом нижнем углу у вас есть возможность принять сотрудника с помощю
+      зеленой кнопки и отменить действие с помощю красной
+    </p>
+    <div class="chat_slider_chat-info">
+      <div class="chat_slider_chat-item">
+        <svg
+          width="47"
+          height="48"
+          viewBox="0 0 47 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="0.5"
+            y="0.5"
+            width="46"
+            height="47"
+            rx="23"
+            fill="white"
+            stroke="#08A652"
+          />
+          <path
+            d="M32 18L20.3125 29L15 24"
+            stroke="#08A652"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <div>
+          <h3>Принять сотрудника на работу.</h3>
+          <p>
+            Эта кнопка предназаначена для принятия кандидата на работу, после
+            данного действия вакансия будет закрыта.
+          </p>
+        </div>
+      </div>
+      <div class="chat_slider_chat-item">
+        <svg
+          width="48"
+          height="47"
+          viewBox="0 0 48 47"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="0.5"
+            y="0.5"
+            width="47"
+            height="45.6479"
+            rx="22.8239"
+            fill="white"
+            stroke="#C83532"
+          />
+          <path
+            d="M28.3357 26.3014L25.072 23.1296L28.3357 19.9578C28.6881 19.6154 28.6881 19.0641 28.3357 18.7217C27.9834 18.3792 27.4161 18.3792 27.0637 18.7217L23.8 21.8935L20.5363 18.7217C20.1839 18.3792 19.6166 18.3792 19.2643 18.7217C18.9119 19.0641 18.9119 19.6154 19.2643 19.9578L22.528 23.1296L19.2643 26.3014C18.9119 26.6439 18.9119 27.1952 19.2643 27.5376C19.6166 27.88 20.1839 27.88 20.5363 27.5376L23.8 24.3658L27.0637 27.5376C27.4161 27.88 27.9834 27.88 28.3357 27.5376C28.6856 27.1952 28.6856 26.6414 28.3357 26.3014Z"
+            fill="#C83532"
+          />
+        </svg>
+        <div>
+          <h3>Откланить сделку</h3>
+          <p>
+            При нажатии данной кнопки, чат с кандидатом будет закрыт и вы снова
+            получите доступ к списку других кандидатов.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #step4>
+  <div>
+    <h3 class="chat_slider_title">Внимание!</h3>
+    <p class="chat_slider_info">
+      Данное действие означает, что вы принимаете данного кандидата на работу,
+      как только вы подтвердите ваше действие вакансия завершится и будет
+      закрыта.
+    </p>
+    <div *ngIf="!isHelper" id="actions" class="chat_slider_button">
+      <div id="closeModal">Отменить</div>
+      <div id="startChat">Начать чат</div>
+    </div>
+  </div>
+</ng-template>

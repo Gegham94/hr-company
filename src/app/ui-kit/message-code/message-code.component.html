@@ -1,0 +1,113 @@
+<section class="message-code" *ngLet="inputForm.invalid  as disabled">
+  <div class="message-code__wrapper">
+    <div class="message-code__header">
+      <form [formGroup]="inputForm">
+        <div class="message-code__input">
+          <div>
+            <input class="message-code__input_item"
+                   #fieldFirst
+                   fieldDir
+                   formControlName="inputCodeFirst"
+                   [maxlength]="1"
+                   (keyup)="moveFocusOnField(fieldFirst,fieldSecond,$event)"
+            >
+          </div>
+          <div>
+            <input class="message-code__input_item"
+                   #fieldSecond
+                   fieldDir
+                   formControlName="inputCodeSecond"
+                   [maxlength]="1"
+                   (keyup)="moveFocusOnField(fieldSecond,fieldThird,$event)"
+            >
+          </div>
+          <div>
+            <input class="message-code__input_item"
+                   #fieldThird
+                   fieldDir
+                   formControlName="inputCodeThird"
+                   [maxlength]="1"
+                   (keyup)="moveFocusOnField(fieldThird,fieldFourth,$event)"
+            >
+          </div>
+          <div>
+            <input class="message-code__input_item"
+                   #fieldFourth
+                   fieldDir
+                   formControlName="inputCodeFourth"
+                   [maxlength]="1"
+                   (keyup)="moveFocusOnField(fieldFourth,fieldFifth,$event)">
+          </div>
+          <div>
+            <input class="message-code__input_item"
+                   #fieldFifth
+                   fieldDir
+                   formControlName="inputCodeFifth"
+                   [maxlength]="1"
+                   (keyup)="moveFocusOnField(fieldFifth,fieldSixth,$event)"
+            >
+          </div>
+          <div>
+            <input class="message-code__input_item"
+                   #fieldSixth
+                   fieldDir
+                   formControlName="inputCodeSixth"
+                   [maxlength]="1">
+          </div>
+        </div>
+        <div class="message-code__error" *ngIf="!!(errorMessage$ | async)">
+        <span class="message-code__error__msg">{{"AUTHORIZATION.RESET_PASSWORD.ERROR_CODE" | translate}}</span>
+        </div>
+      </form>
+      <div class="message-code__time">
+        <hr-message-time
+          (getTimeFinish)="getFinishedTime($event)"
+        ></hr-message-time>
+      </div>
+    </div>
+    <div class="message-code__send-again">
+      <button
+        [disabled]="isFinishedTime"
+        [ngClass]="{'disabled':isFinishedTime}"
+        class="message-code__send-again__button"
+        (click)="sendCodeAgain()">
+        Отправить код еще раз?
+      </button>
+    </div>
+  </div>
+  <section class="new-password">
+    <hr-input
+      [input-type]='inputTypeProps'
+      [label-text]='"AUTHORIZATION.RESET_PASSWORD.NEW_PASSWORD" | translate'
+      [formControl]='newPasswordControl'
+      [placeholder-text]='"AUTHORIZATION.RESET_PASSWORD.PLACEHOLDER_PASSWORD" | translate'
+      [disabled]="disabled"
+      [showPassword]="true"
+      [error-status]="confirmForm.getError('passwordsMustBeEqual') ? inputStatusList.invalid : inputStatusList.valid"
+    ></hr-input>
+
+    <hr-input
+      [input-type]='inputTypeProps'
+      [formControl]='rePasswordControl'
+      [label-text]='"AUTHORIZATION.RESET_PASSWORD.REPEAT_PASSWORD" | translate'
+      [placeholder-text]='"AUTHORIZATION.RESET_PASSWORD.PLACEHOLDER_PASSWORD" | translate'
+      [disabled]="disabled"
+      [showPassword]="true"
+      [error-status]="confirmForm.getError('passwordsMustBeEqual') ? inputStatusList.invalid : inputStatusList.valid"
+      [feedback-text]="newPasswordControl.touched ? confirmForm.getError('passwordsMustBeEqual') : ''"
+    ></hr-input>
+  </section>
+
+  <div class='login__modal-button'>
+    <hr-button
+      [disabled]="
+      confirmForm.invalid
+      || disabled
+      || inputForm.getError('formValueDoesntNumber')"
+      (click)="confirmPassword()"
+      [text]='"AUTHORIZATION.RESET_PASSWORD.CONFIRM" | translate'
+    ></hr-button>
+  </div>
+
+</section>
+

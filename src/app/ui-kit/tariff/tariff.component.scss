@@ -1,0 +1,72 @@
+@import 'src/assets/variables/variables';
+
+.balance {
+  &__card-wrapper {
+    background: $white;
+    border: 1px solid #E2E8F0;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 35px;
+    padding: 27px;
+
+    @media screen and (max-width: 450px) {
+      font-size: 13px;
+      padding: 27px 10px;
+    }
+  }
+}
+
+.packages-content {
+  width: 100%;
+  min-width: 500px;
+  &__buy-now {
+    margin-top: 30px;
+  }
+
+  &__title {
+    text-align: center;
+    padding: 10px 20px;
+    color: $green;
+    h1 {
+      margin-bottom: 40px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  &__all,
+  &__stayed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid $very-light-gray;
+    -webkit-box-shadow: 0 0 transparent, 0 0 transparent, 0 0 10px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 0 transparent, 0 0 transparent, 0 0 10px rgba(0,0,0,.1);
+    box-shadow: 0 0 transparent, 0 0 transparent, 0 0 10px rgba(0,0,0,.1);
+    padding: 20px 30px;
+    font-size: 20px;
+    line-height: 25px;
+
+    &--text {
+      color: $black;
+    }
+
+    &--value {
+      color: $green;
+      font-weight: bold;
+    }
+  }
+}
+
+.loader-content {
+  width: 100%;
+  min-width: 500px;
+  text-align: center;
+}

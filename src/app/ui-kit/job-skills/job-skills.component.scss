@@ -1,0 +1,60 @@
+@import 'src/assets/variables/variables';
+
+.job-skills {
+  width: 100%;
+  padding: 20px 50px;
+  background: #ffffff;
+  border-radius: 8px;
+  position: relative;
+
+  @media screen and (max-width: 1200px) {
+    padding: 20px 50px;
+  }
+
+  @media screen and (max-width: 550px) {
+    padding: 20px;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: 14px;
+    line-height: 140%;
+    color: $green;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+    }
+  }
+
+  &__tag {
+    width: 100%;
+    border: 1px solid $light-gray;
+    border-radius: 8px;
+    padding: 30px 20px 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    ::ng-deep .tag_outline {
+      margin-bottom: 20px;
+    }
+
+    &-name {
+      width: 100%;
+      margin-right: 5px;
+    }
+
+    &-wrapper {
+      margin-top: 17px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

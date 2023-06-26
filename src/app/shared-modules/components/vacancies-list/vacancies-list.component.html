@@ -1,0 +1,9 @@
+<hr-search-select
+  [isBorderGreen]="isBorder"
+  [isCross]="false"
+  [hasDefaultValue]="true"
+  [isLoading]="(isLoading | async) ?? false"
+  [options]="vacancySearchList$ | async"
+  [defaultValue]="(defaultValue | async) ?? ''"
+  (selectedOptionOutput)="selectVacancy($event)"
+></hr-search-select>

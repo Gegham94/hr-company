@@ -1,0 +1,199 @@
+@import "../../../../assets/variables/variables";
+
+.header {
+  &__comments {
+    border: 0;
+    background: 0;
+    margin-right: 15px;
+    margin-top: 7px;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    width: 22.82px;
+  }
+
+  &__notification {
+    display: flex;
+    margin-right: 19px;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+
+    @media screen and (max-width: 750px) {
+      position: static;
+    }
+
+    &-content {
+      position: relative;
+    }
+
+    &-button {
+      width: 18px;
+      height: 22px;
+      background: 0;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+    }
+
+    &-count {
+      font-size: 10px;
+      width: 20px;
+      height: 18px;
+      top: -5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      right: -10px;
+      background: $orange;
+      background-size: contain;
+      color: $white;
+      border-radius: 50%;
+
+      &_no-badge {
+        display: none;
+      }
+    }
+  }
+
+  &__drop-menu {
+    width: 230px;
+    background: $white;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    position: absolute;
+    top: 50px;
+    right: -10px;
+    z-index: 999;
+    overflow: hidden;
+
+    &-close {
+      cursor: pointer;
+    }
+
+    &-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 18px;
+      line-height: 21px;
+      padding: 16px;
+      border-bottom: 1px solid $light-gray;
+      cursor: initial;
+
+      &-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        line-height: 17px;
+        min-width: 21px;
+        min-height: 21px;
+        border-radius: 50%;
+        background-color: $green;
+        color: $white;
+        margin-left: 6px;
+      }
+    }
+
+    &-element {
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      cursor: pointer;
+      min-width: 230px;
+
+      &:hover {
+        background: #e2e8f0;
+      }
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      &-name {
+        margin-left: 13px;
+        font-style: normal;
+        font-weight: $font-normal;
+        font-size: $text-xs;
+        line-height: 14px;
+        padding: 20px 0;
+      }
+    }
+
+    &-img {
+      width: 10px;
+      height: 10px;
+      margin: 22px 0 18px 18px;
+    }
+  }
+}
+
+.notification-item {
+  &-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $green;
+    margin-right: 12px;
+    visibility: hidden;
+  }
+
+  &-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid $gray;
+    background-color: $white;
+    margin-right: 12px;
+
+    img {
+      width: 62px;
+      height: 57px;
+      border-radius: 50px;
+      @media screen and (max-width: 400px) {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  &-description {
+    text-align: left;
+    max-width: 237px;
+
+    @media screen and (max-width: 400px) {
+      font-size: 12px;
+    }
+
+    &-content {
+      width: 80%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  }
+
+  &-date {
+    min-width: 65px;
+    font-size: 13px;
+    line-height: 15px;
+    color: $medium-dark-gray;
+
+    @media screen and (max-width: 400px) {
+      font-size: 10px;
+      line-height: 15px;
+    }
+  }
+}

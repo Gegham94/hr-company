@@ -1,0 +1,26 @@
+<section class="job-description">
+  <div class="job-description__wrapper">
+    <span class="job-description__title">Описание</span>
+    <div class="job-description__description">
+      {{jobInfo.description | removeTag}}
+    </div>
+  </div>
+  <div class="job-description__wrapper">
+    <span class="job-description__title">Обязанности</span>
+    <div class="job-description__description">
+      {{jobInfo.responsibility | removeTag}}
+    </div>
+  </div>
+  <div class="job-description__wrapper">
+    <span class="job-description__title">Условия</span>
+    <div class="job-description__description">
+      {{jobInfo.conditions | removeTag}}
+    </div>
+  </div>
+  <div class="job-description__wrapper">
+    <span class="job-description__title">Вопросы</span>
+    <div class="job-description__description">
+      {{jobInfo.questions ?? "Нет вопросов" | removeTag }}
+    </div>
+  </div>
+</section>

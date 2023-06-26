@@ -1,0 +1,14 @@
+<div class="toasts-wrapper">
+  <a class="item"
+     *ngFor="let toast of toasts$ | async"
+     [@fadeInOut]="'in'"
+     (click)="removeToast()">
+    <div *ngIf="toast.title" class="item__content">
+      <p class="item__text"> {{toast.title}} </p>
+    </div>
+    <div class="close"
+         (click)="removeToast()">
+      <div>&times;</div>
+    </div>
+  </a>
+</div>

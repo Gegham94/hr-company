@@ -1,0 +1,43 @@
+@import '../../../assets/variables/variables';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $medium-dark-gray;
+  padding: 0 10px;
+  &__img {
+    font-size: 300px;
+    line-height: 200px;
+    margin-bottom: 40px;
+
+    @media screen and (max-width: 900px) {
+      font-size: 150px;
+      line-height: 100px;
+      margin-bottom: 20px;
+    }
+  }
+  &__title {
+    font-size: 50px;
+    margin-bottom: 20px;
+    hr {
+      height: 3px;
+      background: linear-gradient(270.13deg, #1CC4A1 -4.76%, #49DA6C 106.15%);
+      border: none;
+    }
+    @media screen and (max-width: 900px) {
+      font-size: 35px;
+    }
+  }
+  &__subtitle {
+    font-size: 26px;
+    color: $light-gray;
+    text-align: center;
+    margin-bottom: 20px;
+    @media screen and (max-width: 900px) {
+      font-size: 18px;
+    }
+  }
+}

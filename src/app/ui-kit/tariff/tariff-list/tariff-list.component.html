@@ -1,0 +1,53 @@
+<div class="balance__card-wrapper__item">
+  <div [ngClass]="{'disabled-card':balance.isActive}">
+    <div class="balance__card-wrapper__item-header">
+      <img *ngIf="balance.name === 'Базовый'"  src="assets/img/icon/tariff1.svg" alt="tariff1">
+      <img *ngIf="balance.name === 'Классический'" src="assets/img/icon/tariff2.svg" alt="tariff1">
+      <img *ngIf="balance.name === 'Премиум'" src="assets/img/icon/tariff3.svg" alt="tariff1">
+      <span class="balance__card-wrapper__item-active" *ngIf="balance.isActive">Активен</span>
+    </div>
+    <h1 class="balance__card-wrapper__item-price"> {{balance.price | number: '3.'}} ₽</h1>
+    <span class="balance__card-wrapper__item-pro_count">
+          <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.14286 3.14288L1 4.9286L3.14286 6.71431" stroke="#B8B8B8" stroke-width="1.16883"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.85742 3.14288L11.0003 4.9286L8.85742 6.71431" stroke="#B8B8B8" stroke-width="1.16883"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.42941 1L4.57227 8.85714" stroke="#B8B8B8" stroke-width="1.16883" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+          </svg>
+      <span> {{balance.count}} разработчика</span>
+        </span>
+    <div class="balance__card-wrapper__item-advantages">
+      <div *ngFor="let keyWord of listCardInfoList">
+                <span>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4.3 5.9L3.2125 4.8125C3.12083 4.72083 3.00833 4.675 2.875 4.675C2.74167 4.675 2.625 4.725 2.525 4.825C2.43333 4.91667 2.3875 5.03333 2.3875 5.175C2.3875 5.31667 2.43333 5.43333 2.525 5.525L3.95 6.95C4.04167 7.04167 4.15833 7.0875 4.3 7.0875C4.44167 7.0875 4.55833 7.04167 4.65 6.95L7.4875 4.1125C7.57917 4.02083 7.625 3.90833 7.625 3.775C7.625 3.64167 7.575 3.525 7.475 3.425C7.38333 3.33333 7.26667 3.2875 7.125 3.2875C6.98333 3.2875 6.86667 3.33333 6.775 3.425L4.3 5.9ZM5 10C4.30833 10 3.65833 9.86867 3.05 9.606C2.44167 9.34367 1.9125 8.9875 1.4625 8.5375C1.0125 8.0875 0.656333 7.55833 0.394 6.95C0.131333 6.34167 0 5.69167 0 5C0 4.30833 0.131333 3.65833 0.394 3.05C0.656333 2.44167 1.0125 1.9125 1.4625 1.4625C1.9125 1.0125 2.44167 0.656167 3.05 0.3935C3.65833 0.131167 4.30833 0 5 0C5.69167 0 6.34167 0.131167 6.95 0.3935C7.55833 0.656167 8.0875 1.0125 8.5375 1.4625C8.9875 1.9125 9.34367 2.44167 9.606 3.05C9.86867 3.65833 10 4.30833 10 5C10 5.69167 9.86867 6.34167 9.606 6.95C9.34367 7.55833 8.9875 8.0875 8.5375 8.5375C8.0875 8.9875 7.55833 9.34367 6.95 9.606C6.34167 9.86867 5.69167 10 5 10Z"
+                    fill="#08A652"/>
+                  </svg>
+                  {{keyWord}}
+                </span>
+      </div>
+      <button
+        *ngIf="isShowMore"
+        class="balance__card-wrapper__item-more"
+        (click)="moreInformation()"
+      >
+        Подробнее
+      </button>
+      <button
+        *ngIf="!isShowMore"
+        class="balance__card-wrapper__item-more"
+        (click)="hideMoreInformation()"
+      >
+        Скрыть
+      </button>
+    </div>
+    <button class="balance__card-wrapper__item-buy"
+            [ngClass]="{'disabled-card_disabled-buy-btn':balance.isActive}"
+            (click)="buyTariff(balance.uuid,balance.isActive)">
+      КУПИТЬ СЕЙЧАС
+    </button>
+  </div>
+</div>

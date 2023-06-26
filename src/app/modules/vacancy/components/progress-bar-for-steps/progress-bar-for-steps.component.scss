@@ -1,0 +1,73 @@
+@import 'src/assets/variables/variables';
+
+
+.progress-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 30px 0;
+
+  &--horizontal {
+    display: block;
+  }
+
+  &--vertical {
+    display: none;
+
+    &-items {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
+
+  &-circle {
+    background: #C4C4C4;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-style: normal;
+    font-weight: $font-black;
+    font-size: $text-sm;
+    line-height: 16px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &_green {
+      background: $green;
+      color: $white;
+    }
+  }
+
+  &-line {
+    width: 45.2%;
+    max-width: 425px;
+    background: #C4C4C4;
+    height: 5px;
+    position: relative;
+
+    @media screen and (max-width: 500px) {
+      width: 80%;
+    }
+  }
+
+  &-progress {
+    border-radius: 0 5px 5px 0;
+    background: $green;
+    position: absolute;
+    height: 5px;
+    transition: width .3s ease-in-out;
+  }
+
+  @media screen and (max-width: 500px) {
+    &--horizontal {
+      display: none;
+    }
+    &--vertical {
+      display: block;
+      margin-top: 30px;
+    }
+  }
+}

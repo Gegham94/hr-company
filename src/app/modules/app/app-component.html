@@ -1,0 +1,4 @@
+<router-outlet></router-outlet>
+<hr-loader *ngIf="isChangeRoute | async"></hr-loader>
+<hr-toasts *ngIf="statusType | async as status" [status-type]="status"></hr-toasts>
+

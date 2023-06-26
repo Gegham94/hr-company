@@ -1,0 +1,36 @@
+<div class='list' [ngClass]="{'list--disabled': disabled}">
+  <div *ngIf='isNew' class='list-icon'></div>
+  <div class='list-info'
+       [class]='"list_"+typeProps'
+  >
+    <div class='list__avatar'>
+      <!--    avatar image-->
+      <img src='assets\img\avatar\list-man-avatar.svg' alt='avatar' class='list__avatar-image'>
+    </div>
+    <div class='list__person-name'>
+      {{personName}} {{personSurname}}
+      <div class='list__person-email'>
+        {{personEmail}}
+      </div>
+    </div>
+    <div class='list__person-post'>
+      Должность
+      <div class='list__person-profession'>
+        {{personPosition}}
+      </div>
+    </div>
+    <div class='list__employment-date'>
+      Дата приема на работу
+      <div class='list__date'>
+        {{workDate}}
+      </div>
+    </div>
+    <hr-button
+      class='list__button'
+      [text]="'Посмотреть профиль'"
+      [type]='buttonTypesList.outline'
+      (click)='specProfile()'
+    ></hr-button>
+  </div>
+</div>
+

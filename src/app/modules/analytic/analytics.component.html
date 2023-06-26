@@ -1,0 +1,117 @@
+<section class='analytics'>
+  <hr-go-back></hr-go-back>
+  <div class='analytics__title'>
+    <div class="analytics__title-keeper">
+      <!--      <div class='analytics__title'>-->
+      <!--        <span *ngIf="this.isSelectShow;else elseBlockTitle">-->
+      <!--          {{"ANALYTICS.GLOBAL_TITLE" | translate }}-->
+      <!--        </span>-->
+      <!--        <ng-template #elseBlockTitle>-->
+      <!--          {{  "ANALYTICS.TITLE" | translate}}-->
+      <!--        </ng-template>-->
+      <!--      </div>-->
+      <div class='analytics__title-keeper-vacancy-info' *ngIf="showVacancyName">
+        <div class='analytics__title-keeper-vacancy-description'>
+          <div class='analytics__title-keeper-vacancy-name'
+               (click)="showSpecialistAnalytic()"
+          >{{vacancyAnalyticList.name}}</div>
+          <div class='analytics__title-keeper-vacancy-date'>{{vacancyAnalyticList.deadlineDate }}</div>
+        </div>
+      </div>
+
+      <div class='analytics__filter'>
+        <div class="analytics__filter--vacancy">
+          <p class="title"> Фильтр вакансии </p>
+          <div class="fields">
+            <div class="wrapper">
+              <p class="subtitle"> Откритые </p>
+              <hr-vacancies-list
+                [defaultValue]="getDefaultValue2()"
+                [status]="VacancyStatusEnum.NotArchived"
+                [isBorder]="true"
+                [isAll]="true"
+                (selectedVacancy)='getVacancyFromSelect($event, VacancyStatusEnum.NotArchived)'>
+              </hr-vacancies-list>
+            </div>
+            <div class="wrapper">
+              <p class="subtitle"> Завершенные </p>
+              <hr-vacancies-list
+                [defaultValue]="getDefaultValue1()"
+                [status]="VacancyStatusEnum.Archived"
+                [isBorder]="true"
+                [isAll]="true"
+                (selectedVacancy)='getVacancyFromSelect($event, VacancyStatusEnum.Archived)'>
+              </hr-vacancies-list>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class='analytics__container-wrapper' *ngIf="vacancyStatisticList.length && showAnalytic; else emptyContentTmpl">
+    <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        {{"ANALYTICS.DIAGRAM" | translate}}
+      </div>
+      <div class='analytics__container-content analytics__container-content_diagram' echarts [options]="option">
+      </div>
+    </div>
+    <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        {{"ANALYTICS.PERCENTAGE.TITLE" | translate}}
+      </div>
+      <div class='analytics__container-content analytics__container-content_percent'>
+        <div class='analytics__container-element' *ngFor='let element of vacancyStatisticList'>
+          <div class='analytics__container-element-image'>
+            <img src='../../../assets/img/icon/star-circle.svg' alt='icon'>
+          </div>
+          <div class='analytics__container-element-description'>
+            <div class='analytics__container-element-title'>
+              {{element.name | translate}}
+            </div>
+            <div class='analytics__container-element-percent'>
+              {{countPercent(element.value)}} %
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        Результат
+      </div>
+      <div class='analytics__container-content analytics__container-content_all'>
+        <div class='analytics__container-content-header'>
+          <div class='analytics__container-content-header-title'>
+            {{"ANALYTICS.ALL.CANDIDATES" | translate}}
+          </div>
+          <div class='analytics__container-content-header-count'>
+            {{statisticAllCount}}
+          </div>
+        </div>
+        <div class='analytics__container-list' *ngFor='let element of vacancyStatisticList'>
+          <div class='analytics__container-list-color'></div>
+          <div class='analytics__container-list-description'>
+            <div class='analytics__container-list-title'>
+              {{element.name | translate}}
+            </div>
+            <div class='analytics__container-list-count'>
+              {{element.value}}  {{"ANALYTICS.ALL.CANDIDATE" | translate}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyContentTmpl>
+    <hr-empty-content></hr-empty-content>
+  </ng-template>
+</section>
+
+<hr-loader *ngIf="!!(isLoader$ | async)"></hr-loader>
+
+<ng-container *ngIf="isChooseModalOpen | async as isOpen">
+  <hr-buy-tariff-modal [isOpen]="isOpen" (checkIsRobot)="checkIsRobot()"></hr-buy-tariff-modal>
+</ng-container>

@@ -1,0 +1,60 @@
+@import 'src/assets/mixins/util/util';
+@import 'src/assets/variables/variables';
+
+.tag {
+  position: relative;
+  user-select: none;
+
+  &_default {
+    @include flex-center;
+    background: #efefef;
+    border-radius: 8px;
+    position: relative;
+    padding: 4px 6px 5px;
+
+    .tag__text {
+      position: relative;
+      width: 100%;
+      padding: 5.5px 33px 5.5px 12px;
+      background: $white;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-style: normal;
+      font-weight: $font-normal;
+      font-size: 12px;
+      line-height: 24px;
+      color: #272c31;
+    }
+  }
+
+  &_outline {
+    background: $white;
+    border: 1px solid $green;
+    border-radius: 35px;
+    display: inline-block;
+    padding: 8px 37px 8px 18px;
+    margin-right: 20px;
+
+    .tag__text {
+      position: relative;
+      width: 100%;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 20px;
+      letter-spacing: 0.4px;
+      color: $green;
+    }
+  }
+
+  &__close-button {
+    @include flex-center;
+    position: absolute;
+    cursor: pointer;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

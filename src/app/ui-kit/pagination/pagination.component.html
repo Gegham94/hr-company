@@ -1,0 +1,67 @@
+<div class="pagination">
+  <div *ngIf="totalPageCountProps>1">
+    <button class="pagination__control"
+            *ngLet="currentPage===1 as isDisabledPrev"
+            [disabled]="isDisabledPrev"
+            [ngClass]="{'pagination__control_disabled':isDisabledPrev}"
+            (click)="prevPage()">Пред.
+    </button>
+  </div>
+  <button
+    [class.pagination__page-min]="minSizeDevice"
+    class="pagination__page"
+    *ngIf="currentPage > (maxShowPageProps / 2) + 1 && totalPageCountProps > 3"
+    (click)='selectedPage(1)'
+  >
+    1
+  </button>
+  <button
+    [class.pagination__page-min]="minSizeDevice"
+    class="pagination__page pagination__page_disabled"
+    disabled
+    *ngIf="currentPage > (maxShowPageProps / 2) + (currentPage === 4 ? 3 : 2)"
+  >
+    ...
+  </button>
+  <button
+    [class.pagination__page-min]="minSizeDevice"
+    class="pagination__page"
+    *ngFor="let page of pages"
+    [class.pagination__page_active]="currentPage === page"
+    (click)='selectedPage(page)'
+  >
+    {{ page }}
+  </button>
+  <button
+    *ngIf="minSizeDevice"
+    [class.pagination__page-current]="minSizeDevice"
+    class="pagination__page pagination__page_disabled"
+    disabled
+  >
+    {{currentPage}}
+  </button>
+  <button
+    [class.pagination__page-min]="minSizeDevice"
+    class="pagination__page pagination__page_disabled"
+    disabled
+    *ngIf="currentPage <= totalPageCountProps - (maxShowPageProps / 2) - ((currentPage === totalPageCountProps - 3) ? 2 : 1)"
+  >
+    ...
+  </button>
+  <button
+    [class.pagination__page-min]="minSizeDevice"
+    class="pagination__page"
+    *ngIf="currentPage < totalPageCountProps - (maxShowPageProps / 2) && totalPageCountProps > 3"
+    (click)='selectedPage(totalPageCountProps)'
+  >
+    {{ totalPageCountProps }}
+  </button>
+  <div *ngIf="totalPageCountProps>1">
+    <button class="pagination__control"
+            *ngLet="totalPageCountProps===currentPage as isDisabledNext"
+            [disabled]="isDisabledNext"
+            [ngClass]="{'pagination__control_disabled':isDisabledNext}"
+            (click)="nextPage()">След.
+    </button>
+  </div>
+</div>

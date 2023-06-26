@@ -1,0 +1,121 @@
+@import "src/assets/variables/variables";
+
+.list {
+  display: flex;
+  align-items: center;
+  min-width: 970px;
+  margin-bottom: 20px;
+  &--disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  &-icon {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    background: #08A652;
+    border-radius: 50%;
+    margin-right: 11px;
+  }
+  &-info {
+    background: #F8F9FA;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 5.5px rgba(0, 0, 0, 0.02);
+    backdrop-filter: blur(21px);
+    border-radius: 15px;
+    padding: 13px 15px 15px 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 67px;
+    position: relative;
+   width: 100%;
+    &:hover {
+      border: 1px solid $green;
+      transition: all 0.3s;
+    }
+  }
+
+  &_new {
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left: -19px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: $green;
+      border-radius: 50%;
+    }
+    background-color: #EFEFEF;
+    margin-left: 20px;
+  }
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    margin-right: 24px;
+    &-image {
+      width: 100%
+    }
+  }
+
+  &__person-name {
+    width: 26.7%;
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: 13px;
+    line-height: 18px;
+    color: $blue;
+  }
+
+  &__person-post {
+    width: 23.8%;
+  }
+
+  &__person-profession {
+    padding-top: 3px;
+  }
+
+  &__employment-date {
+    width: 24.7%;
+  }
+
+  &__date {
+    padding-top: 4px;
+  }
+
+  &__date,
+  &__person-profession {
+    font-style: normal;
+    font-weight: $font-medium;
+    font-size: $text-xs;
+    line-height: 18px;
+    color: $blue;
+  }
+
+  &__employment-date,
+  &__person-post,
+  &__person-email {
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-xs;
+    line-height: 18px;
+    color: $blue;
+
+  }
+  &__button {
+    ::ng-deep .button-wrapper__button {
+      padding:0 21px;
+      font-weight: $font-medium;
+      height: 33px;
+      font-size: $text-xs;
+    }
+  }
+}

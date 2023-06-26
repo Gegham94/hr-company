@@ -1,0 +1,33 @@
+<div class="specialist-test" *ngIf="(question$ | async)?.length; else emptyContentTmpl">
+  <hr-go-back></hr-go-back>
+  <div class="specialist-test__content" *ngFor="let question of question$ | async;let i=index">
+    <div class="specialist-test__question">
+      <p class="specialist-test__question__number">{{i + 1}}/<span>{{questionsCount}}</span></p>
+      <p class="specialist-test__question__text">{{question.question | removeTag}}</p>
+      <div class="specialist-test__answer">
+        <div *ngFor="let answerlist of question.answersList">
+          <div *ngLet="question.answerId==answerlist.id as isEqual"
+               [ngClass]="{'wrong':isEqual && !answerlist.is_correct,'right':isEqual && answerlist.is_correct}">
+            <div class="specialist-test__answer-block">
+              <ng-container
+                *ngIf="(isEqual && answerlist.is_correct) || (isEqual && !answerlist.is_correct); else emptyCircleTmpl">
+                <img *ngIf="isEqual && answerlist.is_correct" src="./assets/img/icon/right.svg" alt="right">
+                <img *ngIf="isEqual && !answerlist.is_correct" src="./assets/img/icon/wrong.svg" alt="wrong">
+              </ng-container>
+              <p>{{answerlist.answer | removeTag}}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #emptyContentTmpl>
+  <hr-empty-content></hr-empty-content>
+</ng-template>
+
+<ng-template #emptyCircleTmpl>
+  <span class="empty-circle"></span>
+</ng-template>

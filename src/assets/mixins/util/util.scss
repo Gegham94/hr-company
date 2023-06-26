@@ -1,0 +1,59 @@
+// Position Mixins
+@mixin position-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+// Size Mixins
+@mixin full-height-width {
+  width: 100%;
+  height: 100%;
+}
+
+// Flex Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin flex-column-end {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+@mixin flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin responsive-container {
+  width: 88.6%;
+  max-width: 1132px;
+  margin: 0 auto 30px;
+  padding: 43px 76px 60px 76px;
+  background: $white;
+  border: 1px solid $green;
+  border-radius: 8px;
+  @media screen and (max-width: 320px) {
+    padding: 43px 16px 30px 38px;
+  }
+  @media screen and (max-width: 700px) {
+    padding: 43px 37px 60px 39px;
+  }
+}

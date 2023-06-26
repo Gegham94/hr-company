@@ -1,0 +1,115 @@
+<main [ngClass]="edit ? 'add-vacancy--step-2' : 'add-vacancy'">
+  <section [ngClass]="edit ? 'add-vacancy__search--step-2' : 'add-vacancy__search'">
+    <div class="add-vacancy__title" *ngIf="!edit">
+      {{ "VACANCY.SEARCH_SPECIALIST.TITLE.STEP_1" | translate }}
+    </div>
+    <hr-progress-bar-for-steps
+      *ngIf="!edit"
+      [edit]="false"
+      [form-group]="vacancyFormGroup"
+      [updateProgressBar]="updateProgressBar | async"
+    >
+    </hr-progress-bar-for-steps>
+    <form [formGroup]="vacancyFormGroup">
+      <div class="add-vacancy__select-wrapper" formGroupName="searchedSettings">
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'country'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.COUNTRY' | translate"
+            [isEditModeActive]="edit"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="countryOptions$ | async"
+            [valid]="getFormControlByName('country').touched ? getFormControlByName('country').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'city'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.CITY' | translate"
+            [isInputDisabled]="isCityDisabled"
+            [isEditModeActive]="edit"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="cityOptions$ | async"
+            [valid]="getFormControlByName('city').touched ? getFormControlByName('city').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'vacancyLevel'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.VACANCY_LEVEL' | translate"
+            [isEditModeActive]="edit"
+            [options]="skillLevelOptions$ | async"
+            [valid]="getFormControlByName('vacancyLevel').touched ? getFormControlByName('vacancyLevel').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'workplace'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.WORKPLACE' | translate"
+            [isEditModeActive]="edit"
+            [options]="workplaceOptions$ | async"
+            [valid]="getFormControlByName('workplace').touched ? getFormControlByName('workplace').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'programmingLanguages'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.VACANCY_LANGUAGE' | translate"
+            [isMultiSelect]="true"
+            [isEditModeActive]="edit"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="programmingLanguageOptions$ | async"
+            [valid]="getFormControlByName('programmingLanguages').touched ? getFormControlByName('programmingLanguages').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'programmingFrameworks'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.FRAMEWORKS' | translate"
+            [isInputReadOnly]="false"
+            [isMultiSelect]="true"
+            [isEditModeActive]="edit"
+            [isInputDisabled]="!createVacancyForm.getFormControl('programmingLanguages', 'searchedSettings').valid"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="frameworkOptions$ | async"
+            [valid]="getFormControlByName('programmingFrameworks').touched ? getFormControlByName('programmingFrameworks').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'nativeLanguages'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.NATIVE_LANGUAGE' | translate"
+            [isMultiSelect]="true"
+            [isEditModeActive]="edit"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="languageOptions$ | async"
+            [valid]="getFormControlByName('nativeLanguages').touched ? getFormControlByName('nativeLanguages').valid : undefined"
+          ></hr-search-select>
+        </div>
+        <div class="add-vacancy__select">
+          <hr-search-select
+            [formControlName]="'wayOfWorking'"
+            [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.WAY_OF_WORKS' | translate"
+            [isEditModeActive]="edit"
+            [isLoading]="(isSelectionLoader | async) ?? false"
+            [options]="employmentTypeOptions$ | async"
+            [valid]="getFormControlByName('wayOfWorking').touched ? getFormControlByName('wayOfWorking').valid : undefined"
+          ></hr-search-select>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <div class="add-vacancy__button" *ngIf="!edit">
+    <hr-button
+      [disabled]="isInValid"
+      [text]="'ACTIONS.NEXT' | translate"
+      [type]="buttonTypesList.default"
+      (click)="sendVacancyValue(vacancyFormGroup.controls['searchedSettings'])"
+    ></hr-button>
+  </div>
+</main>
+
+<ng-container *ngIf="isChooseModalOpen | async as isOpen">
+  <hr-buy-tariff-modal [isOpen]="isOpen" (checkIsRobot)="checkIsRobot()"></hr-buy-tariff-modal>
+</ng-container>

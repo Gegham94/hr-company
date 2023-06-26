@@ -1,0 +1,25 @@
+<div class="filter">
+  <div class="filter__wrapper">
+    <div>
+      <hr-input
+        class="filter__search-input"
+        [label-text]="'Название вакансии'"
+        [placeholder-text]="'MY_VACANCY.SEARCH.BY_NAME' | translate"
+        (textInput)="nameChanged.emit($event)"
+        [isRequared]="false"
+      >
+      </hr-input>
+    </div>
+    <div>
+      <hr-search-select
+        class="filter__status-input"
+        [label]="'Статус платежа'"
+        [placeholder]="'MY_VACANCY.SEARCH.BY_PAYMENT_STATUS' | translate"
+        [options]="payedStatusList"
+        [defaultValue]="defaultValue"
+        [isRequared]="false"
+        (selectedOptionOutput)="handlePayedStatusChange($event)"
+      ></hr-search-select>
+    </div>
+  </div>
+</div>

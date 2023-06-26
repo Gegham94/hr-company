@@ -1,0 +1,93 @@
+@import "src/assets/mixins/input/input-mixins";
+@import "src/assets/variables/variables.scss";
+
+.input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__text {
+    font-weight: $font-normal;
+    font-size: $text-xs;
+    line-height: 20px;
+    color: $black;
+    margin-bottom: 4px;
+
+    &_isRequared {
+      @include input-label-text;
+    }
+  }
+
+  &__input {
+    padding: 14px;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    input {
+      outline: none;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    @include input-placeholder;
+
+    &_default {
+      width: 100%;
+      min-width: 200px;
+      @include input;
+
+      &:hover {
+        @include input-hover;
+      }
+    }
+
+    &_valid {
+      @include input-valid;
+    }
+
+    &_invalid {
+      @include input-invalid;
+    }
+
+    &_disabled {
+      background-color: $very-light-gray;
+    }
+
+    &:not(&_invalid):focus {
+      border: 1px solid $green;
+    }
+  }
+
+  &__feedback {
+    margin-top: 6px;
+
+    &_valid {
+      @include input-valid-text;
+    }
+
+    &_invalid {
+      @include input-invalid-text;
+    }
+  }
+
+  &__date-input-icon {
+    position: absolute;
+    right: 19px;
+    top: 67%;
+    transform: translateY(-50%);
+  }
+}
+
+.removeBlock {
+  display: flex;
+  align-items: center;
+
+  .removeInputValue {
+
+    cursor: pointer;
+  }
+}

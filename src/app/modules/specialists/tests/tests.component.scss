@@ -1,0 +1,91 @@
+@import "src/assets/mixins/image/image-mixin";
+
+.specialist-test {
+
+  &__content {
+    width: 80%;
+    max-width: 1132px;
+    background: #FFFFFF;
+    border: 1px solid #E3E7EC;
+    border-radius: 8px;
+    margin: 25px auto;
+    padding: 20px 30px;
+
+    @media screen and (max-width: 500px) {
+      width: 90%;
+      padding: 20px;
+    }
+  }
+
+  &__question {
+    &__number {
+      color: #08A652;
+      font-size: 26px;
+      line-height: 26px;
+
+      span {
+        color: #08A652;
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+
+    &__text {
+      text-align: center;
+      font-weight: 500;
+      font-size: 23px;
+      line-height: 32px;
+      color: #08A652;
+      margin-bottom: 45px;
+    }
+  }
+
+  &__answer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    @media screen and (max-width: 780px) {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    &-block {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      border: 1px solid #C9C9C9;
+      border-radius: 33px;
+      padding: 22px 15px;
+      align-items: center;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 18px;
+
+     img {
+        margin-right: 20px;
+      }
+    }
+
+  }
+}
+
+.right {
+  background: rgba(8, 166, 82, 0.1);
+  border: 1px solid #08A652;
+  border-radius: 33px;
+}
+
+.wrong {
+  background: rgba(200, 53, 50, 0.1);
+  border: 1px solid #C83532;
+  border-radius: 33px;
+}
+
+.empty-circle {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #E3E7EC;
+  border-radius: 50%;
+  margin-right: 20px;
+}

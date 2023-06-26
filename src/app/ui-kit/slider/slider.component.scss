@@ -1,0 +1,92 @@
+@import "src/assets/variables/variables";
+
+
+
+
+.slider-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .prev-control {
+    width: 20px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    .prev-icon {
+      position: absolute;
+      top: 50%;
+      transform: translate(0%, calc(50% - 25px));
+    }
+  }
+  .next-control {
+    width: 20px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    .next-icon {
+      position: absolute;
+      top: 50%;
+      transform: translate(0%, calc(50% - 25px));
+    }
+  }
+  .slider-text {
+    width: calc(100% - 50px);
+    position: absolute;
+    left: 25px;
+    max-height: calc(100% - 10px);
+    min-height: calc(100% - 10px);
+    overflow-y: auto;
+  }
+  .hide {
+    display: none;
+  }
+}
+
+.info-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  .info {
+    width: 100%;
+    max-height: calc(100% - 40px);
+    min-height: calc(100% - 40px);
+    overflow-y: auto;
+  }
+  .controls {
+    position: relative;
+    width: 70px;
+    height: 20px;
+    bottom: -20px;
+    .prev-icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .next-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .hide {
+      display: none;
+    }
+  }
+}
+
+.single-text {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

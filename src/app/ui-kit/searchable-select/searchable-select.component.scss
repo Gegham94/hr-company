@@ -1,0 +1,238 @@
+@import 'src/assets/variables/variables';
+@import 'src/assets/mixins/util/util';
+@import "src/assets/mixins/input/input-mixins";
+
+.searchable-select {
+  position: relative;
+  flex-direction: column;
+  column-gap: 15px;
+  width: 100%;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+  }
+
+  &__edit {
+    flex-direction: row;
+    cursor: pointer;
+  }
+
+  &__label {
+    position: relative;
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+    }
+
+    &-content {
+      display: flex;
+      column-gap: 10px;
+    }
+  }
+
+  &__title {
+    @include input-label-text;
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-sm;
+    line-height: 20px;
+    letter-spacing: 0.4px;
+    color: $black;
+    margin-bottom: 5px;
+    min-width: 210px;
+
+    &_disabled {
+      color: $medium-dark-gray;
+    }
+  }
+
+  &__input {
+    padding: 14px;
+    width: 100%;
+    min-width: 200px;
+    background: $white;
+    border: 1px solid $gray;
+    border-radius: 8px;
+    outline: none;
+
+    &--content {
+      position: relative;
+      min-width: 210px
+    }
+
+    &::placeholder {
+      padding-left: 18px;
+    }
+
+    &:-webkit-autofill {
+      display: none;
+    }
+
+    &_disabled {
+      background: $very-light-gray;
+      border: 1px solid #E2E8F0;
+    }
+
+    &_active {
+      border-radius: 8px 8px 0 0;
+      border: 1px solid $green;
+      border-bottom: none;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%);
+    transform-origin: top;
+
+    &_rotate {
+      transform: scaleY(-1) translate(-50%, -50%);
+      top: 60%;
+    }
+  }
+
+  &__search-list {
+    max-height: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    background: $white;
+    top: 100%;
+    overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+    flex-direction: column;
+    border: none;
+
+    &--isLoading {
+      height: 200px;
+      border: none;
+      box-shadow: none;
+    }
+
+    &_active {
+      min-width: 200px;
+      max-height: 183px;
+      border: 1px solid $green;
+      z-index: 20;
+      overflow-y: auto;
+      transition: max-height 0.5s;
+    }
+
+    &::-webkit-scrollbar {
+      width: 4px;
+      overflow: hidden;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $medium-dark-gray;
+      border-radius: 5px;
+    }
+  }
+
+  &__search-element {
+    position: relative;
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-sm;
+    line-height: 20px;
+    letter-spacing: 0.4px;
+    color: $medium-dark-gray;
+    opacity: 0.7;
+    padding: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &-isLoader {
+      height: 300px;
+    }
+
+    &_active {
+      background: #ABB7C6;
+      color: $white;
+      opacity: 1;
+
+      &:hover {
+        background: $green;
+        color: $white;
+      }
+    }
+
+    &_selected {
+      background: $green;
+      color: $white;
+      font-weight: $font-black;
+      opacity: 1;
+    }
+  }
+
+  &__checkbox {
+    margin-right: 13px;
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+
+.loader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 3px solid green;
+  border-top-color: rgba(0, 0, 0, 0);
+  animation: spin 2s linear infinite;
+  z-index: 100;
+  position: absolute;
+  top: 60px;
+  &_text {
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $medium-dark-gray;
+    font-size: 10px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.removeBlock {
+  .removeInputValue {
+    margin-right: 5px;
+    position: absolute;
+    top: 20px;
+    right: 7px;
+    cursor: pointer;
+  }
+}

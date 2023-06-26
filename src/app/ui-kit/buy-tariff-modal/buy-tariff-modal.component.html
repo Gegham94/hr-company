@@ -1,0 +1,15 @@
+<hr-modal
+  [is-open]='isOpen'
+  (whenModalClose)='postponeModal()'
+>
+  <div class='modal'>
+    <div class='modal-title'>
+      <span>{{paymentMessage}}!</span>
+    </div>
+    <div class='modal-description'>
+      <div class='modal-description'>
+        <p>благодарим за использование нашей услуги </p>
+      </div>
+    </div>
+  </div>
+</hr-modal>

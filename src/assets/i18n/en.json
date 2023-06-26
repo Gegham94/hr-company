@@ -1,0 +1,223 @@
+{
+  "ACTIONS": {
+    "NEXT": "Further",
+    "PREV": "",
+    "BACK": "Back",
+    "SAVE": "Save",
+    "SEND": "Send",
+    "SEARCH": "Search",
+    "CONFIRM": "Confirm",
+    "POSTPONE": "Postpone",
+    "LOGIN": "Login",
+    "REGISTER": "Registration",
+    "SIGN_IN": "Log in",
+    "REFRESH": "Refresh",
+    "ADD": "Add",
+    "PAY": "Pay",
+    "CLOSED": "Closed"
+  },
+  "SERVICE_PAGES": {
+    "NOT_FOUND": {
+      "TITLE": "Not Found",
+      "SUBTITLE": "The resource requested could not be found on this server!",
+      "LINK": "Go back"
+    },
+    "NO_ACCESS": {
+      "TITLE": "Forbidden",
+      "SUBTITLE": "Sorry, you are forbidden to go this page!",
+      "LINK": "Go back"
+    }
+  },
+  "NOTIFICATIONS": {
+    "COMPANY": "Notifications",
+    "CHAT": "Chats",
+    "DATE_HOURS": "{hour} h {minute} min ago",
+    "DATE_MINUTES": "{minute} min",
+    "YESTERDAY": "yesterday"
+  },
+  "VALIDATION_ERROR": {
+    "REQUIRED": "This field is required",
+    "PATTERN": "Please enter valid data",
+    "PATTERN_FOR_PASSWORD": "Make sure the password is at least eight characters long and must be in uppercase and must include elements of numbers, letters, and symbols such as ! and & "
+  },
+  "ROBOT": {
+    "TEXT": "<div class='robot-info-title'> Hello! </div> <p> I will help you quickly get comfortable and start working on our system! </p> <p> To continue to communicate with a company that is interested in you, please go to your Personal Account and fill in the information. </p> <p> After filling in your personal information, you will have access to the sections Add resume, Search for a company and Tests.</p>"
+  },
+  "HEADER": {
+    "LOGO": "HR-Robot",
+    "DROPDOWN": {
+      "COMPANY": "Company",
+      "BALANCE": "Balance",
+      "MY_CHAT": "My Chats",
+      "LOGOUT": "Exit"
+    }
+  },
+  "AUTHORIZATION": {
+    "TITLE": "Welcome",
+    "PHONE": "Telephone number",
+    "PASSWORD": "Password",
+    "REMEMBER_ME": "Remember me",
+    "FORGOT_PASSWORD": "Forgot your password",
+    "SIGN_IN": {
+      "SUBTITLE": "Enter your phone number and password to enter",
+      "NOTE": "I don't have an account yet",
+      "ERROR": "User {{ prefix }} {{ phone }} doesn't exist",
+      "ERROR_SEND_PHONE": "this number {{ prefix }} {{ phone }}  is not in service"
+    },
+    "SIGN_UP": {
+      "SUBTITLE": "Sign up and get started",
+      "NOTE": "I already have an account",
+      "ERROR": "User {{ prefix }} {{ phone }} exists",
+      "PRIVACY_POLICY": "I agree on the processing of personal data  with the user agreement",
+      "SUCCESS_MESSAGE": {
+        "1" : "Thank you for registering!",
+        "2" : "You have successfully registered on our platform. ",
+        "3" : "Please sign in to your account.",
+        "4" : "We wish you good luck!"
+      }
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Password Recovery",
+      "TEXT": "Please enter your phone number and we will send a link to reset your password.",
+      "PLACEHOLDER": "Telephone number"
+    }
+  },
+  "NAVIGATION": {
+    "ADD_VACANCY": "Add vacancy",
+    "MY_VACANCY": "My vacancies",
+    "ANALYTICS": "Analytics",
+    "SPECIALISTS": "Specialists",
+    "BALANCE": "Balance"
+  },
+  "VACANCY": {
+    "SEARCH_SPECIALIST": {
+      "TITLE": {
+        "STEP_1": "Search for an specialist",
+        "STEP_2": "Find an specialist STEP 2"
+      },
+      "ACCORDION": {
+        "TITLE": "Filters used for this vacancy"
+      },
+      "FILTER": {
+        "COUNTRY": "Country",
+        "CITY": "City",
+        "VACANCY_LEVEL": "Level",
+        "EMPLOYMENT": "Employment",
+        "VACANCY_LANGUAGE": "Programming language",
+        "FRAMEWORKS": "Framework",
+        "NATIVE_LANGUAGE": "Languages",
+        "WAY_OF_WORKS": "Type of employment",
+        "WORKPLACE": "Workplace",
+        "TAGS": "Filter tags",
+        "NAME": "Vacancy name",
+        "COMPLETION_DATE": "Completion date",
+        "COMPANY_DESCRIPTION": "Description of the company",
+        "RESPONSIBILITIES": "Duties",
+        "TERMS": "Conditions"
+      }
+    }
+  },
+  "PROFILE": {
+    "TITLE": "Fill in your company information",
+    "COMPANY": {
+      "LOGO": "Logo",
+      "NAME": "Company Name",
+      "PHONE": "Telephone number",
+      "EMAIL": "E-mail",
+      "ADDRESS": "Address",
+      "COUNTRY": "Country",
+      "CITY": "City",
+      "LINK": "Link to the company's website",
+      "DESCRIPTION": "Description of the company"
+    }
+  },
+  "MY_VACANCY": {
+    "TITLE": "My vacancies",
+    "NAME": "Vacancy name",
+    "DATE": "Date",
+    "DAY": " {{days}} day",
+    "STATUS": "Status",
+    "PAID_STATUS": "Paid status",
+    "END_DATE": "Until completion",
+    "ANALYTICS": "Analytics°",
+    "SEARCH": {
+      "SEARCH": {
+        "PAYED_STATUS": {
+          "COMPLETED": "Completed",
+          "NOT_PAYED": "Not paid",
+          "IN_PROGRESS": "In process",
+          "ALL": "All"
+        },
+        "BY_NAME": "By name ",
+        "BY_STATUS": "By status",
+        "BY_PAYMENT_STATUS": "По платному статусу",
+        "FROM": "From",
+        "TO": "Before"
+      }
+    }
+  },
+  "ANALYTICS": {
+    "TITLE": "Detailed vacancy statistics",
+    "WORK": {
+      "DESCRIPTION": "Angular  Developer",
+      "DATE": "22/07/2021",
+      "STATUS": "Completed"
+    },
+    "DIAGRAM": "Diagram",
+    "PERCENTAGE": {
+      "TITLE": "By percentage",
+      "SEARCH_MATCHING": "Match the search",
+      "ACCEPTED_INVITED": "Accepted invitations",
+      "PASSED_INTERVIEW": "Interviewed",
+      "WAITING_FOR_ANSWER": "Waiting for a response",
+      "REJECTED": "Rejected"
+    },
+    "ALL": {
+      "TEXT": "Altogether",
+      "CANDIDATES": "Total Candidates",
+      "CANDIDATE": "Candidate"
+    }
+  },
+  "BALANCE": {
+    "PAYMENT_HISTORY": "Payment history",
+    "VIEW_ALL": "View all",
+    "DATE": "Date",
+    "PRICE": "Price",
+    "STATUS": "Status",
+    "RUB": "RUB",
+    "PDF": "PDF",
+    "UNPAID_VACANCIES": "Unpaid vacancies",
+    "AMOUNT_PAYABLE": "Amount payable",
+    "VACANCY_NAME": "Vacancy name",
+    "NOTE": "Do you want to remove this vacancy?"
+  },
+  "SPECIALISTS": {
+    "PROFESSION": "Angular Developer",
+    "VIEW_ALL": "View all",
+    "PERSONAL_INFORMATION": {
+      "TITLE": "Personal information",
+      "FULL_NAME": "",
+      "PHONE": "",
+      "EMAIL": "",
+      "COUNTRY": "",
+      "CITY": "",
+      "SKILLS": "",
+      "SOCIAL_MEDIA": ""
+    },
+    "INTERVIEW_RESULTS": {
+      "TITLE": "Interview results",
+      "NOTE_DATE": "Transit time 45 min.",
+      "POSITIVE_REVIEWS": "Positive feedback",
+      "NEGATIVE_REVIEWS": "Negative reviews",
+      "INVITE_TO_CHAT": "Invite to Chat",
+      "TEST": {
+        "TITLE": "Results of the psychological test",
+        "VIEW_TEST": "View the test",
+        "PSYCHOLOGICAL": "STRESS_RESISTANCE",
+        "PERSONALITY": "Personality Test",
+        "INTELLECT": "Intelligence Test",
+        "PASSING_BY": "Testing { PROGRAMMING_LANGUAGE }"
+      }
+    }
+  }
+}

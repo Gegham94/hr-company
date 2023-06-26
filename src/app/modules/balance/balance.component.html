@@ -1,0 +1,165 @@
+<hr-loader *ngIf="isLoader$ | async"></hr-loader>
+
+<main class='balance'>
+  <section #cards [ngClass]="{'content_on_robot-bg': isBlockActive.value[0]}">
+    <hr-tariff></hr-tariff>
+  </section>
+  <div #unpaidVacancies class="balance__unpaid-block" [ngClass]="{'content_on_robot-bg': isBlockActive.value[1]}">
+    <section class='balance__unpaid'>
+      <div class='balance__unpaid-header'>
+        <div class='balance__unpaid-title'>
+          {{"BALANCE.UNPAID_VACANCIES" | translate}}
+        </div>
+
+        <div class='balance__history-table-wrapper-unpaid'
+             [style]="{'min-height':unPaidVacancyContentHeight +'px'}"
+             *ngLet="(unPaidListVacancies$ | async) as unPaid"
+        >
+          <hr-filter-balance
+            [filterFromPaidVacancyBalance]="false"
+            [filterFromUnpaidVacancyBalance]="true"
+            [status-list]="statusList"
+            (nameChanged)="sendValue($event, myVacancyFilterEnum.name,vacancyStatusEnum.UNPAID)"
+          ></hr-filter-balance>
+          <ng-container>
+            <div class='balance__unpaid_table_block' *ngIf="!unPaidLoader.value; else UnPayedListTmpl">
+              <table
+                #unpaidVacanciesList
+                class='balance__unpaid_table_block-table'
+                *ngIf="unPaid?.length > 0; else emptyContentTmplInUnpaidBlock">
+                <tr>
+                  <th class='balance__unpaid-table-title'>{{"BALANCE.VACANCY_NAME" | translate}}</th>
+                  <th class='balance__unpaid-table-title'></th>
+                  <th class='balance__unpaid-table-title'>{{"BALANCE.END_DATE" | translate}}</th>
+                  <th class='balance__unpaid-table-title'></th>
+                  <th class='balance__unpaid-table-title'>{{"BALANCE.PAYMENT" | translate}} </th>
+                  <th class='balance__unpaid-table-title'></th>
+                </tr>
+                <tr class='balance__history-table-list' *ngFor='let list of unPaid;let i=index'>
+                  <td class='balance__history-table-element'>{{list.name}}</td>
+                  <td class='balance__history-table-element'></td>
+                  <td class='balance__history-table-element'>{{changeStatusText(list.payedStatus)}}</td>
+                  <td class='balance__history-table-element'></td>
+                  <td class='balance__history-table-element'>
+                    <hr-progress-bar
+                      [text]='progress(list)'
+                      [value]='getProgressPercent(list)'
+                      [max-value]='100'
+                      progress-bar-color='#08A652'
+                      [value-direction-top]='true'
+                      [type-props]='progressTypeProps.small'
+                    ></hr-progress-bar>
+                  </td>
+                  <td class='balance__history-table-element'></td>
+                  <td class='balance__history-table-element__button'>
+                    <button (click)="buyNotPayedVacancy(list.uuid)">Оплатить</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </ng-container>
+          <ng-template #UnPayedListTmpl>
+            <div class="loader"></div>
+          </ng-template>
+        </div>
+
+        <ng-template #emptyContentTmplInUnpaidBlock>
+          <hr-empty-content *ngIf="unpaidVacanciesCount===0"></hr-empty-content>
+        </ng-template>
+        <hr-pagination
+          *ngIf="unpaidVacanciesCount>1"
+          [total-page-count]='unpaidVacanciesCount'
+          (selectPagination)="getUnpaidVacancyList($event)">
+        </hr-pagination>
+      </div>
+    </section>
+  </div>
+
+  <div #paymentHistory class="balance__history-block" [ngClass]="{'content_on_robot-bg': isBlockActive.value[2]}">
+  <section class='balance__history'>
+    <div class='balance__history-header'>
+      <div class='balance__history-title'>
+        {{"BALANCE.PAYMENT_HISTORY" | translate}}
+      </div>
+      <div class="balance__history-table-wrapper"
+           [style]="{'min-height':paidVacancyContentHeight +'px'}">
+        <ng-container *ngLet="(paidListVacancies$ | async) as paidList">
+          <div class='balance__unpaid_table_block' *ngIf="!paidLoader.value; else ListTmpl">
+            <table
+              class='balance__unpaid_table_block-table'
+              *ngIf="paidList?.length > 0;else emptyContentTmpl">
+              <tr>
+                <th class='balance__history-table-title'>{{"BALANCE.NAME" | translate}}</th>
+                <th class='balance__history-table-title'>{{"BALANCE.DATE" | translate}}</th>
+                <th class='balance__history-table-title'>{{"BALANCE.PRICE" | translate}}</th>
+              </tr>
+              <tr class='balance__history-table-list' *ngFor='let list of paidList'>
+                <td class='balance__history-table-element'> {{list.name}}</td>
+                <td class='balance__history-table-element'>{{list.date | date :'MM/dd/yy'}}</td>
+                <td class='balance__history-table-element'>{{list.price}} {{"BALANCE.RUB" | translate}}.</td>
+              </tr>
+            </table>
+          </div>
+        </ng-container>
+        <ng-template #ListTmpl>
+          <div class="loader"></div>
+        </ng-template>
+      </div>
+
+
+      <hr-pagination
+        *ngIf="paidVacanciesCount>1"
+        [total-page-count]='paidVacanciesCount'
+        (selectPagination)="getCompanyBalanceOrders($event)">
+      </hr-pagination>
+    </div>
+
+    <ng-template #emptyContentTmpl>
+      <hr-empty-content *ngIf="paidVacanciesCount===0"></hr-empty-content>
+    </ng-template>
+  </section>
+  </div>
+</main>
+
+<hr-modal
+  [is-open]='isBuyVacancyPopup'
+  (whenModalClose)='postponeModal()'
+>
+  <div class='add-vacancy-description__modal'>
+    <div class='add-vacancy-description__modal-title'>
+      <span>Вы уверены, что хотите оплатить за вакансию?</span>
+    </div>
+    <div>
+      <div class='add-vacancy-description__modal-description'>
+        <p>У вас оплаченных вакансии {{notificationCountForBalance}} </p>
+      </div>
+      <div class="add-vacancy-description__modal-button-content">
+        <button class="add-vacancy-description__modal-field"
+                (click)="questionForBuyVacancyField ()">НЕТ
+        </button>
+        <button class="add-vacancy-description__modal-accept"
+                (click)=" questionForBuyVacancyAccept()">ДА
+        </button>
+      </div>
+    </div>
+  </div>
+</hr-modal>
+
+<hr-modal
+  [is-open]='isBuyVacancyModal'
+  (whenModalClose)='closeBuyVacancyPopup()'
+>
+  <div class='add-vacancy-description__modal'>
+    <div class='add-vacancy-description__modal-title'>
+      <span>{{buyVacancyMessage}}</span>
+    </div>
+    <div class='add-vacancy-description__modal-description'>
+      <p>благодарим за использование нашей услуги </p>
+    </div>
+  </div>
+</hr-modal>
+
+
+<ng-container *ngIf="isChooseModalOpen | async as isOpen">
+  <hr-buy-tariff-modal [isOpen]="isOpen" (checkIsRobot)="checkIsRobot()"></hr-buy-tariff-modal>
+</ng-container>

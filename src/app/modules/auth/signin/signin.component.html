@@ -1,0 +1,113 @@
+<hr-loader *ngIf="!!(loader$ | async)"></hr-loader>
+
+<section class='login' *ngLet="(userDoesNotExistsError | async) as returnedError">
+  <form class='login__form'>
+    <div class='login__wrapper'>
+      <div class='login__title'>
+        {{"AUTHORIZATION.TITLE" | translate}}
+      </div>
+      <div class='login__description'>
+        {{"AUTHORIZATION.SIGN_IN.SUBTITLE" | translate}}
+      </div>
+      <div class='login__phone-number'>
+        <hr-input
+          [phone-input]='true'
+          [input-type]="'tel'"
+          [placeholder-text]='"+7  (_____)  _______ -- _______"'
+          [label-text]='"AUTHORIZATION.PHONE" | translate'
+          [formControl]='signInPhoneNumberControl'
+          [valid]='signInPhoneNumberControl.touched ? signInPhoneNumberControl.valid : undefined'
+        ></hr-input>
+      </div>
+      <div class='login__password'>
+        <hr-input
+          [input-type]='inputTypeProps'
+          [label-text]='"AUTHORIZATION.PASSWORD" | translate'
+          [formControl]='signInPasswordControl'
+          [valid]='signInPasswordControl.touched ? signInPasswordControl.valid : undefined'
+          [feedback-text]='
+          !!(signInPasswordControl.touched && returnedError===errorMessageEnum.INVALID_LOGIN )
+           ? ("AUTHORIZATION.SIGN_IN.ERROR" | translate:
+          { prefix: prefix, phone: (signInPhoneNumberControl.value | phone)})  : returnedError ? returnedError  :
+           ""'
+          [error-status]='!!returnedError ? inputStatusList.invalid : inputStatusList.valid'
+          [showPassword]="true"
+        ></hr-input>
+      </div>
+      <div class='login__remember-wrapper'>
+        <label class='login__remember'>
+          <hr-switcher
+            (isCheckedRememberUser)="rememberUser($event)"
+          ></hr-switcher>
+          {{"AUTHORIZATION.REMEMBER_ME" | translate}}
+        </label>
+        <div class='login__forget-password' (click)='passwordModal(true)'>
+          {{"AUTHORIZATION.FORGOT_PASSWORD" | translate}}?
+        </div>
+      </div>
+      <div class='login__button'>
+        <hr-button
+          [disabled]='signInForm.invalid || !!returnedError'
+          [text]='"ACTIONS.SIGN_IN" | translate'
+          [type]='buttonType.outlineGreen'
+          (click)='signIn(signInForm)'
+        ></hr-button>
+      </div>
+      <div class='login__register-wrapper'>
+        {{"AUTHORIZATION.SIGN_IN.NOTE" | translate}}?
+        <a [routerLink]='"/signUp"' class='login__register'> {{"ACTIONS.REGISTER" | translate}}</a>
+      </div>
+    </div>
+  </form>
+  <div class='login__modal'>
+    <hr-modal
+      [is-open]='isPasswordModalOpen'
+      (whenModalClose)='passwordModal($event)'
+    >
+      <div class="login__modal-content">
+        <div class='login__modal-title'>
+          {{"AUTHORIZATION.RESET_PASSWORD.TITLE" | translate}}
+        </div>
+        <div class='login__modal-description'>
+          {{"AUTHORIZATION.RESET_PASSWORD.TEXT" | translate}}
+        </div>
+        <div class='login__modal-input'>
+          <hr-input
+            [formControl]="sendPhoneControl"
+            [phone-input]='true'
+            [feedback-text]='!!(sendPhoneControl.touched && returnedError) ?
+          ("AUTHORIZATION.SIGN_IN.ERROR_SEND_PHONE" | translate:
+          { prefix: prefix, phone: (sendPhoneControl.value | phone)}) : ""'
+            [placeholder-text]='"AUTHORIZATION.RESET_PASSWORD.PLACEHOLDER" | translate'
+            [error-status]='!!returnedError ? inputStatusList.invalid : inputStatusList.valid'
+          ></hr-input>
+        </div>
+        <div class='login__modal-button'>
+          <hr-button
+            (click)="sendPhone()"
+            [disabled]="sendPhoneForm.invalid || !!returnedError"
+            [text]='"ACTIONS.SEND" | translate'
+          ></hr-button>
+        </div>
+      </div>
+
+    </hr-modal>
+
+    <hr-modal
+      *ngIf="resetPsw"
+      [is-open]='!isPasswordModalOpen'
+      (whenModalClose)='passwordModal($event)'
+    >
+      <div>
+        <div class='login__modal-title'>
+          {{"AUTHORIZATION.RESET_PASSWORD.SECURITY_CODE" | translate}}
+        </div>
+        <hr-message-code
+          [resetPhoneValue]="sendPhoneControl.value"
+          (sendPhone)="sendPhone($event)"
+          (isResetPassword)="resetPsw=!resetPsw"
+        ></hr-message-code>
+      </div>
+    </hr-modal>
+  </div>
+</section>

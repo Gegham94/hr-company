@@ -1,0 +1,25 @@
+<div class="content">
+  <section>
+    <div class="specialists" *ngLet="conversations$ | async as conversations">
+      <ng-container *ngFor="let conversation of conversations; let i = index">
+        <div
+          class="specialist"
+          [ngClass]="{'isActive' : selectedSpecialistUuid.value === conversation?.other_info?.foundSpecialistUuid }"
+          (click)="inviteSpecialistInChatAction(conversation, conversations, i)"
+        >
+          <img
+            [tooltipClass]="'tooltip--new-styles'"
+            [tooltip]="conversation?.other_info?.name"
+            [placement]="'top'"
+            [showDelay]="200"
+            [src]="conversation?.specialist?.image ?? '/assets/img/avatar/list-man-avatar.svg'" alt="specialist"/>
+          <span class="red_circle"
+                *ngIf="!conversation?.last_message?.messageStatus && !!conversation.last_message.senderUuid"></span>
+        </div>
+      </ng-container>
+    </div>
+  </section>
+  <div>
+    <hr-chat></hr-chat>
+  </div>
+</div>

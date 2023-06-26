@@ -1,0 +1,17 @@
+@import "src/assets/variables/variables";
+
+.go-back {
+  display: inline-flex;
+  font-style: normal;
+  font-weight: $font-medium;
+  color: $medium-dark-gray;
+  opacity: 0.8;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  &:hover {
+    color: $green;
+  }
+}

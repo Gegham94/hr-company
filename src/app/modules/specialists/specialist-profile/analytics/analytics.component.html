@@ -1,0 +1,72 @@
+<section class='analytics'>
+  <div class='analytics__title'>
+      <p> Аналитика специалиста по пройденным тестам </p>
+  </div>
+  <div class='analytics__container-wrapper'>
+    <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        Диаграмма
+      </div>
+      <div class='analytics__container-content analytics__container-content_diagram' echarts [options]="option">
+      </div>
+    </div>
+    <!-- <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        {{"ANALYTICS.PASSED_TESTS" | translate}}
+      </div>
+      <div class='analytics__container-content analytics__container-content_percent'>
+        <div class='analytics__container-element' *ngFor='let element of passedTestsPercentages.value | keyvalue'>
+          <div class='analytics__container-element-image'>
+            <img src='../../../assets/img/icon/star-circle.svg' alt='icon'>
+          </div>
+          <div class='analytics__container-element-description'>
+            <div class='analytics__container-element-title'>
+              {{AnalyticsEnum[element.key]}}
+            </div>
+            <div class='analytics__container-element-percent'>
+              {{element.value.point}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class='analytics__container'>
+      <div class='analytics__container-title'>
+        Результаты
+      </div>
+      <div class='analytics__container-content analytics__container-content_all'>
+        <div class='analytics__container-content-header'>
+          <!-- <div class='analytics__container-content-header-title'>
+            {{"ANALYTICS.ALL.CANDIDATES" | translate}}
+          </div>
+          <div class='analytics__container-content-header-count'>
+            {{allTestsCount}}
+          </div> -->
+        </div>
+        <div class='analytics__container-list' *ngFor='let element of (passedTestsPercentages.value | keyvalue)'>
+          <div class="analytics__container-list">
+            <div class='analytics__container-list-color'></div>
+            <div class='analytics__container-list-description'>
+              <div class='analytics__container-list-title'>
+                {{AnalyticsEnum[element.key]}}
+              </div>
+              <div class='analytics__container-list-count'>
+                {{element?.value?.testsCount}} тесты
+              </div>
+            </div>
+          </div>
+          <div class='analytics__container-list-arrow' (click)="openTestsList(element.key)">
+            <img src="assets/img/icon/arrow.svg" alt="arrow">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyContentTmpl>
+    <hr-empty-content></hr-empty-content>
+  </ng-template>
+</section>
+
+

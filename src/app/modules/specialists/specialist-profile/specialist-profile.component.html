@@ -1,0 +1,74 @@
+<hr-loader *ngIf="isLoader$.value"></hr-loader>
+<ng-container *ngLet="specialistList$ | async as specialistList">
+  <section class="specialists">
+    <hr-go-back></hr-go-back>
+    <div class="parent specialists-user">
+      <div class="child specialists-user__info">
+        <div class="specialists-user__info-img">
+          <img [src]="specialistList?.image_blured ?
+             specialistList?.image_blured
+             : '../../../../assets/img/avatar/list-man-avatar.svg'" alt="">
+        </div>
+        <div>
+          <p class="info"> {{ specialistList?.name }} </p>
+          <p class="info__position"> Front End developer </p>
+        </div>
+        <div class="specialists-user__add-to-favorites" (click)="updateFavorites()">
+          <img *ngIf="!isFavorite" src="assets/img/icon/heart-1.svg" alt="heart">
+          <img *ngIf="isFavorite" src="assets/img/icon/heart-2.svg" alt="heart">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="specialists specialists-personal" *ngIf="company$ | async as company">
+    <div class="specialists-personal__info">
+      <div class="child">
+        <span class="specialists-personal__info-title">Личная информация</span>
+      </div>
+      <div class="child specialists-personal__info-item">
+        <p><span class="info">Полное имя:</span>
+          <span class="description"> {{ specialistList?.name }} {{specialistList?.surname}}</span></p>
+        <p><span class="info">Телефон: </span> <span class="description"> {{ specialistList?.phone }} </span></p>
+        <p><span class="info">Эл.почта:</span> <span class="description"> {{ specialistList?.email}} </span></p>
+        <p><span class="info">Страна .город: </span> <span
+          class="description"> {{ specialistList?.country }} {{ specialistList?.city }} </span></p>
+      </div>
+    </div>
+
+
+    <div class="child specialists-personal__social-button"
+         *ngIf="(!(bottomChatSettings | async)?.isOpen && isChatBtn$.value)
+         || startChatText$.value === StartChatBtnTextEnum.startChat">
+      <hr-button
+        (click)="startChat()"
+        [text]='startChatText$.value'
+        [type]='buttonType.gradient'
+      ></hr-button>
+    </div>
+
+  </section>
+
+  <div *ngIf="openCandidates.value">
+    <app-chat-open-modal
+      [isOpen]="openCandidates.value"
+      [isHelper]="false"
+      [specialistName]="specialistList?.name "
+      [specialistSurname]="specialistList?.surname"
+      (openConversationModals)="openConversationModals($event)"
+    ></app-chat-open-modal>
+  </div>
+
+  <div *ngIf="showConfirmationModal$.value">
+    <hr-confirmation-modals
+      [isOpen]="showConfirmationModal$.value"
+      [isFirstChat]="!!isFirstChat$.value"
+      (startChat)="inviteSpecialistInChatAction()"
+      (close)="rejectStartConversation()"
+    ></hr-confirmation-modals>
+  </div>
+
+  <hr-analytics [specialist]="specialistList$.value"></hr-analytics>
+</ng-container>
+
+

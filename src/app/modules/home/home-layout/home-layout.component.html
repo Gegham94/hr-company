@@ -1,0 +1,109 @@
+<hr-header></hr-header>
+<hr-loader *ngIf="isLoader$ | async"> </hr-loader>
+<section
+  class='navigate-button-wrapper'
+  *ngIf='isLogged'
+>
+  <ngx-slick-carousel class="carousel" style="width: 80%" [ngClass]="{'d_none': (isRobotOpen$ | async)}"
+                      #slickModal="slick-carousel"
+                      [config]="slideConfig"
+                      (afterChange)="afterChange($event)"
+  >
+    <div ngxSlickItem #slickItem *ngFor='let navigation of navigations | async; let i=index' class="slide">
+      <hr-navigate-button
+        *ngLet="(notificationCount | async) as notificationCount"
+        [notification-count]='(navigation.statusType === "default" && navigation.id === 5) ? notificationCount : 0'
+        [text]='navigation.text | translate'
+        [type]='navigation.statusType'
+        [link]='navigation.link'
+        [icon]='navigation.icon'
+      >
+      </hr-navigate-button>
+    </div>
+  </ngx-slick-carousel>
+
+  <div *ngIf="isRobotOpen$ | async" class='navigate-button-wrapper__web'>
+    <div *ngFor='let navigation of navigations | async; let i=index'
+         class='navigate-button__web'
+         [style.width.px]="itemWidth - 40"
+    >
+      <hr-navigate-button
+        *ngLet="(notificationCount | async) as notificationCount"
+        [notification-count]='(navigation.statusType === "default" && navigation.id === 5) ? notificationCount: 0'
+        [text]='navigation.text | translate'
+        [type]='navigation.statusType'
+        [isActive]='(robotSettings$ | async)?.navigationItemId === navigation.id ? "isActive": "notActive"'
+        [link]='navigation.link'
+        [icon]='navigation.icon'
+      >
+      </hr-navigate-button>
+    </div>
+  </div>
+
+  <div *ngIf="isRobotOpen$ | async" class='navigate-button-wrapper__tablet'>
+    <div *ngFor='let navigation of navigations | async; let i=index'>
+      <ng-container *ngIf="i >= slideActiveId && i < slideActiveId + 3">
+        <div class='navigate-button__tablet' [style.width.px]="itemWidth - 40">
+          <hr-navigate-button
+            *ngLet="(notificationCount | async) as notificationCount"
+            [notification-count]='(navigation.statusType === "default" && navigation.id === 5) ? notificationCount: 0'
+            [text]='navigation.text | translate'
+            [type]='navigation.statusType'
+            [isActive]='(robotSettings$ | async)?.navigationItemId === navigation.id ? "isActive": "notActive"'
+            [link]='navigation.link'
+            [icon]='navigation.icon'
+          >
+          </hr-navigate-button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div *ngIf="isRobotOpen$ | async" class='navigate-button-wrapper__mobile'>
+    <div *ngFor='let navigation of navigations | async; let i=index'>
+      <ng-container *ngIf="(slideActiveId ? i === slideActiveId :  i === 0)">
+        <div class='navigate-button__mobile' [style.width.px]="itemWidth - 40">
+          <hr-navigate-button
+            *ngLet="(notificationCount | async) as notificationCount"
+            [notification-count]='(navigation.statusType === "default" && navigation.id === 5) ? notificationCount : 0'
+            [text]='navigation.text | translate'
+            [type]='navigation.statusType'
+            [isActive]='(robotSettings$ | async)?.navigationItemId === navigation.id ? "isActive": "notActive"'
+            [link]='navigation.link'
+            [icon]='navigation.icon'
+          >
+          </hr-navigate-button>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<hr-robot *ngIf='isRobotOpen$ | async'>
+  <ng-container *ngLet="(robotSettings$ | async) as robotSettings">
+    <div [innerHTML]='robotSettings.content'></div>
+  </ng-container>
+</hr-robot>
+
+<div class="home_robot-info"
+     [hidden]="(isRobotOpen$ | async) || (isModalOpened | async) || (isChatOpened | async)" (click)="openRobot()">
+  <img src="/assets/img/icon/info.svg" alt="info" class="home_robot-img">
+</div>
+
+<div class="home_chat-info" *ngIf="(conversations$ | async)?.length || (bottomChatStateSettings | async)?.isOpen" (click)="openChat()">
+  <img src="./assets/img/icon/chat-icon.svg" alt="chat">
+  <span class="red_circle" *ngIf="isUnreadMessage$ | async"></span>
+</div>
+
+<div *ngIf="(bottomChatStateSettings | async)?.isOpen">
+  <hr-bottom-chat></hr-bottom-chat>
+</div>
+
+<div
+  [ngClass]="{'pointer-none': isRobotOpen$ | async, 'content_on_robot-bg': (robotSettings$ | async)?.isContentActive && !isBalancePage}">
+  <router-outlet></router-outlet>
+</div>
+
+<hr-footer></hr-footer>

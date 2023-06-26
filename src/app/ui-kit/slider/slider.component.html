@@ -1,0 +1,108 @@
+<ng-container *ngIf="helperInfo.length > 1; else singleTextTpl">
+  <ng-container *ngIf="controlsUnder; else sideControlsTpl">
+    <div class="info-wrapper">
+      <div class="info scrollbar-green" [class.flex-center]="centerContent">
+        <ng-container *ngIf="!isTemplateRef; else templatesTpl">
+          <ng-container
+            *ngFor="let item of helperInfo; let i = index"
+          >
+            <div *ngIf="i == counter">
+              <div @fade [innerHTML]="item"></div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #templatesTpl>
+          <ng-container
+            *ngFor="let item of templateRefs; let i = index"
+          >
+            <div *ngIf="i == counter">
+              <ng-container @fade *ngTemplateOutlet="item"></ng-container>
+            </div>
+          </ng-container>
+        </ng-template>
+      </div>
+      <div class="controls">
+        <ng-container *ngFor="let item of helperInfo; let i = index">
+          <div
+            class="prev-icon pointer"
+            [class.hide]="i === 0 || i !== counter"
+            (click)="prev()"
+          >
+            <img src="./assets/img/icon/prev.svg" alt="prev" />
+          </div>
+          <div
+            class="next-icon pointer"
+            @fade
+            [class.hide]="i === helperInfo.length - 1 || i !== counter"
+            (click)="next()"
+          >
+            <img src="./assets/img/icon/next.svg" alt="next" />
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #sideControlsTpl>
+    <div class="slider-wrapper">
+      <div class="prev-control">
+        <ng-container *ngFor="let item of helperInfo; let i = index">
+          <div
+            class="prev-icon pointer"
+            [class.hide]="i === 0 || i !== counter"
+            (click)="prev()"
+          >
+            <img src="./assets/img/icon/prev.svg" alt="prev" />
+          </div>
+        </ng-container>
+      </div>
+      <div
+        class="slider-text scrollbar-green"
+        [class.flex-center]="centerContent"
+      >
+        <ng-container *ngIf="!isTemplateRef; else templatesTpl2">
+          <ng-container *ngFor="let item of helperInfo; let i = index">
+            <div *ngIf="i == counter">
+              <div @fade [innerHTML]="item"></div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #templatesTpl2>
+          <ng-container *ngFor="let item of templateRefs; let i = index">
+            <div *ngIf="i == counter">
+              <ng-container @fade *ngTemplateOutlet="item"></ng-container>
+            </div>
+          </ng-container>
+        </ng-template>
+      </div>
+      <div class="next-control">
+        <ng-container *ngFor="let item of helperInfo; let i = index">
+          <div
+            class="next-icon pointer"
+            @fade
+            [class.hide]="i === helperInfo.length - 1 || i !== counter"
+            (click)="next()"
+          >
+            <img src="./assets/img/icon/next.svg" alt="next" />
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #singleTextTpl>
+  <div class="single-text scrollbar-green" [class.flex-center]="centerContent">
+    <ng-container *ngFor="let item of helperInfo">
+      <ng-container *ngIf="!isTemplateRef; else singleTemplateTpl">
+        <div [innerHTML]="item"></div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #singleTemplateTpl>
+      <ng-container *ngFor="let item of templateRefs">
+        <ng-container *ngTemplateOutlet="item"></ng-container>
+      </ng-container>
+    </ng-template>
+  </div>
+</ng-template>

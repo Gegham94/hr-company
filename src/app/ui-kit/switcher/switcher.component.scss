@@ -1,0 +1,68 @@
+@import "src/assets/variables/variables";
+
+.switcher {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 19px;
+  margin: 10px 5px;
+  &__checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked {
+      & + .switcher__slider {
+        background-color: $green;
+
+        &:before {
+          -webkit-transform: translateX(15px);
+          -ms-transform: translateX(15px);
+          transform: translateX(15px);
+        }
+      }
+    }
+
+    &:focus {
+      & + .switcher__slider {
+        box-shadow: 0 0 1px $green;
+      }
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $dark-gray;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 15px;
+      width: 15px;
+      left: 3px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+
+    &_round {
+      -webkit-border-radius: 34px;
+      -moz-border-radius: 34px;
+      border-radius: 34px;
+
+      &:before {
+        -webkit-border-radius: $radius-circle;
+        -moz-border-radius: $radius-circle;
+        border-radius: $radius-circle;
+      }
+    }
+  }
+}

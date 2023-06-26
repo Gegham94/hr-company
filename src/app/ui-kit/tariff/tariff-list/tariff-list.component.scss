@@ -1,0 +1,134 @@
+@import 'src/assets/variables/variables';
+
+.balance {
+  &__card-wrapper {
+
+    &__item {
+      width: 268px;
+      height: fit-content;
+      box-shadow: rgb(149 157 165 / 20%) 0px 8px 24px;
+      border: 2px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 15px;
+
+
+      @media screen and (max-width: 500px) {
+        width: 220px;
+      }
+      &-header {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        min-height: 30px;
+        img {
+          position: absolute;
+          top: 0;
+          left:-25px
+        }
+      }
+
+      &-price {
+        font-weight: 900;
+        font-size: 22px;
+        line-height: 26px;
+      }
+
+      &-title {
+        font-size: 19px;
+      }
+
+      &-pro_count {
+        color: #B8B8B8;
+      }
+
+      > div:nth-of-type(1) {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        > div:nth-of-type(1) {
+          span {
+            width: 72px;
+            height: 23px;
+            font-size: 14px;
+            text-align: center;
+            padding-top: 3px;
+            background: #08A652;
+            border-radius: 26px;
+            color: white;
+          }
+        }
+      }
+
+      &-advantages {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 12.38px;
+      }
+
+      &-buy {
+        padding: 7px;
+        font-size: 10px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        border-radius: 24px;
+        background: none;
+        border: 1px solid #08A652;
+        cursor: pointer;
+        width: fit-content;
+        margin: 0 auto;
+      }
+
+      &-buy:hover {
+        background: #08A652;
+        color: white;
+      }
+
+      &-more {
+        border: none;
+        background: none;
+        text-align: left;
+        font-size: 15px;
+        color: #B8B8B8;
+        cursor: pointer;
+        margin-left: 14px;
+        border-bottom: 1px solid #B8B8B8;
+        width: fit-content;
+      }
+    }
+  }
+}
+
+.add-vacancy-description__modal {
+  &-title {
+    font-size: 24px;
+    color: #08A652;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 30px;
+  }
+
+  &-description {
+    text-align: center;
+    font-size: 14px;
+    color: #000000;
+  }
+
+}
+
+.disabled-card {
+  pointer-events: none;
+  color: grey;
+  opacity: 0.4;
+
+  &_disabled-buy-btn {
+    border: 1px solid grey;
+
+  }
+}
+
+

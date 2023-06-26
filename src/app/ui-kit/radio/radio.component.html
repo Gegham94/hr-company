@@ -1,0 +1,11 @@
+<div class="radio-wrapper">
+  <input
+    type="radio"
+    class="radio-wrapper__input"
+    [name]="groupNameProps"
+    [checked]='checkedProps'
+    [value]='valueProps'
+    (change)="onItemChange(valueProps)"
+  >
+  <span class="radio-wrapper__check-mark"></span>
+</div>
