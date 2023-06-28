@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { TagTypesEnum } from "../../modules/app/constants/tag-types.enum";
+import { TagTypesEnum } from "../../shared/enum/tag-types.enum";
 
 @Component({
   selector: "hr-tag",

@@ -1,5 +1,6 @@
-import {QuestionAnswerList, RejectedOrAcceptedInterface} from "../interface/specialist-test.interface";
+import {IQuestionAnswerList, IRejectedOrAccepted} from "./specialist-test.interface";
 
+//TODO: delete
 export interface Specialist {
   about?: null;
   busyStatus?: string;
@@ -38,9 +39,9 @@ export interface Specialist {
   image_blured?: string;
   name?: string;
   surname?: string;
-  test_answers?: QuestionAnswerList[];
-  found_specialist_for_company_rejected?: RejectedOrAcceptedInterface[];
-  found_specialist_for_company_succeed?: RejectedOrAcceptedInterface[];
+  test_answers?: IQuestionAnswerList[];
+  found_specialist_for_company_rejected?: IRejectedOrAccepted[];
+  found_specialist_for_company_succeed?: IRejectedOrAccepted[];
 }
 
 export interface FilteredSpecialistsListRequest {

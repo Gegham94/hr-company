@@ -1,8 +1,8 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
-import {VacancyInterface} from "../../modules/app/interfaces/vacancy.interface";
-import {ProgressBarEnum} from "../../modules/app/constants/progress-bar.enum";
+import {IVacancy} from "../../shared/interfaces/vacancy.interface";
+import {ProgressBarEnum} from "../../shared/enum/progress-bar.enum";
 import {TranslateService} from "@ngx-translate/core";
-import {getDiffDays} from "../../helpers/get-diff-days.helper";
+import {getDiffDays} from "../../shared/helpers/get-diff-days.helper";
 
 @Component({
   selector: "hr-job-statistics",
@@ -12,10 +12,10 @@ import {getDiffDays} from "../../helpers/get-diff-days.helper";
 export class JobStatisticsComponent implements OnInit {
   @Input() viewChildElement!:ElementRef;
 
-  @Input("vacancy") vacancyProps!: VacancyInterface;
+  @Input("vacancy") vacancyProps!: IVacancy;
   @Input("type-props") progressTypeProps = ProgressBarEnum;
 
-  @Output() vacancyValueProps: EventEmitter<VacancyInterface> = new EventEmitter<VacancyInterface>();
+  @Output() vacancyValueProps: EventEmitter<IVacancy> = new EventEmitter<IVacancy>();
 
   constructor(private readonly _translateService: TranslateService) {}
 

@@ -1,0 +1,87 @@
+@import "src/assets/variables/variables";
+
+.company-notification-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px 16px;
+  border-bottom: 1px solid $gray;
+
+  &:hover {
+    background-color: $light-gray;
+  }
+
+  &--unread {
+    background-color: rgba(8, 166, 82, 0.04);
+  }
+
+  .notification-item-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid $gray;
+    background-color: $white;
+    margin-right: 12px;
+
+    img {
+      width: 62px;
+      height: 57px;
+      border-radius: 50px;
+      @media screen and (max-width: 400px) {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 35px;
+      height: 35px;
+    }
+  }
+}
+
+.notification-item-description-content {
+  width: 80%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .notification-item-description {
+    padding: 0 0 6px 0;
+    text-align: left;
+    max-width: 237px;
+
+    &-vacancy_name {
+      color: $green;
+    }
+
+    @media screen and (max-width: 400px) {
+      font-size: 12px;
+    }
+  }
+
+  .notification-item-date {
+    min-width: 65px;
+    font-size: 13px;
+    line-height: 15px;
+    color: $medium-dark-gray;
+
+    @media screen and (max-width: 400px) {
+      font-size: 10px;
+      line-height: 15px;
+    }
+  }
+}
+
+.empty-notification {
+  position: absolute;
+  top: 50%;
+  right: 32%;
+  font-size: 18px;
+  color: green;
+}

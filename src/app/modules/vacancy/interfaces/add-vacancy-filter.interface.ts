@@ -1,6 +1,6 @@
-import { AddVacancyInterface } from "../../app/interfaces/add-vacancy.interface";
+import { IAddVacancy } from "../../../shared/interfaces/add-vacancy.interface";
 
-export interface AddVacancyFilterInterface {
+export interface IAddVacancyFilter {
   vacancyCountry: string;
   vacancyCity: string;
   vacancyProgrammingLanguage: string[];
@@ -11,4 +11,4 @@ export interface AddVacancyFilterInterface {
   vacancyTypeEmployment: string;
 }
 
-export type AddVacancyInterfaceOrNull = AddVacancyInterface | null;
+export type IAddVacancyOrNullType = IAddVacancy | null;

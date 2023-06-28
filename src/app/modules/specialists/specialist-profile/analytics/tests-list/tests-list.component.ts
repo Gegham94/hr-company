@@ -1,14 +1,15 @@
-import {Component} from "@angular/core";
+import {ChangeDetectionStrategy, Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {LocalStorageService} from "../../../../app/services/local-storage.service";
+import {LocalStorageService} from "../../../../../shared/services/local-storage.service";
 import {TestLevelEnum} from "../constants/tests-level.enum";
 import {TestCategory} from "../constants/tests.enum";
-import {ObjectType} from "../../../../../shared-modules/types/object.type";
+import {ObjectType} from "../../../../../shared/types/object.type";
 
 @Component({
   selector: "app-tests-list",
   templateUrl: "./tests-list.component.html",
-  styleUrls: ["./tests-list.component.scss"]
+  styleUrls: ["./tests-list.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestsListComponent {
   public readonly TestLevelEnum = TestLevelEnum;
@@ -27,44 +28,46 @@ export class TestsListComponent {
     this.uuid = this._route.snapshot.queryParams?.["uuid"];
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getTests();
   }
 
-  private getTests(): any {
-    const data = JSON.parse(this._localStorage.getItem("selectedGroupTests"));
+  private getTests(): void {
+    if(this._localStorage.getItem("selectedGroupTests")){
+      const data = JSON.parse(this._localStorage.getItem("selectedGroupTests"));
 
-    this.groupByCategoryOfPsychological =
-      data.reduce((group: ObjectType, product: ObjectType) => {
+      this.groupByCategoryOfPsychological =
+        data.reduce((group: ObjectType, product: ObjectType) => {
+          const {interviewTest} = product;
+          const {typeOfQuiz} = product;
+          if (interviewTest?.specialist_skill_type?.name && typeOfQuiz === TestCategory.psychological) {
+            group[interviewTest?.specialist_skill_type?.name] =
+              group[interviewTest?.specialist_skill_type?.name] ?? [];
+
+            group[interviewTest?.specialist_skill_type?.name] = [];
+            group[interviewTest?.specialist_skill_type?.name].push(product);
+          }
+          return group;
+        }, []);
+
+      this.groupByCategoryOfProgramming = data.reduce((group: ObjectType, product: ObjectType) => {
         const {interviewTest} = product;
         const {typeOfQuiz} = product;
-        if (interviewTest?.specialist_skill_type?.name && typeOfQuiz === TestCategory.psychological) {
+        if (interviewTest?.specialist_skill_type?.name && typeOfQuiz === TestCategory.programming) {
           group[interviewTest?.specialist_skill_type?.name] =
             group[interviewTest?.specialist_skill_type?.name] ?? [];
-
-          group[interviewTest?.specialist_skill_type?.name] = [];
           group[interviewTest?.specialist_skill_type?.name].push(product);
         }
         return group;
       }, []);
 
-    this.groupByCategoryOfProgramming = data.reduce((group: ObjectType, product: ObjectType) => {
-      const {interviewTest} = product;
-      const {typeOfQuiz} = product;
-      if (interviewTest?.specialist_skill_type?.name && typeOfQuiz === TestCategory.programming) {
-        group[interviewTest?.specialist_skill_type?.name] =
-          group[interviewTest?.specialist_skill_type?.name] ?? [];
-        group[interviewTest?.specialist_skill_type?.name].push(product);
+      if (this.isObjectData(this.groupByCategoryOfProgramming)) {
+        this.tests = this.groupByCategoryOfProgramming;
+      } else if (this.isObjectData(this.groupByCategoryOfPsychological)) {
+        this.tests = this.groupByCategoryOfPsychological;
+      } else {
+        this.tests = {};
       }
-      return group;
-    }, []);
-
-    if (this.isObjectData(this.groupByCategoryOfProgramming)) {
-      this.tests = this.groupByCategoryOfProgramming;
-    } else if (this.isObjectData(this.groupByCategoryOfPsychological)) {
-      this.tests = this.groupByCategoryOfPsychological;
-    } else {
-      this.tests = {};
     }
   }
 

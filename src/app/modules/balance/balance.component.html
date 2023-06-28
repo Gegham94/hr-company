@@ -12,8 +12,8 @@
         </div>
 
         <div class='balance__history-table-wrapper-unpaid'
-             [style]="{'min-height':unPaidVacancyContentHeight +'px'}"
-             *ngLet="(unPaidListVacancies$ | async) as unPaid"
+             [style]="{'min-height':unpaidVacancyContentHeight +'px'}"
+             *ngLet="(unpaidListVacancies$ | async) as unPaid"
         >
           <hr-filter-balance
             [filterFromPaidVacancyBalance]="false"
@@ -22,7 +22,7 @@
             (nameChanged)="sendValue($event, myVacancyFilterEnum.name,vacancyStatusEnum.UNPAID)"
           ></hr-filter-balance>
           <ng-container>
-            <div class='balance__unpaid_table_block' *ngIf="!unPaidLoader.value; else UnPayedListTmpl">
+            <div class='balance__unpaid_table_block' *ngIf="!unpaidLoader.value; else UnPayedListTmpl">
               <table
                 #unpaidVacanciesList
                 class='balance__unpaid_table_block-table'
@@ -52,7 +52,7 @@
                   </td>
                   <td class='balance__history-table-element'></td>
                   <td class='balance__history-table-element__button'>
-                    <button (click)="buyNotPayedVacancy(list.uuid)">Оплатить</button>
+                    <button (click)="buyNotPayedVacancy(list.uuid)">{{"BALANCE.PAY" | translate}}</button>
                   </td>
                 </tr>
               </table>
@@ -122,23 +122,23 @@
 </main>
 
 <hr-modal
-  [is-open]='isBuyVacancyPopup'
-  (whenModalClose)='postponeModal()'
+  [is-open]='isBuyVacancyModal'
+  (whenModalClose)='closeBuyVacancyModal()'
 >
   <div class='add-vacancy-description__modal'>
     <div class='add-vacancy-description__modal-title'>
-      <span>Вы уверены, что хотите оплатить за вакансию?</span>
+      <span>{{"BALANCE.VACANCY_PAY_CONFIRM_MESSAGE" | translate}}</span>
     </div>
     <div>
       <div class='add-vacancy-description__modal-description'>
-        <p>У вас оплаченных вакансии {{notificationCountForBalance}} </p>
+        <p>{{"BALANCE.PAYED_VACANCY_COUNT" | translate}}{{notificationCountForBalance}} </p>
       </div>
       <div class="add-vacancy-description__modal-button-content">
         <button class="add-vacancy-description__modal-field"
-                (click)="questionForBuyVacancyField ()">НЕТ
+                (click)="questionForBuyVacancyField ()">{{"BALANCE.NO" | translate}}
         </button>
         <button class="add-vacancy-description__modal-accept"
-                (click)=" questionForBuyVacancyAccept()">ДА
+                (click)=" questionForBuyVacancyAccept()">{{"BALANCE.YES" | translate}}
         </button>
       </div>
     </div>
@@ -146,15 +146,15 @@
 </hr-modal>
 
 <hr-modal
-  [is-open]='isBuyVacancyModal'
-  (whenModalClose)='closeBuyVacancyPopup()'
+  [is-open]='boughtVacancyModal'
+  (whenModalClose)='closeBoughtVacancyModal()'
 >
   <div class='add-vacancy-description__modal'>
     <div class='add-vacancy-description__modal-title'>
       <span>{{buyVacancyMessage}}</span>
     </div>
     <div class='add-vacancy-description__modal-description'>
-      <p>благодарим за использование нашей услуги </p>
+      <p>{{"BALANCE.YES" | translate}}</p>
     </div>
   </div>
 </hr-modal>

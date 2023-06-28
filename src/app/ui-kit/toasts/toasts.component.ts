@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
-import {ToastsService} from "../../modules/app/services/toasts.service";
-import {ToastInterface} from "../../modules/app/interfaces/toast.interface";
+import {ToastsService} from "../../shared/services/toasts.service";
+import {ToastInterface} from "../../shared/interfaces/toast.interface";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {StatusTypeEnum} from "../../modules/app/constants/status-type.enum";
+import {StatusTypeEnum} from "../../shared/enum/status-type.enum";
 
 @Component({
   selector: "hr-toasts",
@@ -15,10 +15,11 @@ import {StatusTypeEnum} from "../../modules/app/constants/status-type.enum";
         "in",
         style({
           opacity: 1,
+          transform: "translateX(0)",
         })
       ),
-      transition("void => *", [style({opacity: 0}), animate(200)]),
-      transition("* => void", [animate(500, style({opacity: 0, transform: "translateX(-600px)"}))]),
+      transition("void => *", [style({ opacity: 0, transform: "translateX(600px)" }), animate(300)]),
+      transition("* => void", [animate(500, style({ opacity: 0, transform: "translateX(600px)" }))]),
     ]),
   ],
 })

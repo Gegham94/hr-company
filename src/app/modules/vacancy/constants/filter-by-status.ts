@@ -1,5 +1,5 @@
 export const FilterByPayedStatus = {
-  "COMPLETED": "оплачена",
+  "COMPLETED": "Оплачена",
   "NOT_PAYED": "Не оплачена",
   "IN_PROGRESS": "В процессе",
   "ALL": "Все",

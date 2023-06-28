@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ValidationError} from "../app/services/validation-error.service";
+import {ValidationError} from "../../shared/services/validation-error.service";
 import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({providedIn: "root"})

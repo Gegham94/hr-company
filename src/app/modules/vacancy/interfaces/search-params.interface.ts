@@ -1,4 +1,4 @@
-export interface SearchParams {
+export interface ISearchParams {
   take?: number;
   skip?: number;
   countryId?: string;

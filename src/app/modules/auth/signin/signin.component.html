@@ -1,7 +1,7 @@
 <hr-loader *ngIf="!!(loader$ | async)"></hr-loader>
 
-<section class='login' *ngLet="(userDoesNotExistsError | async) as returnedError">
-  <form class='login__form'>
+<section class='login' *ngLet="(userDoesNotExistsError | async) as  returnedError">
+  <form class='login__form' autocomplete="off">
     <div class='login__wrapper'>
       <div class='login__title'>
         {{"AUTHORIZATION.TITLE" | translate}}
@@ -47,10 +47,10 @@
       </div>
       <div class='login__button'>
         <hr-button
-          [disabled]='signInForm.invalid || !!returnedError'
+          [disabled]='!!returnedError'
           [text]='"ACTIONS.SIGN_IN" | translate'
           [type]='buttonType.outlineGreen'
-          (click)='signIn(signInForm)'
+          (click)='signIn()'
         ></hr-button>
       </div>
       <div class='login__register-wrapper'>
@@ -85,7 +85,7 @@
         <div class='login__modal-button'>
           <hr-button
             (click)="sendPhone()"
-            [disabled]="sendPhoneForm.invalid || !!returnedError"
+            [disabled]="sendPhoneControl.invalid || !!returnedError"
             [text]='"ACTIONS.SEND" | translate'
           ></hr-button>
         </div>

@@ -24,3 +24,6 @@ export const NoCredentialsUrls = [
 ];
 
 export const SpecialistProfileUrl = "recruiter/specialist/";
+
+export const MinDeadlineDateVacancy = 7;
+export const MaxDeadlineDateVacancy = 70;

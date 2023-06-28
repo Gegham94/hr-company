@@ -1,34 +1,17 @@
-import {ObjectType} from "../../../../../shared-modules/types/object.type";
+import {ObjectType} from "../../../../../shared/types/object.type";
+import {ISpecialist} from "../../interfaces/specialist.interface";
 
 export interface SpecialistTestInterface {
-  specialist: SpecialistListsInterface;
+  specialist: ISpecialist;
 }
 
-export interface SpecialistListsInterface {
-  citizenship: string;
-  city: string;
-  country: string;
-  email: string;
-  employment: string;
-  image: string;
-  image_blured: string;
-  languages: "[]";
-  languagesFrameworksArray: "[]";
-  languagesFrameworksObjects: "{}";
-  name: string;
-  phone: string;
-  surname: string;
-  test_answers: QuestionAnswerList[];
-  uuid: string;
-}
-
-export interface QuestionAnswerList {
+export interface IQuestionAnswerList {
   correctAnswerCount: number;
   createdAt: string;
   foundCompanySpecialistUuid: string;
   interview_test: ObjectType;
   point: number;
-  questionAnswerList: QuestionsAnswersInterface;
+  questionAnswerList: IQuestionsAnswersInterface;
   specialistUuid: string;
   testUuid: string;
   updatedAt: string;
@@ -37,7 +20,7 @@ export interface QuestionAnswerList {
   wrongAnswerCount: number;
 }
 
-export interface TestAnswer {
+export interface ITestAnswer {
   correctAnswerCount: number;
   createdAt: string;
   foundCompanySpecialistUuid: string;
@@ -51,35 +34,35 @@ export interface TestAnswer {
   vacancyUuid: number;
   wrongAnswerCount: number;
 }
-export interface QuestionsAnswersInterface {
+export interface IQuestionsAnswersInterface {
   typeOfQuiz?: string;
-  questions?: SpecialistAnswers;
+  questions?: ISpecialistAnswers;
   testUuid?: string;
   title?: string;
   point?: number;
   category?: string;
 }
 
-export interface GroupedTests {
-  Intelligence?: QuestionAnswerList[];
-  Personality?: QuestionAnswerList[];
-  "Stress tolerance"?: QuestionAnswerList[];
+export interface IGroupedTests {
+  Intelligence?: IQuestionAnswerList[];
+  Personality?: IQuestionAnswerList[];
+  "Stress tolerance"?: IQuestionAnswerList[];
 }
-export interface SpecialistAnswers {
+export interface ISpecialistAnswers {
   answerId: 1;
-  answersList:AnswersList[];
+  answersList: IAnswersList[];
   isCorrect: boolean;
   question: string;
   specialistAnswer: string;
 }
 
-export interface AnswersList {
+export interface IAnswersList {
   id: number;
   answer: string;
   is_correct: boolean;
 }
 
-export interface Tests {
+export interface ITests {
   psychologic: {
     point: string;
     testsCount: number;

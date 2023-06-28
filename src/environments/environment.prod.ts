@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   jsonUrl: "http://localhost:3000",
+  footerUrl: "http://80.249.146.197:3110",
   url: "https://api.company.hrhunt.ru/api/v1",
   analytic: "http://80.249.146.197:3120/api/v1",
   searchUrl: "http://80.249.146.197:3030/api/v1",

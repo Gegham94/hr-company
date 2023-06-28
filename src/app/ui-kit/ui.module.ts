@@ -22,10 +22,9 @@ import {environment} from "../../environments/environment";
 import {NgxMaskModule} from "ngx-mask";
 import {CheckboxComponent} from "./checkbox/checkbox.component";
 import {RouterModule} from "@angular/router";
-import {IconsModule} from "../shared-modules/icons/icons.module";
-import {PopupComponent} from "./popup/popup.component";
+import {IconsModule} from "../shared/icons/icons.module";
 import {TranslateModule} from "@ngx-translate/core";
-import {LetDirective} from "../modules/app/directive/ng-let-directive";
+import {LetDirective} from "../shared/directive/ng-let.directive";
 import {ShowPasswordComponent} from "./show-password/show-password.component";
 import {JobStatisticsComponent} from "./job-statistics/job-statistics.component";
 import {JobDescriptionComponent} from "./job-description/job-description.component";
@@ -51,6 +50,11 @@ import {SliderComponent} from "./slider/slider.component";
 import {ImageCropperModule} from "ngx-image-cropper";
 import {EmptyContentComponent} from "./empty-content/empty-content.component";
 import {GoBackComponent} from "./go-back/go-back.component";
+import {DrawerComponent} from "./drawer/drawer.component";
+import {SpecialistsProgressBarComponent} from "./specialists-progress-bar/specialists-progress-bar.component";
+import {UserLoadSkeletonComponent} from "./user-load-skeleton/user-load-skeleton.component";
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
+import { UserCardComponent } from "./user-card/user-card.component";
 
 @NgModule({
   declarations: [
@@ -69,7 +73,6 @@ import {GoBackComponent} from "./go-back/go-back.component";
     ModalComponent,
     FileInputComponent,
     CheckboxComponent,
-    PopupComponent,
     LetDirective,
     JobStatisticsComponent,
     JobDescriptionComponent,
@@ -89,7 +92,11 @@ import {GoBackComponent} from "./go-back/go-back.component";
     TariffListComponent,
     SliderComponent,
     EmptyContentComponent,
-    GoBackComponent
+    GoBackComponent,
+    DrawerComponent,
+    SpecialistsProgressBarComponent,
+    UserLoadSkeletonComponent,
+    UserCardComponent
   ],
   imports: [
     CommonModule,
@@ -111,6 +118,7 @@ import {GoBackComponent} from "./go-back/go-back.component";
     TooltipModule,
     CdkVirtualScrollViewport,
     ScrollingModule,
+    NgxSkeletonLoaderModule,
   ],
   exports: [
     ButtonComponent,
@@ -128,7 +136,6 @@ import {GoBackComponent} from "./go-back/go-back.component";
     ModalComponent,
     FileInputComponent,
     CheckboxComponent,
-    PopupComponent,
     JobStatisticsComponent,
     JobDescriptionComponent,
     JobSkillsComponent,
@@ -144,7 +151,11 @@ import {GoBackComponent} from "./go-back/go-back.component";
     TariffComponent,
     SliderComponent,
     EmptyContentComponent,
-    GoBackComponent
+    GoBackComponent,
+    DrawerComponent,
+    SpecialistsProgressBarComponent,
+    UserLoadSkeletonComponent,
+    UserCardComponent
   ],
 })
 export class UiModule {

@@ -1,0 +1,5 @@
+<div class="backdrop" *ngIf="isOpen" (click)="close()"></div>
+<div class="drawer custom-scrollbar" [ngStyle]="drawerStyle">
+  <p class="close" *ngIf="showCloseIcon" (click)="close()" [class.position]="side === 'left'">X</p>
+  <ng-content></ng-content>
+</div>

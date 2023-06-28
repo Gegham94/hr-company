@@ -19,12 +19,12 @@ import {
 } from "ngx-image-cropper";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BehaviorSubject, filter, takeUntil } from "rxjs";
-import { ButtonTypeEnum } from "../../modules/app/constants/button-type.enum";
-import { ToastsService } from "../../modules/app/services/toasts.service";
+import { ButtonTypeEnum } from "../../shared/enum/button-type.enum";
+import { ToastsService } from "../../shared/services/toasts.service";
 import { DomSanitizer, SafeStyle } from "@angular/platform-browser";
-import { ScreenSizeService } from "src/app/modules/app/services/screen-size.service";
-import { Unsubscribe } from "src/app/shared-modules/unsubscriber/unsubscribe";
-import { InputStatusEnum } from "../../modules/app/constants/input-status.enum";
+import { ScreenSizeService } from "src/app/shared/services/screen-size.service";
+import { Unsubscribe } from "src/app/shared/unsubscriber/unsubscribe";
+import { InputStatusEnum } from "../../shared/enum/input-status.enum";
 
 export interface ImageProps {
   width: string;

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { debounceTime } from "rxjs";
-import { ProgressBarHelper } from "../../../../shared-modules/helpers/progress-bar.helper";
-import { AddVacancyInterfaceOrNull } from "../../interfaces/add-vacancy-filter.interface";
+import { ProgressBarHelper } from "../../../../shared/helpers/progress-bar.helper";
+import { IAddVacancyOrNullType } from "../../interfaces/add-vacancy-filter.interface";
 
 @Component({
   selector: "hr-progress-bar-for-steps",
@@ -14,7 +14,7 @@ export class ProgressBarForStepsComponent implements OnChanges{
    public progressStep1:number = 0;
    public progressStep2:number = 0;
   @Input("form-group") formGroup!: FormGroup;
-  @Input("updateProgressBar") updateProgressBar!: AddVacancyInterfaceOrNull;
+  @Input("updateProgressBar") updateProgressBar!: IAddVacancyOrNullType;
   @Input("edit") edit!: boolean;
 
   ngOnChanges() {

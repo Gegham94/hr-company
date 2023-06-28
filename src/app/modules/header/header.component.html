@@ -1,128 +1,170 @@
-<div class='wrapper'>
-  <div class='side-menu' [class.side-menu__open]='isMenuOpen' (click)='dropMenuToggle()'>
-    <div *ngIf="isMenuOpen" class='side-menu__overlay' (click)='isMenuOpenHandler()'></div>
-    <div class='side-menu__content'>
-      <div class='side-menu__content-company'>
-        <div class="side-menu__header-content">
-          <div class="side-menu__content-company__header">
-            <div class='side-menu__content-company-icons'>
-              <!--              <hr-chat-notification *ngIf="isMenuOpen" [isMenuOpen]='isMenuOpen'></hr-chat-notification>-->
-              <hr-notification *ngIf="isMenuOpen" [isMenuOpen]='isMenuOpen'></hr-notification>
-              <!--              <hr-balance-notification *ngIf="isMenuOpen" [isMenuOpen]='isMenuOpen'></hr-balance-notification>-->
+<div class="wrapper" [class.wrapper__fixed]="isMenuOpen">
+  <app-drawer [width]="drawerWidth" [isOpen]="isMenuOpen" (drawerClosed)="close()">
+    <div class="side-menu">
+      <div class="side-menu__content">
+        <div class="side-menu__content-company custom-scrollbar">
+          <div class="side-menu__header-content">
+            <div class="side-menu__content-company__header">
+              <div class="side-menu__content-company-icons">
+                <hr-notification
+                  *ngIf="isMenuOpen"
+                  [isMenuOpen]="isMenuOpen"
+                ></hr-notification>
+              </div>
+              <div>
+                <img
+                  style="width: 15px; height: 15px"
+                  src="./assets/img/icon/cross.svg"
+                  alt="cross"
+                  (click)="close()"
+                />
+              </div>
             </div>
-            <div (click)='isMenuOpenHandler()'>
+            <div class="side-menu__content-company__image">
+              <div>
+                <div class="side-menu-img" *ngIf="!logo.value" (click)="close()">
+                  <img src="/assets/img/avatar/avatar-menu.jpg" />
+                </div>
+                <div class="side-menu__image-content" *ngIf="!!logo.value">
+                  <div class="side-menu-img">
+                    <img [src]="logo.value" class="header__company-logo-img" alt="Company logo" />
+                  </div>
+                  <div class="side-menu__content-company-title" *ngIf="(company$ | async)?.name">
+                    {{ (company$ | async)?.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-menu__content-links">
+            <div class="side-menu__content-element" (click)="navigate('/company')">
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'company' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.COMPANY" | translate }}</div>
+            </div>
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.balance) | async }"
+              (click)="openTariffPopup()"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'balance' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.TARIFF" | translate }}</div>
+            </div>
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.balance) | async }"
+              (click)="navigate('/balance')"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'balance' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.BALANCE" | translate }}</div>
+            </div>
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.vacancyCreateFilter) | async }"
+              (click)="navigate('/vacancy/create-filter')"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'add-vacancy' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.ADD_VACANCY" | translate }}</div>
+            </div>
+
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.vacancies) | async }"
+              (click)="navigate('/vacancies')"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'my-vacancy' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.MY_VACANCY" | translate }}</div>
+            </div>
+
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.analytic) | async }"
+              (click)="navigate('/analytic')"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'analytics' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.ANALYTIC" | translate }}</div>
+            </div>
+
+            <div
+              class="side-menu__content-element"
+              [ngClass]="{ 'side-menu__content-element--disabled': isDisabled(RoutesEnum.specialists) | async }"
+              (click)="navigate('/specialists')"
+            >
+              <div class="side-menu__content-element-img-content">
+                <img
+                  [src]="'assets/img/header-images/' + 'specialist' + '.svg'"
+                  alt="icon"
+                  class="side-menu__content-element-img"
+                />
+              </div>
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.SPECIALISTS" | translate }}</div>
+            </div>
+
+            <div class="side-menu__content-element" (click)="logOut()">
               <img
-                style='width:15px; height: 15px'
-                src='./assets/img/icon/cross.svg'
-                alt='cross'
+                [src]="'assets/img/header-images/' + 'log_out' + '.svg'"
+                alt="icon"
+                class="side-menu__content-element-img"
               />
+              <div class="side-menu__content-element-name">{{ "HEADER.DROPDOWN.LOGOUT" | translate }}</div>
             </div>
-          </div>
-          <div class="side-menu__content-company__image">
-            <div *ngIf="logo.value">
-              <div class="side-menu-img" *ngIf='!logo.value' (click)='isMenuOpenHandler()'>
-                <img src="/assets/img/avatar/avatar-menu.jpg">
-              </div>
-              <div class="side-menu__image-content" *ngIf='!!logo.value'>
-                <div class="side-menu-img">
-                  <img [src]='logo.value'
-                       class='header__company-logo-img'
-                       alt='Company logo'
-                  />
-                </div>
-                <div class='side-menu__content-company-title' *ngIf='(company$ | async)?.name'>
-                  {{(company$ | async)?.name }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class='side-menu__content-links'>
-          <div class='side-menu__content-element' (click)='navigate("/company")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "company" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.COMPANY' | translate}}</div>
-          </div>
-          <div class='side-menu__content-element' (click)="openTariffPopup($event)">
-            <div class="side-menu__content-element-img-content">
-            <img [src]='"assets/img/header-images/"+ "balance" +".svg"' alt='icon'
-                 class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>
-              Тарифы
-            </div>
-          </div>
-          <div class='side-menu__content-element'
-               [ngClass]="{'side-menu__content-element--disabled': isDisabled(RoutesEnum.balance)}"
-               (click)='navigate("/balance")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "balance" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.BALANCE' | translate}}</div>
-          </div>
-          <div class='side-menu__content-element'
-               [ngClass]="{'side-menu__content-element--disabled': isDisabled(RoutesEnum.vacancyCreateFilter)}"
-               (click)='navigate("/vacancy/create-filter")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "add-vacancy" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.ADD_VACANCY' | translate}}</div>
-          </div>
-
-          <div class='side-menu__content-element'
-               [ngClass]="{'side-menu__content-element--disabled': isDisabled(RoutesEnum.vacancies)}"
-               (click)='navigate("/vacancies")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "my-vacancy" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.MY_VACANCY' | translate}}</div>
-          </div>
-
-          <div class='side-menu__content-element'
-               [ngClass]="{'side-menu__content-element--disabled': isDisabled(RoutesEnum.analytic)}"
-               (click)='navigate("/analytic")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "analytics" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.ANALYTIC' | translate}}</div>
-          </div>
-
-          <div class='side-menu__content-element'
-               [ngClass]="{'side-menu__content-element--disabled': isDisabled(RoutesEnum.specialists)}"
-               (click)='navigate("/specialists")'>
-            <div class="side-menu__content-element-img-content">
-              <img [src]='"assets/img/header-images/"+ "specialist" +".svg"' alt='icon'
-                   class='side-menu__content-element-img'>
-            </div>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.SPECIALISTS' | translate}}</div>
-          </div>
-
-          <div class='side-menu__content-element' (click)='logOut()'>
-            <img [src]='"assets/img/header-images/"+ "log_out" +".svg"' alt='icon'
-                 class='side-menu__content-element-img'>
-            <div class='side-menu__content-element-name'>{{'HEADER.DROPDOWN.LOGOUT' | translate}}</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </app-drawer>
 
-  <header class='header'>
-    <div class='header__logo' [routerLink]='"/company"'>
+  <header class="header">
+    <div class="header__logo" [routerLink]="'/company'">
       <ng-container *ngIf="(company$ | async)?.packageCount ?? 0 > 0; else noTariffTmpl">
         <ng-container [ngSwitch]="(company$ | async)?.activeTariffUuid">
-          <img *ngSwitchCase="HeaderTariffsEnum.basic" src="assets/img/header-images/basic.svg" alt="basic">
-          <img *ngSwitchCase="HeaderTariffsEnum.classic" src="../../../assets/img/header-images/classic.svg"
-               alt="classic">
-          <img *ngSwitchCase="HeaderTariffsEnum.premium" src="../../../assets/img/header-images/premium.svg"
-               alt="premium">
+          <img *ngSwitchCase="HeaderTariffsEnum.basic" src="assets/img/header-images/basic.svg" alt="basic" />
+          <img
+            *ngSwitchCase="HeaderTariffsEnum.classic"
+            src="../../../assets/img/header-images/classic.svg"
+            alt="classic"
+          />
+          <img
+            *ngSwitchCase="HeaderTariffsEnum.premium"
+            src="../../../assets/img/header-images/premium.svg"
+            alt="premium"
+          />
           <p *ngSwitchDefault>HR-Hunt</p>
         </ng-container>
       </ng-container>
@@ -130,63 +172,68 @@
         <p>HR-Hunt</p>
       </ng-template>
     </div>
-    <div class='header__right-side--reverse'>
-      <div class='header__right-side'>
-        <div class='header__navigate web' *ngIf='isLogged'>
-          <!--          <hr-balance-notification *ngIf="!isMenuOpen"></hr-balance-notification>-->
-          <!--          <hr-chat-notification *ngIf="!isMenuOpen"></hr-chat-notification>-->
+    <div class="header__right-side--reverse">
+      <div class="header__right-side">
+        <div class="header__navigate web" *ngIf="isLogged">
           <hr-notification *ngIf="!isMenuOpen"></hr-notification>
-          <div class='header__company-info' (click)='dropMenuToggle()' (clickOutside)='dropMenuToggle(true)'>
-            <div class='header__company-title' *ngIf='(company$ | async)?.name'>{{(company$ | async)?.name }}</div>
-            <div class='header__company-logo' *ngIf="logo.value">
-              <svg *ngIf='!logo.value' width='47' height='41' viewBox='0 0 47 41' fill='none'
-                   xmlns='http://www.w3.org/2000/svg'>
-                <rect width='47' height='41' rx='5' fill='white'/>
+          <div class="header__company-info" (click)="dropMenuToggle()" (clickOutside)="dropMenuToggle(true)">
+            <div class="header__company-title" *ngIf="(company$ | async)?.name">{{ (company$ | async)?.name }}</div>
+            <div class="header__company-logo" *ngIf="logo.value">
+              <svg
+                *ngIf="!logo.value"
+                width="47"
+                height="41"
+                viewBox="0 0 47 41"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect width="47" height="41" rx="5" fill="white" />
               </svg>
-              <img
-                *ngIf='!!logo.value'
-                [src]='logo.value'
-                class='header__company-logo-img'
-                alt='Company logo'
-              />
+              <img *ngIf="!!logo.value" [src]="logo.value" class="header__company-logo-img" alt="Company logo" />
             </div>
-            <div class='header__list-menu'>
-              <button class='header__list-menu-button'>
-                <img src='./assets/img/header-images/white-arrow-icon.svg' alt='icon' id='hide'>
+            <div class="header__list-menu">
+              <button class="header__list-menu-button">
+                <img src="./assets/img/header-images/white-arrow-icon.svg" alt="icon" id="hide" />
               </button>
-              <div class='header__drop-menu' *ngIf='isDropdownOpen$ | async'>
-                <div class='header__drop-menu-element' [routerLink]='"/company"'>
-                  <img [src]='"assets/img/header-images/"+ "build-icon" +".svg"' alt='icon'
-                       class='header__drop-menu-img'>
-                  <div class='header__drop-menu-element-name'>{{'HEADER.DROPDOWN.COMPANY' | translate}}</div>
+              <div class="header__drop-menu" *ngIf="isDropdownOpen$ | async">
+                <div class="header__drop-menu-element" [routerLink]="'/company'">
+                  <img
+                    [src]="'assets/img/header-images/' + 'build-icon' + '.svg'"
+                    alt="icon"
+                    class="header__drop-menu-img"
+                  />
+                  <div class="header__drop-menu-element-name">{{ "HEADER.DROPDOWN.COMPANY" | translate }}</div>
                 </div>
-                <div class='header__drop-menu-element' (click)="openTariffPopup($event)">
-                  <img [src]='"assets/img/header-images/"+ "tariff" +".svg"' alt='icon'
-                       class='header__drop-menu-img'>
-                  <div class='header__drop-menu-element-name'>
-                    Тарифы
-                  </div>
+                <div
+                  class="header__drop-menu-element"
+                  [ngClass]="{ 'header__drop-menu-element--disabled': isDisabled(RoutesEnum.balance) | async }"
+                  (click)="openTariffPopup()"
+                >
+                  <img
+                    [src]="'assets/img/header-images/' + 'tariff' + '.svg'"
+                    alt="icon"
+                    class="header__drop-menu-img"
+                  />
+                  <div class="header__drop-menu-element-name">{{ "HEADER.DROPDOWN.TARIFF" | translate }}</div>
                 </div>
-                <div class='header__drop-menu-element' (click)='logOut()'>
-                  <img [src]='"assets/img/header-images/"+ "log-out-icon" +".svg"' alt='icon'
-                       class='header__drop-menu-img'>
-                  <div class='header__drop-menu-element-name'>{{'HEADER.DROPDOWN.LOGOUT' | translate}}</div>
+                <div class="header__drop-menu-element" (click)="logOut()">
+                  <img
+                    [src]="'assets/img/header-images/' + 'log-out-icon' + '.svg'"
+                    alt="icon"
+                    class="header__drop-menu-img"
+                  />
+                  <div class="header__drop-menu-element-name">{{ "HEADER.DROPDOWN.LOGOUT" | translate }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!--        <div class='header__languages' (click)='showLanguages = !showLanguages' *ngIf='!isMenuOpen'>-->
-        <!--          <div *ngFor='let language of _translate.getLangs(), let i=index'-->
-        <!--               (click)='switchLang(i ? 0 : 1)'>-->
-        <!--            <div *ngIf='language === selectedLang'>-->
-        <!--              <img class='header__languages-flag' [src]="'./assets/img/icon/'+ language +'-flag.svg'" alt='flag' />-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <div class='header__navigate mobile' *ngIf='isLogged && !isMenuOpen'>
-          <div class='header__navigate-menu' (click)='isMenuOpenHandler()'
-               [class.header__navigate-menu-open]='isMenuOpen'>
+        <div class="header__navigate mobile" *ngIf="isLogged">
+          <div
+            class="header__navigate-menu"
+            (click)="isMenuOpen = true"
+            [class.header__navigate-menu-open]="isMenuOpen"
+          >
             <div></div>
             <div></div>
             <div></div>
@@ -194,18 +241,16 @@
         </div>
       </div>
 
-      <div class='header__auth' *ngIf='!isLogged'>
-        <div class='header__auth-text'>
-          <a [routerLink]='"/signIn"' [routerLinkActive]='"active"'> {{"ACTIONS.LOGIN" | translate}} </a>
+      <div class="header__auth" *ngIf="!isLogged">
+        <div class="header__auth-text">
+          <a [routerLink]="'/signIn'" [routerLinkActive]="'active'"> {{ "ACTIONS.LOGIN" | translate }} </a>
         </div>
-        <div class='header__auth-text'>
-          <a [routerLink]='"/signUp"' [routerLinkActive]='"active"'> {{"ACTIONS.REGISTER" | translate}} </a>
+        <div class="header__auth-text">
+          <a [routerLink]="'/signUp'" [routerLinkActive]="'active'"> {{ "ACTIONS.REGISTER" | translate }} </a>
         </div>
       </div>
     </div>
   </header>
 </div>
 
-<div *ngIf="isTariffInfo$ | async as isTariffInfo">
-  <hr-tariff [isTariffInfo]="isTariffInfo" (close)="closePopup()"></hr-tariff>
-</div>
+<hr-tariff-modal></hr-tariff-modal>

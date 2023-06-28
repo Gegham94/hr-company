@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import {Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges} from "@angular/core";
 
 @Component({
   selector: "hr-pagination",
@@ -19,10 +19,16 @@ export class PaginationComponent implements OnChanges {
   }
 
   @Input("total-page-count") public totalPageCountProps: number = 0;
+  @Input("updatePagination") public updatePagination: boolean = false;
   @Output() selectPagination: EventEmitter<number> = new EventEmitter<number>();
 
   ngOnChanges(changes: SimpleChanges) {
     this.minSizeDevice = window.innerWidth <= 600;
+    if (changes.hasOwnProperty("updatePagination")) {
+      if (this.updatePagination) {
+        this.currentPage = 1;
+      }
+    }
   }
 
   @HostListener("window:resize")
@@ -45,7 +51,7 @@ export class PaginationComponent implements OnChanges {
     this.selectPagination.emit(this.currentPage);
   }
 
- public get pages():number[] {
+  public get pages(): number[] {
     let start;
     let end;
     const ret = [];

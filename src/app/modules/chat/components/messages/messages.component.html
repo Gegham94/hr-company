@@ -1,0 +1,157 @@
+<section class="wrapper">
+  <div class="chat">
+    <div class="chat-list">
+      <div class="chat-list__top">
+        <div class="chat-list__top-content">
+          <ng-container *ngIf="!!selectedConversation">
+            <div class="chat-list__top-title">
+              {{ selectedConversation.specialist.name }}
+              {{ selectedConversation.specialist.surname}}
+            </div>
+            <div class="chat-list__top-title chat-list__top-vacancy-name">
+              {{ selectedConversation.other_info.name }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="chat-list__top-icons">
+          <img class="chat-start-info-icon" src="assets/img/icon/question.png" alt="?"
+               (click)="openChatInfo(selectedConversation)"/>
+          <img src="assets/img/icon/close-chat.svg" alt="close" (click)="closeChat()">
+        </div>
+      </div>
+
+      <ng-container *ngIf="(chatSettings | async)?.isMessagesContent; else hiddenMessagesTmpl">
+        <div #chat class="chat-list__body scrollbar-green" (scroll)="scroll($event)">
+          <ng-container *ngIf="!isLoading && messages$.value.length; else LoadDataTmpl">
+            <div
+              class="search-results"
+              infiniteScroll
+              [infiniteScrollUpDistance]="2"
+              [infiniteScrollThrottle]="30"
+              [infiniteScrollContainer]="'.chat-list__body'"
+              (scrolledUp)="onScrollUp()"
+              [scrollWindow]="false"
+              [fromRoot]="true"
+            >
+              <div *ngFor="let message of messages$.value">
+                <div
+                  *ngIf="message.isMyMessage"
+                  class="chat-list__body-item chat-list__body-right list-item"
+                >
+                  <div class="chat-list__body-message_content">
+                    <p [innerText]="message?.message"></p>
+                    <div class="chat-list__body-item-viewed">
+                      <span>{{ message?.createdAt | date: "dd/MM/yy hh:mm" }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="!message.isMyMessage"
+                  class="chat-list__body-item"
+                >
+                  <div class="chat-list__body-img">
+                    <img
+                      [src]="message?.specialistImage || message.senderLogo || selectedConversation?.specialist?.image"
+                      alt="specialist"/>
+                  </div>
+                  <div class="chat-list__body-message_content">
+                    <p [innerText]="message?.message"></p>
+                    <div class="chat-list__body-item-viewed">
+                      <span>{{ message?.createdAt | date: "dd/MM/yy hh:mm" }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #LoadDataTmpl>
+            <ng-container *ngIf="isLoading; else NoDataTmpl">
+              <div class="loader-content">
+                <div class="loader"></div>
+              </div>
+            </ng-container>
+
+            <ng-template #NoDataTmpl>
+              <!--              <div class="no-data-tmpl">-->
+              <div class="chat-list__body-message__no-data">
+                <div class="chat-list__body-message__no-data--center">
+                  <img
+                    [src]="selectedConversation?.specialist?.image ?? '/assets/img/avatar/list-man-avatar.svg'"
+                    alt="specialist"
+                  />
+                  <p> {{selectedConversation?.specialist?.name}} {{selectedConversation?.specialist?.surname}}</p>
+                  <p> {{"CHAT.NOT_MESSAGES_YET" | translate}} </p>
+                </div>
+
+              </div>
+              <!--              </div>-->
+            </ng-template>
+          </ng-template>
+        </div>
+        <div class="chat-list--isMsg">
+          <p class="is-unread-msg"
+             *ngIf="selectedConversation?.hasUpdate"
+             (click)="openChat()">
+            {{"CHAT.IS_UNREAD_MESSAGE" | translate}}
+          </p>
+        </div>
+        <div class="chat-list__footer">
+
+          <div class="chat-input" *ngIf="selectedConversation && ((messages$ | async)?.length || !isLoading)">
+            <button
+              *ngIf="selectedConversation.other_info.interviewStatus !== AcceptOrDeclineEnum.REJECTED"
+              class="chat-input__button chat-input_refuse-button"
+              [ngClass]="{ disabled: selectedConversation.other_info.interviewStatus === AcceptOrDeclineEnum.ACCEPTED }"
+              (click)="refuseAction()"
+            >
+              <img src="assets/img/icon/refuse.svg" alt="refuse">
+            </button>
+            <button
+              *ngIf="selectedConversation.other_info.interviewStatus !== AcceptOrDeclineEnum.REJECTED"
+              class="chat-input__button chat-input_agree-button"
+              [ngClass]="{ disabled: selectedConversation.other_info.interviewStatus === AcceptOrDeclineEnum.ACCEPTED }"
+              (click)="agreeAction()"
+            >
+              <img src="assets/img/icon/accept.svg" alt="accept">
+            </button>
+            <div
+              class="chat-input__text"
+              *ngIf="selectedConversation.other_info.interviewStatus !== AcceptOrDeclineEnum.REJECTED"
+            >
+              <textarea
+                #textarea
+                (input)="auto_grow()"
+                (keydown)="onKeydown($event)"
+                [(ngModel)]="message"
+                placeholder="{{'CHAT.WRITE_SOMETHING' | translate}}"
+              ></textarea>
+            </div>
+            <button
+              *ngIf="selectedConversation.other_info.interviewStatus !== AcceptOrDeclineEnum.REJECTED"
+              #button
+              (click)="sendMessageAction()"
+              [ngClass]="{ disabled: !msgLength() }"
+              class="chat-input__button chat-input_send-button"
+            >
+              <img src="assets/img/icon/send-msg.svg" alt="send-msg"/>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #hiddenMessagesTmpl>
+        <div class="robot_img--content">
+          <img src="assets/img/icon/chat-robot.svg" alt="robot"/>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>
+
+
+<div class="accept-or-decline">
+  <hr-accept-or-decline
+    [popupName]="popupName ?? ''"
+    (isConfirmed)="acceptOrDecline($event)"
+  >
+  </hr-accept-or-decline>
+</div>

@@ -1,24 +1,25 @@
 import {Injectable} from "@angular/core";
-import {delay, forkJoin, Observable, of, switchMap, takeUntil} from "rxjs";
-import {CompanyInterface} from "../../app/interfaces/company.interface";
+import {Observable, takeUntil} from "rxjs";
 import {HomeLayoutState} from "./home-layout.state";
-import {LocalStorageService} from "../../app/services/local-storage.service";
+import {LocalStorageService} from "../../../shared/services/local-storage.service";
 import {NavigateButtonFacade} from "../../../ui-kit/navigate-button/navigate-button.facade";
 import {Router} from "@angular/router";
-import {CompanyFacade} from "../../company/company.facade";
-import {VacancyFacade} from "../../vacancy/vacancy.facade";
-import {RoutesEnum} from "../../app/constants/routes.enum";
-import {RobotHelperService} from "../../app/services/robot-helper.service";
+import {CompanyFacade} from "../../company/services/company.facade";
+import {VacancyFacade} from "../../vacancy/services/vacancy.facade";
+import {RoutesEnum} from "../../../shared/enum/routes.enum";
+import {RobotHelperService} from "../../../shared/services/robot-helper.service";
+import {Unsubscribe} from "../../../shared/unsubscriber/unsubscribe";
 
 @Injectable({
   providedIn: "root"
 })
-export class HomeLayoutFacade {
-  public company$!: Observable<CompanyInterface>;
+export class HomeLayoutFacade extends Unsubscribe {
   public isCompletedVacancyCreate!: boolean;
-  public isCompletedVacancyCreate$ = this._vacancyFacade.isCompletedVacancyCreate().subscribe(data => {
-    this.isCompletedVacancyCreate = data;
-  });
+  public isCompletedVacancyCreate$ = this._vacancyFacade.isCompletedVacancyCreate()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(data => {
+      this.isCompletedVacancyCreate = data;
+    });
   public readonly Routes = RoutesEnum;
 
   constructor(
@@ -30,40 +31,44 @@ export class HomeLayoutFacade {
     private readonly _robotHelperService: RobotHelperService,
     private readonly _router: Router,
   ) {
+    super();
   }
 
   public close(): void {
     this._robotHelperService.isRobotOpen$.next(false);
 
     const robotSettings = this._robotHelperService.robot$.value;
-    if (robotSettings?.uuid && this._localStorage.getItem("company")) {
-      this.company$ = of(JSON.parse(this._localStorage.getItem("company")));
-      this.company$.pipe(
-        switchMap((data: CompanyInterface) => {
-          const currentPageRobotSettings =
-            data.helper?.findIndex(page => page["uuid"] === robotSettings?.uuid) ?? -1;
+    if (robotSettings?.uuid) {
 
-          if (this._router.url === "/vacancy/create-information") {
-            this._robotHelperService.setRobotSettings({
-              content: "Step 2 - helper",
-              navigationItemId: null,
-              isContentActive: true,
-            });
-          }
+      const company = this._companyFacade.getCompanyData();
 
-          if (currentPageRobotSettings >= 0 && data?.helper && !data.helper[currentPageRobotSettings]["hidden"]) {
-            data.helper[currentPageRobotSettings]["hidden"] = true;
-            this._localStorage.setItem("company", JSON.stringify(data));
-            return this._companyFacade.updateCurrentPageRobot(data.helper[currentPageRobotSettings].uuid);
-          }
-          return of([]);
-        })
-      ).subscribe(() => {
-        if (robotSettings?.link && robotSettings?.link === "/company-after-save") {
-          this._router.navigateByUrl("/vacancy/create-filter");
-        }
-      });
+      const currentPageRobotSettings =
+        company.helper?.findIndex(page => page["uuid"] === robotSettings?.uuid) ?? -1;
+
+      if (this._router.url === "/vacancy/create-information") {
+        this._robotHelperService.setRobotSettings({
+          content: "Step 2 - helper",
+          navigationItemId: null,
+          isContentActive: true,
+        });
+      }
+
+      if (robotSettings?.link && robotSettings?.link === "/company-after-save") {
+        this._router.navigateByUrl("/vacancy/create-filter");
+      } else
+      if (currentPageRobotSettings >= 0 && company?.helper && !company.helper[currentPageRobotSettings]["hidden"]) {
+        company.helper[currentPageRobotSettings]["hidden"] = true;
+        this._companyFacade.setCompanyData(company);
+        this._companyFacade.updateCurrentPageRobot(company.helper[currentPageRobotSettings].uuid)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe();
+      }
+
     }
+  }
+
+  public getIsRobotHelper$(): Observable<boolean> {
+    return this._homeLayoutState.getIsRobotHelper$();
   }
 
 }

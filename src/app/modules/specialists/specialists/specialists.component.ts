@@ -1,37 +1,26 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from "@angular/core";
-import {
-  BehaviorSubject,
-  filter,
-  map,
-  Observable,
-  of,
-  Subject,
-  switchMap, take,
-  takeUntil
-} from "rxjs";
-import {SearchableSelectDataInterface} from "../../app/interfaces/searchable-select-data.interface";
-import {AddVacancyInterfaceOrNull} from "../../vacancy/interfaces/add-vacancy-filter.interface";
-import {SpecialistFilterInterface, SpecialistInterviewStatusEnum} from "../interfaces/specialist-filter-interface";
-import {SelectedTabEnum} from "../../app/constants/selectedTab.enum";
-import {Experiences, FilteredSpecialistsListResult} from "../interfaces/specialist.interface";
-import {SpecialistFacade} from "../specialist.facade";
-import {VacancyFacade} from "../../vacancy/vacancy.facade";
-import {HomeLayoutState} from "../../home/home-layout/home-layout.state";
-import {CompanyInterface} from "../../app/interfaces/company.interface";
-import {Router} from "@angular/router";
-import {RobotHelperService} from "../../app/services/robot-helper.service";
-import {LocalStorageService} from "../../app/services/local-storage.service";
-import {Unsubscribe} from "../../../shared-modules/unsubscriber/unsubscribe";
-import {CompanyFacade} from "../../company/company.facade";
-import {RoutesEnum} from "../../app/constants/routes.enum";
-import {BalanceState} from "../../balance/balance.state";
-import {PayedVacancyEnum, VacancyStatusEnum} from "../../vacancy/constants/filter-by-status.enum";
-import {BalanceService} from "../../balance/balance.service";
-import {ChatFacade} from "../../chat/chat.facade";
-import {ButtonTypeEnum} from "../../app/constants/button-type.enum";
-import {IConversation} from "../../chat/interfaces/conversations";
-import {NavigateButtonFacade} from "../../../ui-kit/navigate-button/navigate-button.facade";
-import {PopupMessageEnum} from "../../app/model/popup-message.enum";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, filter, forkJoin, map, Observable, of, switchMap, takeUntil, tap } from "rxjs";
+import { ISpecialistFilter } from "../interfaces/specialist-filter-interface";
+import { SpecialistInterviewStatusEnum } from "../constants/interviev-status.enum";
+import { FilteredSpecialistsListResult } from "../interfaces/specialist.interface";
+import { SpecialistFacade } from "../services/specialist.facade";
+import { Router } from "@angular/router";
+import { Unsubscribe } from "src/app/shared/unsubscriber/unsubscribe";
+import { ISearchableSelectData } from "src/app/shared/interfaces/searchable-select-data.interface";
+import { ICompany } from "src/app/shared/interfaces/company.interface";
+import { RoutesEnum } from "src/app/shared/enum/routes.enum";
+import { LocalStorageService } from "src/app/shared/services/local-storage.service";
+import { ButtonTypeEnum } from "src/app/shared/enum/button-type.enum";
+import { VacancyFacade } from "../../vacancy/services/vacancy.facade";
+import { HomeLayoutFacade } from "../../home/home-layout/home-layout.facade";
+import { CompanyFacade } from "../../company/services/company.facade";
+import { BalanceFacade } from "../../balance/services/balance.facade";
+import { ChatFacade } from "../../chat/chat.facade";
+import { NavigateButtonFacade } from "src/app/ui-kit/navigate-button/navigate-button.facade";
+import { Conversation } from "../../chat/interfaces/conversations";
+import { AcceptOrDeclineEnum } from "../../chat/constants/accept-or-decline.enum";
+import { IAddVacancyOrNullType } from "../../vacancy/interfaces/add-vacancy-filter.interface";
+import { VacancyStatusEnum } from "../../vacancy/constants/filter-by-status.enum";
 
 @Component({
   selector: "app-specialists",
@@ -39,75 +28,58 @@ import {PopupMessageEnum} from "../../app/model/popup-message.enum";
   styleUrls: ["./specialists.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpecialistsComponent extends Unsubscribe implements OnInit {
+export class SpecialistsComponent extends Unsubscribe implements OnInit, OnDestroy {
+  public ButtonTypeEnum = ButtonTypeEnum;
   public update: boolean = false;
-  public currentPage: number = 1;
-  public readonly options: SearchableSelectDataInterface[] = [
-    {id: 1, value: "Все", displayName: "Все"},
-    {id: 2, value: "Прошли тест", displayName: "Прошли тест"},
-    {id: 3, value: "В процессе", displayName: "В процессе"},
-    {id: 4, value: "Принятые", displayName: "Принятые"},
-    {id: 5, value: "Избранное", displayName: "Избранное"},
+  public specialistFilterAll: string = "Все";
+  public readonly options: ISearchableSelectData[] = [
+    { id: 1, value: "Все", displayName: "Все" },
+    { id: 2, value: "Прошли тест", displayName: "Прошли тест" },
+    { id: 3, value: "В процессе", displayName: "В процессе" },
+    { id: 4, value: "Принятые", displayName: "Принятые" },
+    { id: 5, value: "Избранное", displayName: "Избранное" },
   ];
+  public specialists: BehaviorSubject<FilteredSpecialistsListResult[]> = new BehaviorSubject<
+    FilteredSpecialistsListResult[]
+  >([]);
+  public selectedVacancy$: BehaviorSubject<IAddVacancyOrNullType> =
+    new BehaviorSubject<IAddVacancyOrNullType>(null);
+  public selectedSpecialistPossition = this.options[0];
 
-  public selectedItem = this.options[0];
-
-  public specialists: BehaviorSubject<FilteredSpecialistsListResult[]> = new BehaviorSubject<FilteredSpecialistsListResult[]>([]);
-
-  public selectedVacancy$: BehaviorSubject<AddVacancyInterfaceOrNull> = new BehaviorSubject<AddVacancyInterfaceOrNull>(
-    null
-  );
-
-  public vacancyDeadlineDate$: Subject<string> = new Subject<string>();
-
-  public isSpecialistAvailableAfterAcceptOrReject$ = this._chatFacade.getIsAvailableAfterAcceptOrReject$().pipe(
-    switchMap(data => {
-      return this._chatFacade.getConversation$()
-        .pipe(
-          map(conv => {
-            if(this._localStorage.getItem("filtered_vacancies")) {
-              const selectedVacancy = JSON.parse(this._localStorage.getItem("filtered_vacancies"));
-              if (selectedVacancy?.length && conv?.other_info.vacancyUuid === selectedVacancy[0].id) {
-                return data;
-              }
-            }
-            return true;
-          })
-        );
-    })
-  );
-
-  public searchParams: SpecialistFilterInterface = {};
+  public readonly VacancyStatusEnum = VacancyStatusEnum;
+  public readonly SpecialistInterviewStatusEnum = SpecialistInterviewStatusEnum;
+  public searchParams: ISpecialistFilter = {};
   public specialistTotalPageCount: number = 0;
   public loader$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public isRobotHelper: Observable<boolean> = this._homeLayoutState.getIsRobotHelper$();
-  public isRobotMap: Observable<boolean> = this._homeLayoutState.getIsRobotMap();
-  public company$: Observable<CompanyInterface> = of(JSON.parse(this._localStorage.getItem("company")));
+  public isRobotHelper: Observable<boolean> = this._homeLayoutFacade.getIsRobotHelper$();
+  public company$: Observable<ICompany> = this._companyFacade.getCompanyData$();
   public isChooseModalOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public defaultValue1: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  public defaultValue2: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  public ButtonTypeEnum = ButtonTypeEnum;
-  public readonly VacancyStatusEnum = VacancyStatusEnum;
-  public readonly PayedVacancyEnum = PayedVacancyEnum;
-  public readonly SpecialistInterviewStatusEnum = SpecialistInterviewStatusEnum;
-  private readonly Routes = RoutesEnum;
-  private conversations$!: Observable<IConversation[]>;
   public vacancyType: VacancyStatusEnum = VacancyStatusEnum.NotArchived;
-  public filter$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
-  public isBuyVacancyModal: boolean = false;
-  public paymentMessage: BehaviorSubject<string> = new BehaviorSubject("");
-  public popupMessageEnum = PopupMessageEnum;
+  public isUpdatePagination: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  private readonly Routes = RoutesEnum;
+  private vacanciesListDefaultValue: BehaviorSubject<string> = new BehaviorSubject<string>("");
+
+  // After accepting or rejecting specialist for selected vacancy from chat, make specialists available
+  public selectedConversation$: Observable<Conversation | null> = this._chatFacade.getSelectedConversation$();
+  public isAvailableSpecialist: boolean = true;
+  private conversations$: Observable<Conversation[]> = this._chatFacade.getConversations$();
+
+  public get vacancyDeadlineDate(): string {
+    if (this.selectedVacancy$.value?.deadlineDate) {
+      return this.selectedVacancy$.value?.deadlineDate.split("-").join("/");
+    }
+    return "";
+  }
 
   constructor(
     private readonly _vacancyFacade: VacancyFacade,
     private readonly _specialistFacade: SpecialistFacade,
-    private readonly _homeLayoutState: HomeLayoutState,
+    private readonly _homeLayoutFacade: HomeLayoutFacade,
     private readonly _router: Router,
-    private readonly _robotHelperService: RobotHelperService,
     private readonly _localStorage: LocalStorageService,
     private readonly _companyFacade: CompanyFacade,
-    private readonly _balanceState: BalanceState,
-    private readonly _balanceService: BalanceService,
+    private readonly _balanceFacade: BalanceFacade,
     private readonly _chatFacade: ChatFacade,
     private readonly _navigateButtonFacade: NavigateButtonFacade,
     private readonly _cdr: ChangeDetectorRef
@@ -117,11 +89,45 @@ export class SpecialistsComponent extends Unsubscribe implements OnInit {
 
   public ngOnInit(): void {
     this.conversations$ = this._chatFacade.getConversations$();
-    this.isRobot();
+    this.checkIsRobot();
     if (this._router.url.includes("payment")) {
-      this.isBuyVacancyModal = true;
       this.questionForBuyVacancyAccept();
     }
+
+    // subscribe to the selected conversation
+    // to check the acceptance and rejection of events
+    // for opening and closing specialist cards
+    this.selectedConversation$
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap((selectedConversation) => {
+          if (
+            this.selectedVacancy$?.value &&
+            selectedConversation?.other_info.vacancyUuid === this.selectedVacancy$.value.uuid
+          ) {
+            this.isAvailableSpecialist =
+              selectedConversation?.other_info?.interviewStatus !==
+              (AcceptOrDeclineEnum.ACCEPTED || AcceptOrDeclineEnum.REJECTED);
+          }
+          this.isAvailableSpecialist = true;
+        })
+      )
+      .subscribe(() => {
+        this._cdr.markForCheck();
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe();
+  }
+
+  public getPercentage(): Observable<number> {
+    return this.selectedVacancy$.pipe(
+      takeUntil(this.ngUnsubscribe),
+      map((vacancy) => {
+        return this._specialistFacade.getPercentage(vacancy);
+      })
+    );
   }
 
   public navigateToBalance(): void {
@@ -138,128 +144,77 @@ export class SpecialistsComponent extends Unsubscribe implements OnInit {
     this.company$
       .pipe(
         takeUntil(this.ngUnsubscribe),
-        switchMap((company: CompanyInterface | null) => {
+        switchMap((company: ICompany | null) => {
           const navigationBtns = this._navigateButtonFacade.getShowedNavigationsMenu();
           if (navigationBtns) {
             const currentBtnIndex = navigationBtns.findIndex((btn) => btn.id === 4);
-            if (currentBtnIndex > -1) {
+            const specialistBtnIndex = navigationBtns.findIndex((btn) => btn.id === 5);
+            if (currentBtnIndex > -1 && specialistBtnIndex > -1) {
               navigationBtns[currentBtnIndex].statusType = "default";
+              navigationBtns[specialistBtnIndex].statusType = "default";
             }
             this._navigateButtonFacade.setShowedNavigationsMenu$(navigationBtns);
+          }
+          this.isRobot();
+          if (company) {
+            const analyticPageIndex =
+              company.helper?.findIndex((data) => data["link"] === this.Routes.analytic + "/isActive") ?? -1;
+            const specialistsPageIndex =
+              company.helper?.findIndex((data) => data["link"] === this.Routes.specialists + "/isActive") ?? -1;
+            if (company?.helper && analyticPageIndex >= 0) {
+              return forkJoin([this._companyFacade.updateCurrentPageRobot(company.helper[analyticPageIndex]["uuid"]),
+              this._companyFacade.updateCurrentPageRobot(company.helper[specialistsPageIndex]["uuid"]),
+              ]);
+            }
           }
           return of(company);
         })
       )
-      .subscribe((company) => {
-        this.isRobot();
-        if (company) {
-          const analyticPageIndex =
-            company.helper?.findIndex((data) => data["link"] === this.Routes.analytic + "/isActive") ?? -1;
-
-          if (company?.helper && analyticPageIndex >= 0) {
-            company.helper[analyticPageIndex]["hidden"] = true;
-            this._localStorage.setItem("company", JSON.stringify(company));
-            this._companyFacade.updateCurrentPageRobot(company.helper[analyticPageIndex]["uuid"]).subscribe();
-          }
-        }
-      });
+      .subscribe();
   }
 
-  public questionForBuyVacancyAccept(): void {
-    const vacancyUuid = localStorage.getItem("vacancyUuid");
-    if (vacancyUuid) {
-      this._balanceService
-        .buyNotPayedVacancy(vacancyUuid)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          () => {
-            const companyData = JSON.parse(this._localStorage.getItem("company"));
-            companyData.packageCount--;
-            this._localStorage.setItem("company", JSON.stringify(companyData));
-            localStorage.removeItem("vacancyUuid");
-            this._balanceState.setTariffBouth(false);
-            this.paymentMessage.next(this.popupMessageEnum.SUCCESS);
-          },
-          () => {
-            localStorage.removeItem("vacancyUuid");
-            this._balanceState.setTariffBouth(false);
-            this.paymentMessage.next(this.popupMessageEnum.FAILED);
-          }
-        );
-    }
-    this.loader$.next(false);
+  public getvacanciesListDefaultValue(): Observable<string> {
+    return this.vacanciesListDefaultValue.asObservable();
   }
 
-  public getDefaultValue1() {
-    return this.defaultValue1.asObservable();
+  public navOptions(searchSelectData: ISearchableSelectData): void {
+    this.selectedSpecialistPossition = searchSelectData;
+    this.isUpdatePagination.next(true);
+    this._specialistFacade
+      .getNavOptions(searchSelectData)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap((searchParams) => (this.searchParams = searchParams))
+      )
+      .subscribe(() => this.getFilteredSpecialistList(1, this.searchParams));
   }
 
-  public getDefaultValue2() {
-    return this.defaultValue2.asObservable();
-  }
-
-  public isFilterDisabled(i: number): boolean {
-    return this.vacancyType === VacancyStatusEnum.Archived && [3, 4].includes(i);
-  }
-
-  public navOptions(el: SearchableSelectDataInterface) {
-    this.selectedItem = el;
-    this.currentPage = 1;
-
-    switch (el.displayName) {
-      case SelectedTabEnum.Successfully:
-        this.searchParams["status"] = SpecialistInterviewStatusEnum.SUCCESS;
-        this.getFilteredSpecialistList(1, this.searchParams);
-        break;
-      case SelectedTabEnum.Process:
-        this.searchParams["status"] = SpecialistInterviewStatusEnum.InProgress;
-        this.getFilteredSpecialistList(1, this.searchParams);
-        break;
-      case SelectedTabEnum.Accepted:
-        this.searchParams["status"] = SpecialistInterviewStatusEnum.ACCEPTED;
-        this.getFilteredSpecialistList(1, this.searchParams);
-        break;
-      case SelectedTabEnum.Favorites:
-        this.searchParams["status"] = SpecialistInterviewStatusEnum.FAVORITES;
-        this.getFilteredSpecialistList(1, this.searchParams);
-        break;
-      default: {
-        delete this.searchParams.status;
-        this.getFilteredSpecialistList(1, this.searchParams);
-      }
-    }
-  }
-
-  getAllVacancyList(vacancies: SearchableSelectDataInterface[]) {
+  public getAllVacancyList(vacancies: ISearchableSelectData[]): void {
     const filteredVacancies = localStorage.getItem("filtered_vacancies");
     if (filteredVacancies && filteredVacancies.length > 0) {
       const parsedFilteredVacancies = JSON.parse(filteredVacancies);
-      this.defaultValue2.next(parsedFilteredVacancies[0].displayName);
+      this.vacanciesListDefaultValue.next(parsedFilteredVacancies[0].displayName);
       this.searchParams["vacancyUuid"] = parsedFilteredVacancies[0].id.toString();
     } else if (vacancies[vacancies.length - 1]) {
-      this.defaultValue2.next(vacancies[vacancies.length - 1].displayName);
+      this.vacanciesListDefaultValue.next(vacancies[vacancies.length - 1].displayName);
       this.searchParams["vacancyUuid"] = vacancies[vacancies.length - 1].id.toString();
     }
   }
 
-  public setSelectedVacancy(vacancy: SearchableSelectDataInterface, type: VacancyStatusEnum) {
+  public setSelectedVacancy(vacancy: ISearchableSelectData, type: VacancyStatusEnum): void {
+    this.isUpdatePagination.next(true);
     this.loader$.next(true);
     this.vacancyType = type;
-    this.currentPage = 1;
-
     if (type === VacancyStatusEnum.Archived) {
-      this.defaultValue2.next("");
-      this.defaultValue1.next(vacancy.displayName);
+      this.vacanciesListDefaultValue.next("");
       localStorage.removeItem("filtered_vacancies");
-      if ([3, 4].includes(this.selectedItem.id as number)) {
-        this.selectedItem = this.options[0];
+      if ([3, 4].includes(this.selectedSpecialistPossition.id as number)) {
+        this.selectedSpecialistPossition = this.options[0];
       }
     } else {
-      this.defaultValue1.next("");
-      this.defaultValue2.next(this.defaultValue2.value);
+      this.vacanciesListDefaultValue.next(this.vacanciesListDefaultValue.value);
       localStorage.setItem("filtered_vacancies", JSON.stringify([vacancy]));
     }
-
     if (vacancy.id) {
       this._vacancyFacade.getVacancy(vacancy.id).subscribe((data) => {
         const [selectedVacancy] = data.result;
@@ -276,79 +231,80 @@ export class SpecialistsComponent extends Unsubscribe implements OnInit {
   public isRobot() {
     this.company$.pipe(filter((data) => !!data?.phone)).subscribe((company) => {
       const specialists = company.helper?.find((item) => item.link === "/specialists");
-
-      this._robotHelperService.setRobotSettings({
+      this._specialistFacade.isRobot({
         content: "/specialists - helper",
         navigationItemId: null,
         isContentActive: true,
       });
-
       if (specialists && !specialists?.hidden) {
-        this._robotHelperService.setRobotSettings({
+        this._specialistFacade.isRobot({
           content: "/specialist",
           navigationItemId: 5,
           isContentActive: true,
           uuid: specialists.uuid,
         });
-        this._robotHelperService.isRobotOpen$.next(true);
+        this._specialistFacade.openRobot(true);
       }
     });
   }
 
-  public getFilteredSpecialistList(
-    pageNumber: number,
-    searchParams: SpecialistFilterInterface = this.searchParams
-  ): void {
-    this.currentPage = pageNumber;
+  public getFilteredSpecialistList(pageNumber: number, searchParams: ISpecialistFilter = this.searchParams): void {
+    this.isUpdatePagination.next(false);
     this.specialists.next([]);
     const limit = 12;
     const skip = pageNumber * limit - limit;
-
-    this.conversations$.pipe(
-      takeUntil(this.ngUnsubscribe),
-      filter(data => !!data.length),
-      take(1))
-      .subscribe((data) => {
-        searchParams["orderSpecialistUuids"] = data.map((item: IConversation) => {
-          return item?.other_info.foundSpecialistUuid;
+    if (this.searchParams["vacancyUuid"]) {
+      this.conversations$
+        .pipe(
+          takeUntil(this.ngUnsubscribe),
+          switchMap((data) => {
+            if (data.length) {
+              searchParams["orderSpecialistUuids"] = data.map((item: Conversation) => {
+                return item?.other_info.foundSpecialistUuid;
+              });
+            }
+            if (searchParams.vacancyUuid) {
+              return this._specialistFacade.getFilteredSpecialistList(skip, searchParams);
+            }
+            return of(null);
+          })
+        )
+        .subscribe((data) => {
+          this.loader$.next(false);
+          if (data) {
+            if (data.result?.length) {
+              this._localStorage.setItem("isFirstChat", JSON.stringify(data.result[0]?.newSpecialist));
+              this.specialists.next(data.result);
+            }
+            this.specialistsTotalPages(data.count);
+          }
         });
-        if (!!searchParams.vacancyUuid) {
-          this._specialistFacade
-            .getFilteredSpecialistList(skip, searchParams)
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe((data) => {
-              this.loader$.next(false);
-              if (data.result.length) {
-                this._localStorage.setItem("isFirstChat", JSON.stringify(data.result[0]?.newSpecialist));
-                this.specialists.next(data.result);
-              }
-              this.specialistsTotalPages(data.count);
-            });
-        }
-      });
-
-
-  }
-
-  public closeBuyVacancyPopup(): void {
-    this.isBuyVacancyModal = !this.isBuyVacancyModal;
-    this.isBuyVacancyModal = !this.isBuyVacancyModal;
-    this._localStorage.removeData("vacancyUuid");
-  }
-
-  public get vacancyDeadlineDate(): string {
-    if (this.selectedVacancy$.value?.deadlineDate) {
-      return this.selectedVacancy$.value?.deadlineDate.split("-").join("/");
     }
-    return "";
   }
 
-  public getProfession(item: Experiences[]): string {
-    let professions = "";
-    item.forEach((data: Experiences) => {
-      professions += data.position + " ";
-    });
-    return professions;
+  private questionForBuyVacancyAccept(): void {
+    const vacancyUuid = localStorage.getItem("vacancyUuid");
+    if (vacancyUuid) {
+      this._balanceFacade
+        .buyNotPayedVacancy(vacancyUuid)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: () => {
+            this.company$.pipe(
+              takeUntil(this.ngUnsubscribe),
+              tap((company) => {
+                if (company) {
+                  this._specialistFacade.questionForBuyVacancyAccept(company, false);
+                }
+              })
+            );
+          },
+          error: () => {
+            this._specialistFacade.questionForBuyVacancyAccept({}, true);
+          },
+        });
+    }
+    this.loader$.next(false);
   }
 
   private specialistsTotalPages(count: number): void {

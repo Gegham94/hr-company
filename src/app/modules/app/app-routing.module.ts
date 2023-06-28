@@ -1,8 +1,8 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {AccountGuard} from "../../helpers/account.guard";
+import {AccountGuard} from "../../shared/guards/account.guard";
 import {AppComponent} from "./app.component";
-import {AuthGuard} from "../../helpers/auth.guard";
+import {AuthGuard} from "../../shared/guards/auth.guard";
 
 const routes: Routes = [{
   path: "",
@@ -15,12 +15,12 @@ const routes: Routes = [{
     },
     {
       path: "",
-      loadChildren: () => import("../service-pages/service-pages.module")
+      loadChildren: () => import("../service-pages/module/service-pages.module")
         .then((module) => module.ServicePagesModule),
     },
     {
       path: "",
-      loadChildren: () => import("../auth/auth.module")
+      loadChildren: () => import("../auth/module/auth.module")
         .then((module) => module.AuthModule)
     },
     {

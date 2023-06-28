@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import {NavigateButtonInterface, NavigationButton} from "../../modules/app/interfaces/navigateButton.interface";
+import {NavigateButtonInterface, NavigationButton} from "../../shared/interfaces/navigateButton.interface";
 import {Observable, Subscription} from "rxjs";
 import {NavigateButtonState} from "./navigate-button.state";
-import {CompanyService} from "../../modules/company/company.service";
+import {CompanyService} from "../../modules/company/services/company.service";
 
 @Injectable({
   providedIn: "root"
@@ -36,8 +36,9 @@ export class NavigateButtonFacade {
     return this._navigateButtonState.getShowedNavigationsMenu();
   }
 
-  public setShowedNavigationsMenu$(value: NavigationButton[]){
-    return this._navigateButtonState.setShowedNavigationsMenu(value);
+  public setShowedNavigationsMenu$(value: NavigationButton[]) {
+    localStorage.setItem("navigationState", btoa(JSON.stringify(value)));
+    this._navigateButtonState.setShowedNavigationsMenu(value);
   }
 
   public getNavigationsMenuItem(link: string): NavigateButtonInterface {

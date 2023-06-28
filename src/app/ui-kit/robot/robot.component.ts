@@ -5,23 +5,23 @@ import {
 } from "@angular/core";
 import "hammerjs";
 import { BehaviorSubject, distinctUntilChanged, Observable, of } from "rxjs";
-import { Unsubscribe } from "../../shared-modules/unsubscriber/unsubscribe";
-import { CompanyInterface } from "../../modules/app/interfaces/company.interface";
-import { LocalStorageService } from "../../modules/app/services/local-storage.service";
-import { RoutesEnum } from "../../modules/app/constants/routes.enum";
+import { Unsubscribe } from "../../shared/unsubscriber/unsubscribe";
+import { ICompany } from "../../shared/interfaces/company.interface";
+import { LocalStorageService } from "../../shared/services/local-storage.service";
+import { RoutesEnum } from "../../shared/enum/routes.enum";
 import { HomeLayoutFacade } from "../../modules/home/home-layout/home-layout.facade";
-import { RobotHelperService } from "../../modules/app/services/robot-helper.service";
-import { RobotHelper } from "../../modules/app/interfaces/robot-helper.interface";
+import { RobotHelperService } from "../../shared/services/robot-helper.service";
+import { RobotHelper } from "../../shared/interfaces/robot-helper.interface";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-import { BalanceFacade } from "../../modules/balance/balance.facade";
-import { ScreenSizeService } from "src/app/modules/app/services/screen-size.service";
-import { ScreenSizeType } from "src/app/modules/app/interfaces/screen-size.type";
+import { ScreenSizeType } from "src/app/shared/interfaces/screen-size.type";
 import {
   robotBgOpacityAnimation,
   robotBlockInfoAnimation,
   robotFadeInOutAnimation,
   robotToastAnimation,
 } from "./robot.animations";
+import { BalanceFacade } from "src/app/modules/balance/services/balance.facade";
+import { ScreenSizeService } from "src/app/shared/services/screen-size.service";
 
 @Component({
   selector: "hr-robot",
@@ -36,7 +36,7 @@ import {
   ],
 })
 export class RobotComponent extends Unsubscribe {
-  public company$: Observable<CompanyInterface> = of(
+  public company$: Observable<ICompany> = of(
     JSON.parse(this._localStorage.getItem("company"))
   );
   public robotSettings$: Observable<RobotHelper> =
@@ -126,12 +126,17 @@ export class RobotComponent extends Unsubscribe {
   public close() {
     this.state = "closed";
     this.infoState = "closed";
+    setTimeout(() => {
       this._homeLayoutFacade.close();
+    }, 500);
   }
 
   public checkForValidSwipe(swipeEvent: any) {
     if (swipeEvent.deltaY >= 80) {
-      this.close();
+      this.state = "closed";
+      setTimeout(() => {
+        this.close();
+      }, 500);
     }
   }
 }

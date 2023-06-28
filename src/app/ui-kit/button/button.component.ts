@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ButtonTypeEnum } from "../../modules/app/constants/button-type.enum";
-import { StringOrNumber } from "../../modules/app/interfaces/searchable-select-data.interface";
+import { ButtonTypeEnum } from "../../shared/enum/button-type.enum";
+import { StringOrNumberType } from "../../shared/interfaces/searchable-select-data.interface";
 
 @Component({
   selector: "hr-button",
@@ -9,7 +9,7 @@ import { StringOrNumber } from "../../modules/app/interfaces/searchable-select-d
 })
 export class ButtonComponent {
   @Input("disabled") disabledProps!: boolean;
-  @Input("text") textProps?: StringOrNumber;
+  @Input("text") textProps?: StringOrNumberType;
   @Input("type") typeProps?: ButtonTypeEnum = ButtonTypeEnum.default;
   @Output() clickEvent: EventEmitter<Event> = new EventEmitter<Event>();
   constructor() {}

@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit} from "@angular/core";
-import {ProgressBarEnum} from "../../modules/app/constants/progress-bar.enum";
+import {ProgressBarEnum} from "../../shared/enum/progress-bar.enum";
 
 @Component({
   selector: "hr-progress-bar",

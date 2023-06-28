@@ -33,14 +33,6 @@
     {{ page }}
   </button>
   <button
-    *ngIf="minSizeDevice"
-    [class.pagination__page-current]="minSizeDevice"
-    class="pagination__page pagination__page_disabled"
-    disabled
-  >
-    {{currentPage}}
-  </button>
-  <button
     [class.pagination__page-min]="minSizeDevice"
     class="pagination__page pagination__page_disabled"
     disabled

@@ -1,31 +1,33 @@
 import {Injectable} from "@angular/core";
 import {ChatState} from "./chat.state";
-import {filter, map, Observable, of, Subscription, switchMap, take, tap} from "rxjs";
+import {filter, map, Observable, Subject, switchMap} from "rxjs";
 import {ChatService} from "./chat.service";
-import {MessageInterface} from "./chat.component";
-import {ObjectType} from "../../shared-modules/types/object.type";
-import {LocalStorageService} from "../app/services/local-storage.service";
-import {IConversation} from "./interfaces/conversations";
-import {CompanyFacade} from "../company/company.facade";
+import {ObjectType} from "../../shared/types/object.type";
+import {LocalStorageService} from "../../shared/services/local-storage.service";
+import {Conversation} from "./interfaces/conversations";
+import {CompanyFacade} from "../company/services/company.facade";
+import {IMessage, Message} from "./interfaces/messages";
+import { BottomChatSettings } from "src/app/shared/services/chat-helper.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ChatFacade {
-  private destroyGetCompanyConversationUuidHandler$: Subscription = new Subscription();
-  private destroyGetMessageFromSpecialistToCompanyHandler$: Subscription = new Subscription();
-  private destroyGetConversationMessagesRequestSubscription$: Subscription = new Subscription();
-  private destroyUpdateConversationMessageSubscription$: Subscription = new Subscription();
-
-  private conversationUuid: string = "";
-  private lastMessageUuid: string = "";
+  public openAcceptOrRejectModal$: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _chatState: ChatState,
     private readonly _chatService: ChatService,
     private readonly _localStorage: LocalStorageService,
     private readonly _companyFacade: CompanyFacade
-  ) {
+  ) {}
+
+  public setChatSettings(value: BottomChatSettings): void {
+    this._chatState.setChatSettings(value);
+  }
+
+  public getChatSettings(): Observable<BottomChatSettings> {
+    return this._chatState.getChatSettings();
   }
 
   public getIsAvailableAfterAcceptOrReject$(): Observable<boolean> {
@@ -36,19 +38,19 @@ export class ChatFacade {
     this._chatState.setIsAvailableAfterAcceptOrReject(value);
   }
 
-  public getConversations$() {
+  public getConversations$(): Observable<Conversation[]> {
     return this._chatState.getConversations$();
   }
 
-  public getConversations() {
+  public getConversations(): Conversation[] {
     return this._chatState.getConversations();
   }
 
-  public setConversations(conversation: IConversation[]): void {
+  public setConversations(conversation: Conversation[]): void {
     this._chatState.setConversations(conversation);
   }
 
-  public getIsUnreadMessage() {
+  public getIsUnreadMessage(): Observable<boolean> {
     return this._chatState.getIsUnreadMessage$();
   }
 
@@ -56,20 +58,12 @@ export class ChatFacade {
     this._chatState.setIsUnreadMessage(value);
   }
 
-  public getConversation$() {
-    return this._chatState.getConversation$();
+  public getSelectedConversation$(): Observable<Conversation | null> {
+    return this._chatState.getSelectedConversation$();
   }
 
-  public setConversation(conversation: IConversation | null): void {
-    this._chatState.setConversation(conversation);
-  }
-
-  public getUnreadMessagesCount$() {
-    return this._chatState.getUnreadMessagesCount$();
-  }
-
-  public setUnreadMessagesCount$(count: number) {
-    return this._chatState.setUnreadMessagesCount$(count);
+  public setSelectedConversation$(conversation: Conversation | null): void {
+    this._chatState.setSelectedConversation$(conversation);
   }
 
   public getChatPopupStatus$(): Observable<boolean> {
@@ -88,63 +82,52 @@ export class ChatFacade {
     this._chatState.setCandidatesPopupStatus(isVisible);
   }
 
-  public getAcceptOrDeclinePopupStatus$(): Observable<boolean> {
-    return this._chatState.getAcceptOrDeclinePopupStatus$();
-  }
-
-  public setAcceptOrDeclinePopupStatus$(isVisible: boolean): void {
-    this._chatState.setAcceptOrDeclinePopupStatus$(isVisible);
-  }
-
-  public getChatMessages$(): Observable<MessageInterface[]> {
+  public getChatMessages$(): Observable<Message[]> {
     return this._chatState.getChatMessages$();
   }
 
-  public getConversationUuid$(): Observable<string> {
-    return this._chatState.getConversationUuid$();
+  public getConversationsRequest(): Observable<Conversation[]> {
+    return this._companyFacade.getCompanyData$()
+      .pipe(
+        switchMap(company => {
+          if (company.uuid) {
+            return this._chatService.getConversationsRequest$(company.uuid)
+              .pipe(map((conversations) => {
+                const conversationModified = conversations.map(conv => new Conversation(conv));
+                const rearranged = this.rearrangeConversation(conversationModified);
+                this.setConversations(rearranged || []);
+                return rearranged || [];
+              }));
+          }
+          return [];
+        }));
   }
 
-  public emitGetConversationsRequest(): Observable<IConversation[] | null> {
-    return this._companyFacade.getCompanyData$().pipe(
-      switchMap((company) => {
-        if (!!company && company?.uuid) {
-          return this._chatService.emitGetConversationsRequest$(company?.uuid)
-            .pipe(map((conversations) =>
-                this.rearrangeConversation(conversations)),
-              tap((conversations) => this.setConversations(conversations || [])));
-        } else {
-          return of([]);
-        }
-      })
-    );
-  }
-
-  public rearrangeConversation(conversations: IConversation[] | null): IConversation[] | null {
+  public rearrangeConversation(conversations: Conversation[] | null): Conversation[] | null {
     if (!conversations) {
       return null;
-    } else if (conversations.length === 1) {
-      return conversations;
     }
-    const unreadConversations = conversations.filter((conv) => conv.last_message?.messageStatus === false);
-    const readConversations = conversations.filter((conv) => conv.last_message?.messageStatus === true);
 
-    const sortedUnreadConversations: IConversation[] =
-      unreadConversations.sort((item1, item2) => {
-        return new Date(item2.last_message.createdAt).getTime() - new Date(item1.last_message.createdAt).getTime();
-      });
+    const sortByDateDescending = (item1: Conversation, item2: Conversation) => {
+      return new Date(item2.last_message.createdAt).getTime() - new Date(item1.last_message.createdAt).getTime();
+    };
 
-    const sortedReadConversations: IConversation[] =
-      readConversations.sort((item1, item2) => {
-        return new Date(item2.last_message.createdAt).getTime() - new Date(item1.last_message.createdAt).getTime();
-      });
+    const unreadConversations = conversations.filter(conv => conv.last_message?.messageStatus === false);
+    const readConversations = conversations.filter(conv => conv.last_message?.messageStatus === true);
+
+    const sortedUnreadConversations = unreadConversations.sort(sortByDateDescending);
+    const sortedReadConversations = readConversations.sort(sortByDateDescending);
 
     return [...sortedUnreadConversations, ...sortedReadConversations];
   }
 
-  public setChatMessage(message: MessageInterface): void {
-    Object.assign(message);
+  public setChatMessage(message: Message): void {
     this._chatState.setChatMessage(message);
     this._chatService.emitSendMessageFromCompanyToSpecialist(message);
+  }
+
+  public addChatMessage(message: Message | Message[]): void {
+    this._chatState.setChatMessage(message);
   }
 
   public emitConversationCompanyToSpecialist(
@@ -156,80 +139,21 @@ export class ChatFacade {
     this._chatService.emitConversationCompanyToSpecialist(companyUuid, specialistUuid, foundSpecialistUuid);
   }
 
-  public getMessageFromCompanyToSpecialistHandler$(): Observable<MessageInterface> {
-    return this._chatService.getMessageFromSpecialistToCompanyHandler$().pipe(
-      map((message) => {
-        this.lastMessageUuid = message.uuid;
-        this.getCompanyConversationUuidHandler$();
-        return message;
-      })
-    );
+  public getMessageFromSpecialistToCompanyHandler$(): Observable<IMessage> {
+    return this._chatService.getMessageFromSpecialistToCompanyHandler$();
   }
 
-  public emitGetConversationMessagesRequest(conversationUuid: string) {
-    if (conversationUuid) {
-      this.destroyGetConversationMessagesRequestSubscription$ = this._chatService
-        .getConversationMessagesRequest(conversationUuid)
-        .pipe(filter((data) => !!data))
-        .subscribe((messages: any) => {
-          this._chatState.setChatMessage(messages);
-          this.lastMessageUuid = messages.slice(-1)[0]?.uuid;
-          this.destroyGetConversationMessagesRequestSubscription$.unsubscribe();
-        });
-    }
+  public emitGetConversationMessagesRequest(conversationUuid: string): Observable<IMessage[]> {
+    return this._chatService
+      .getConversationMessagesRequest(conversationUuid)
+      .pipe(
+        filter((data) => !!data),
+        map(data => data)
+      );
   }
 
-  public emitGetConversationMessagesRequest$(conversationUuid: string): Observable<MessageInterface[] | null> {
-    if (conversationUuid) {
-      return this._chatService
-        .getConversationMessagesRequest(conversationUuid)
-        .pipe(
-          map((messages: MessageInterface[]) => {
-            this._chatState.setChatMessage(messages);
-            this.lastMessageUuid = messages.slice(-1)[0]?.uuid;
-            return messages;
-          }));
-    }
-    return of(null);
-  }
-
-  public getCompanyConversationUuidHandler$() {
-    this.destroyGetCompanyConversationUuidHandler$ = this._chatService
-      .getCompanyConversationUuidHandler$()
-      .subscribe((conversationUuid: string) => {
-        this._chatState.setConversationUuid(conversationUuid);
-        this.conversationUuid = conversationUuid;
-        this.destroyGetCompanyConversationUuidHandler$.unsubscribe();
-      });
-  }
-
-  public updateConversationMessage(messageUuid: string, messageData: any) {
-    this.destroyUpdateConversationMessageSubscription$ = this._chatService
-      .updateConversationMessage(messageUuid, messageData)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.destroyUpdateConversationMessageSubscription$.unsubscribe();
-      });
-  }
-
-  public setConversationUuid(uuid: string): void {
-    this._chatState.setConversationUuid(uuid);
-  }
-
-  public emitMessageIsViewedFromCompanyHandler$(specialistUuid: string) {
-    this._chatService.emitMessageIsViewedFromCompanyHandler$(this.lastMessageUuid, specialistUuid);
-  }
-
-  public destroyGetCompanyConversationUuidHandler(): void {
-    this.destroyGetCompanyConversationUuidHandler$.unsubscribe();
-  }
-
-  public destroyGetMessageFromSpecialistToCompanyHandler() {
-    this.destroyGetMessageFromSpecialistToCompanyHandler$.unsubscribe();
-  }
-
-  public destroyUpdateConversationMessageHandler() {
-    this.destroyUpdateConversationMessageSubscription$.unsubscribe();
+  public updateConversationMessage(messageUuid: string, messageData: { status: boolean }): Observable<IMessage> {
+    return this._chatService.updateConversationMessage(messageUuid, messageData);
   }
 
   public acceptOrDeclineSpecialistRequest(status: string, uuid: string, reason?: string): Observable<ObjectType> {

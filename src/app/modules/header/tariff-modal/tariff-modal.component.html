@@ -1,0 +1,38 @@
+<ng-template #titleTpl>
+  <div class="packages-content__title" *ngIf="packageInfo$ | async as packageInfo">
+    <ng-container *ngIf="packageInfo.allActivePackages; else noTariffTmpl">
+      <h1>{{ packageInfo.activeTariffsNames }}</h1>
+    </ng-container>
+    <ng-template #noTariffTmpl>
+      <h1> {{ "HEADER.TARIFF.NO_ACTIVE_TARIFF" | translate }}</h1>
+    </ng-template>
+  </div>
+</ng-template>
+<ng-template #contentTpl>
+  <div class="packages-content custom-scrollbar" *ngIf="!isLoader$.value; else packagesTmpl">
+    <div class="packages-content__title" *ngIf="packageInfo$ | async as packageInfo">
+      <div class="packages-content__info">
+        <div class="packages-content__all">
+          <p class="packages-content__all--text">{{ "HEADER.TARIFF.ALL_TARIFFS" | translate }}</p>
+          <p class="packages-content__all--value">{{ packageInfo.allActivePackages }}</p>
+        </div>
+        <div class="packages-content__stayed">
+          <p class="packages-content__stayed--text">{{ "HEADER.TARIFF.UNUSED" | translate }}</p>
+          <p class="packages-content__stayed--value">{{ packageInfo.stayedPackages }}</p>
+        </div>
+      </div>
+
+      <hr-button
+        *ngIf="!packageInfo.allActivePackages"
+        (click)="navigateToBalance()"
+        [text]="'Купить сейчас'"
+        [type]="buttonTypesList.outlineGreen"
+      ></hr-button>
+    </div>
+  </div>
+  <ng-template #packagesTmpl>
+    <div class="loader-content">
+      <div class="loader"></div>
+    </div>
+  </ng-template>
+</ng-template>

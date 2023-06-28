@@ -1,15 +1,15 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MessageTimeService} from "../message-time/message-time.service";
-import {InputTypeEnum} from "../../modules/app/constants/input-type.enum";
-import {SignInFacade} from "../../modules/auth/signin/signin.facade";
+import {InputTypeEnum} from "../../shared/enum/input-type.enum";
+import {SignInFacade} from "../../modules/auth/signin/services/signin.facade";
 import {phone_number_prefix} from "../../modules/app/constants";
-import {formFieldsMustBeNumber} from "../../modules/app/validators/field-number";
+import {formFieldsMustBeNumber} from "../../shared/validators/field-number";
 import {Observable, takeUntil} from "rxjs";
-import {Unsubscribe} from "../../shared-modules/unsubscriber/unsubscribe";
-import {CustomValidatorForPassword} from "../../modules/app/validators/custom-validator-for-password";
-import {ErrorMsg} from "../../modules/auth/error-message.type";
-import {InputStatusEnum} from "../../modules/app/constants/input-status.enum";
+import {Unsubscribe} from "../../shared/unsubscriber/unsubscribe";
+import {CustomValidatorForPassword} from "../../shared/validators/custom-validator-for-password";
+import {ErrorMsgType} from "../../modules/auth/interface/error-message.type";
+import {InputStatusEnum} from "../../shared/enum/input-status.enum";
 
 @Component({
   selector: "hr-message-code",
@@ -20,7 +20,7 @@ import {InputStatusEnum} from "../../modules/app/constants/input-status.enum";
 export class MessageCodeComponent extends Unsubscribe implements OnDestroy {
 
   @Input() resetPhoneValue!: string;
-  public errorMessage$!: Observable<ErrorMsg | string>;
+  public errorMessage$!: Observable<ErrorMsgType | string>;
   public prefix = phone_number_prefix;
   public inputForm!: FormGroup;
   public confirmForm!: FormGroup;

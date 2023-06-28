@@ -123,16 +123,40 @@
         border-bottom: none;
       }
 
+      &_mobile {
+        border-radius: 0 0 8px 8px;
+        border: 1px solid $green;
+      }
+
       &_valid {
         @include input-valid;
+        border-radius: 8px 8px 0 0;
+        @media screen and (max-width: 750px) {
+          border-radius: 0 0 8px 8px ;
+        }
       }
 
       &_invalid {
         @include input-invalid;
+        border-radius: 8px 8px 0 0;
+        @media screen and (max-width: 750px) {
+          border-radius: 0 0 8px 8px ;
+        }
+      }
+
+      @media screen and (max-width: 750px) {
+        &:not(&_mobile) {
+          border-radius: 8px ;
+        }
+      }
+
+      &:not(&_active) {
+        border-radius: 8px ;
       }
 
       &_disabled {
         background-color: $very-light-gray;
+        pointer-events: none;
       }
 
       &:not(&_invalid):focus {
@@ -196,6 +220,10 @@
     flex-direction: column;
     border: none;
 
+    @media screen and (max-width: 750px) {
+      border-radius: 8px 8px 0 0;
+    }
+
     ::ng-deep {
       .cdk-virtual-scroll-content-wrapper {
         max-width: 100%;
@@ -214,7 +242,8 @@
       border: 1px solid $green;
       z-index: 20;
       overflow-y: auto;
-      transition: max-height 0.5s;
+      transition: max-height 1s step-start;
+      transform-origin: bottom;
     }
 
     &_notItems {
@@ -294,7 +323,7 @@
   z-index: 100;
   position: absolute;
   top: 60px;
-
+  left: 45%;
   &_text {
     position: absolute;
     top: 110px;

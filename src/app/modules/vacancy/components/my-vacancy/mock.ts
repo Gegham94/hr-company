@@ -1,6 +1,6 @@
-import {SearchableSelectDataInterface} from "../../../app/interfaces/searchable-select-data.interface";
+import {ISearchableSelectData} from "../../../../shared/interfaces/searchable-select-data.interface";
 
-export const StatusList: SearchableSelectDataInterface[] = [
+export const StatusList: ISearchableSelectData[] = [
   {
     id: 1,
     value: "все",
@@ -18,7 +18,7 @@ export const StatusList: SearchableSelectDataInterface[] = [
   }
 ];
 
-export const PayedStatusList: SearchableSelectDataInterface[] = [
+export const PayedStatusList: ISearchableSelectData[] = [
   {
     id: 1,
     value: "все",

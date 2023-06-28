@@ -1,44 +1,52 @@
-import {Component, HostListener, Input} from "@angular/core";
-import {ButtonTypeEnum} from "../app/constants/button-type.enum";
-import {CompanyInterface} from "../app/interfaces/company.interface";
-import {BehaviorSubject, Observable, of, switchMap} from "rxjs";
-import {CompanyFacade} from "../company/company.facade";
-import {Router} from "@angular/router";
-import {AuthService} from "../auth/auth.service";
-import {TranslateService} from "@ngx-translate/core";
-import {LocalStorageService} from "../app/services/local-storage.service";
-import {HeaderFacade} from "./header.facade";
-import {HeaderDropdownsEnum} from "./constants/header-dropdowns.enum";
-import {HomeLayoutState} from "../home/home-layout/home-layout.state";
-import {RoutesEnum} from "../app/constants/routes.enum";
-import {NavigateButton} from "../home/home-layout/home-layout.interface";
-import {HeaderTariffsEnum} from "./constants/header-tariffs.enum";
+import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, map, Observable, of, switchMap, takeUntil } from "rxjs";
+import { Router } from "@angular/router";
+import { HeaderFacade } from "./services/header.facade";
+import { HeaderDropdownsEnum } from "./constants/header-dropdowns.enum";
+import { HeaderTariffsEnum } from "./constants/header-tariffs.enum";
+import { NavigateButtonFacade } from "../../ui-kit/navigate-button/navigate-button.facade";
+import { Unsubscribe } from "src/app/shared/unsubscriber/unsubscribe";
+import { ICompany } from "src/app/shared/interfaces/company.interface";
+import { RoutesEnum } from "src/app/shared/enum/routes.enum";
+import { ScreenSizeType } from "src/app/shared/interfaces/screen-size.type";
+import { ScreenSizeEnum } from "src/app/shared/enum/screen-size.enum";
+import { CompanyFacade } from "../company/services/company.facade";
+import { AuthService } from "../auth/service/auth.service";
+import { ScreenSizeService } from "src/app/shared/services/screen-size.service";
 
 @Component({
   selector: "hr-header",
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"]
+  styleUrls: ["./header.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent {
+export class HeaderComponent extends Unsubscribe implements OnInit, OnDestroy {
   @Input("notification-count") notificationCountProps?: number;
   @Input("header-type") headerTypeProps!: string;
+
   public logo: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  public isTariffInfo$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public buttonType = ButtonTypeEnum;
   public isDropdownOpen$ = this._headerFacade.getStateDropdown$(HeaderDropdownsEnum.menu);
-  public company$!: Observable<CompanyInterface>;
-  public showLanguages = false;
+  public company$!: Observable<ICompany>;
   public isMenuOpen: boolean = false;
-  public buttonsStatuses: NavigateButton[] = this._homeLayoutState.getButtonsStatuses();
   public readonly RoutesEnum = RoutesEnum;
   public readonly HeaderTariffsEnum = HeaderTariffsEnum;
+
+  private closeDrawer: BehaviorSubject<"open" | "close" | null> = new BehaviorSubject<"open" | "close" | null>(null);
+  private screenSizeType: BehaviorSubject<ScreenSizeType> = new BehaviorSubject<ScreenSizeType>(ScreenSizeEnum.DESKTOP);
 
   @HostListener("window:resize", ["$event"])
   onResize() {
     if (this.isMenuOpen) {
       this.isMenuOpen = !this.isMenuOpen;
-      document.body.classList.remove("active");
     }
+  }
+
+  public get isLogged(): boolean {
+    return !!(this._authService.getToken && this._authService.isTokenExpired && this._router.url !== "/signIn");
+  }
+
+  public get drawerWidth(): number {
+    return this.screenSizeType.value == ScreenSizeEnum.EXTRA_SMALL ? 100 : 70;
   }
 
   constructor(
@@ -46,80 +54,71 @@ export class HeaderComponent {
     private readonly _headerFacade: HeaderFacade,
     private readonly _router: Router,
     private readonly _authService: AuthService,
-    private readonly _localStorageService: LocalStorageService,
-    private readonly _homeLayoutState: HomeLayoutState,
-    public readonly _translate: TranslateService,
+    private readonly _navigateButtonFacade: NavigateButtonFacade,
+    private readonly _screenSizeService: ScreenSizeService
   ) {
-    // this._companyFacade.setCompanyData();
-    // this.selectedLang = this._localStorageService.getItem("language") ?? defaultLang;
+    super();
   }
 
   ngOnInit() {
     if (this.isLogged) {
       this.company$ = this._companyFacade.getCompanyData$();
-      this.company$.pipe(switchMap((data: CompanyInterface) => {
-          if (data.logo) {
-            this._companyFacade.setCompanyLogo$(data.logo);
-            return this._companyFacade.getCompanyLogo$();
-          }
-          return of("");
-        })
-      ).subscribe(logo => {
-        this.logo.next(logo);
+      this.company$
+        .pipe(
+          takeUntil(this.ngUnsubscribe),
+          switchMap((data: ICompany) => {
+            if (data.logo) {
+              this._companyFacade.setCompanyLogo$(data.logo);
+              return this._companyFacade.getCompanyLogo$();
+            }
+            return of("");
+          })
+        )
+        .subscribe((logo) => {
+          this.logo.next(logo);
+        });
+
+      this.screenSizeType.next(this._screenSizeService.calcScreenSize);
+      this._screenSizeService.screenSize$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((type: ScreenSizeType) => {
+        this.screenSizeType.next(type);
       });
     }
   }
 
-  public logOut(): void {
-    this._companyFacade.removeCompanyData();
-    this._authService.logOut();
+  ngOnDestroy(): void {
+    this.unsubscribe();
   }
 
-  public openTariffPopup(event: Event) {
-    this.isTariffInfo$.next(true);
-    this.isMenuOpen = !this.isMenuOpen;
+  public logOut(): void {
+    this._authService.logOut();
+    this._headerFacade.setStateDropdown$(HeaderDropdownsEnum.menu, false)
+  }
+
+  public openTariffPopup() {
+    this._headerFacade.tarifModalState.next(null);
+    this.isMenuOpen = false;
   }
 
   public navigate(link: string): void {
-    this.isMenuOpenHandler();
+    this.isMenuOpen = false;
+    this.closeDrawer.next("close");
     this._router.navigate([link]);
   }
 
-  public isDisabled(route: string): boolean {
-    return !this.buttonsStatuses.find(item => item.link === route + "/isActive")?.status ?? true;
+  public isDisabled(route: string): Observable<boolean> {
+    return this._navigateButtonFacade.getShowedNavigationsMenu$().pipe(
+      map((data) => {
+        return !(data?.find((item) => item.link === route)?.statusType === "default");
+      })
+    );
   }
 
   public dropMenuToggle(newState?: boolean): void {
     this._headerFacade.resetDropdownsState(HeaderDropdownsEnum.menu, newState);
   }
 
-  public get isLogged(): boolean {
-    return !!(this._authService.getToken && this._authService.isTokenExpired && this._router.url !== "/signIn");
-  }
-
-  // public switchLang(index: number): void {
-  //   this._translate.use(Languages[index]);
-  //   this.selectedLang = Languages[index];
-  //   this._localStorageService.setItem("language", Languages[index]);
-  // }
-
-  public isMenuOpenHandler(): void {
-    this.buttonsStatuses = this._homeLayoutState.getButtonsStatuses();
-    this.isMenuOpen = !this.isMenuOpen;
-    if (this.isMenuOpen) {
-      document.body.classList.add("active");
-    } else {
-      document.body.classList.remove("active");
-    }
-  }
-
-  public close(event: Event) {
-    event.stopPropagation();
-    this._headerFacade.resetDropdownsState(HeaderDropdownsEnum.menu, false);
-  }
-
-  public closePopup() {
-    this.isTariffInfo$.next(false);
-    this.isMenuOpen = !this.isMenuOpen;
+  public close(): void {
+    this.isMenuOpen = false;
+    this.closeDrawer.next("close");
   }
 }

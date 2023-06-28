@@ -3,13 +3,12 @@ import { NgModule } from "@angular/core";
 
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeLayoutComponent } from "./home-layout/home-layout.component";
-import { HeaderModule } from "../header/header.module";
+import { HeaderModule } from "../header/modules/header.module";
 import { UiModule } from "../../ui-kit/ui.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { RobotComponent } from "../../ui-kit/robot/robot.component";
 import { IvyCarouselModule } from "angular-responsive-carousel";
 import {SlickCarouselModule} from "ngx-slick-carousel";
-import {BottomChatComponent} from "../bottom-chat/bottom-chat.component";
 import {ChatModule} from "../chat/chat.module";
 import {ScrollingModule} from "@angular/cdk/scrolling";
 import {TooltipModule} from "ng2-tooltip-directive-ng13fix";
@@ -20,7 +19,6 @@ import {FooterComponent} from "../footer/footer.component";
     declarations: [
         HomeLayoutComponent,
         RobotComponent,
-        BottomChatComponent,
         FooterComponent
     ],
     exports: [

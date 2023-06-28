@@ -1,0 +1,72 @@
+<ng-template #titleTpl></ng-template>
+<ng-template #contentTpl>
+  <div class="modal-content-container">
+    <hr-slider
+      [isTemplateRef]="true"
+      [centerContent]="true"
+      [helperInfo]="[step1, step2, step3, step4]"
+      (isOpenChat)="openChat($event)"
+    ></hr-slider>
+  </div>
+</ng-template>
+
+<ng-template #step1>
+  <div>
+    <h3 class="chat_slider_title">{{"CHAT_INFO_MODAL.STEP_1.TITLE" | translate}}</h3>
+    <p class="chat_slider_info">{{"CHAT_INFO_MODAL.STEP_1.INFO" | translate}}</p>
+  </div>
+</ng-template>
+
+<ng-template #step2>
+  <div>
+    <h3 class="chat_slider_title">{{"CHAT_INFO_MODAL.STEP_2.TITLE" | translate}}</h3>
+    <p class="chat_slider_info chat_slider_info-item">
+      {{"CHAT_INFO_MODAL.STEP_2.SUBTITLE" | translate}} {{ specialistName }} {{ specialistSurname }}
+    </p>
+    <p class="chat_slider_info">{{"CHAT_INFO_MODAL.STEP_2.INFO" | translate}}</p>
+    <div class="chat_slider_img">
+      <img
+        src="assets/img/avatar/candidates.svg"
+        alt="candidates"
+      />
+    </div>
+    <div class="chat_slider_img_mobile">
+      <img src="assets/img/avatar/candidate.svg" alt="candidates"/>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #step3>
+  <div>
+    <h3 class="chat_slider_title">{{"CHAT_INFO_MODAL.STEP_3.TITLE" | translate}}</h3>
+    <p class="chat_slider_info chat_slider_info-item">{{"CHAT_INFO_MODAL.STEP_3.SUBTITLE" | translate}}</p>
+    <p class="chat_slider_info">{{"CHAT_INFO_MODAL.STEP_3.INFO" | translate}}</p>
+    <div class="chat_slider_chat-info">
+      <div class="chat_slider_chat-item">
+        <img src="/assets/img/icon/chat-info-accept.svg" alt="accept"/>
+        <div>
+          <h3>{{"CHAT_INFO_MODAL.STEP_3.TEXT_1" | translate}}</h3>
+          <p>{{"CHAT_INFO_MODAL.STEP_3.TEXT_2" | translate}}</p>
+        </div>
+      </div>
+      <div class="chat_slider_chat-item">
+        <img src="/assets/img/icon/chat-info-reject.svg" alt="reject"/>
+        <div>
+          <h3>{{"CHAT_INFO_MODAL.STEP_3.TEXT_3" | translate}}</h3>
+          <p>{{"CHAT_INFO_MODAL.STEP_3.TEXT_4" | translate}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #step4>
+  <div>
+    <h3 class="chat_slider_title">{{"CHAT_INFO_MODAL.STEP_4.TITLE" | translate}}</h3>
+    <p class="chat_slider_info">{{"CHAT_INFO_MODAL.STEP_4.INFO" | translate}}</p>
+    <div *ngIf="!isHelper" id="actions" class="chat_slider_button">
+      <div id="closeModal">{{"CHAT_INFO_MODAL.STEP_4.BUTTON_1" | translate}}</div>
+      <div id="startChat">{{"CHAT_INFO_MODAL.STEP_4.BUTTON_2" | translate}}</div>
+    </div>
+  </div>
+</ng-template>

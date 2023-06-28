@@ -1,20 +1,6 @@
 <div class="searchable-select">
   <label class="searchable-select__label">
     <div class="searchable-select__label-content">
-      <div class="searchable-select__edit" *ngIf="isEditModeActive">
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7.32182 1.95547L9.71706 4.3507L3.65403 10.4137L1.26015 8.0185L7.32182 1.95547ZM11.5346 1.3778L10.4664 0.309613C10.0536 -0.103204 9.38326 -0.103204 8.96904 0.309613L7.94582 1.33283L10.3411 3.72808L11.5346 2.53455C11.8548 2.21434 11.8548 1.69798 11.5346 1.3778ZM0.00666541 11.3852C-0.036925 11.5814 0.140197 11.7571 0.336399 11.7094L3.0055 11.0623L0.61161 8.66706L0.00666541 11.3852Z"
-            fill="#08A652"
-          />
-        </svg>
-      </div>
       <div
         *ngIf="label"
         class="searchable-select__title"
@@ -28,7 +14,8 @@
       #select
       class="searchable-select__input--content" [ngClass]="{'select-with-green-border': !isBorderGreen}"
       [class.searchable-select__input--content_active]="isDropdownOpen"
-      [class.searchable-select__input--content_disabled]="isInputDisabled"
+      [class.searchable-select__input--content_disabled]="isInputDisabled || isEditModeActive"
+      [class.searchable-select__input--content_mobile]="isDropdownOpen && screenSize !== ScreenSizeEnum.DESKTOP"
       [class.searchable-select__input--content_valid]='valid !== undefined && valid'
       [class.searchable-select__input--content_invalid]='valid !== undefined && !valid'
     >
@@ -63,6 +50,7 @@
         [class.searchable-select__input_disabled]="isInputDisabled"
         [class.searchable-select__input_active]="isDropdownOpen"
         (input)="filterOptions()"
+        (keydown)="validateInput($event)"
         [type]="inputTypeNumber ? 'number': 'text'"
       />
       <div
@@ -133,6 +121,7 @@
       class="searchable-select__search-list"
       [class.searchable-select__search-list--isLoading]="isLoading"
       [class.searchable-select__search-list_active]="isDropdownOpen"
+      [style.top]="screenSize !== ScreenSizeEnum.DESKTOP ? '-' + (dropdownHeight - 25) + 'px': '100%'"
       [style.height.px]="dropdownHeight"
       [style.width.px]="selectWidth"
     >

@@ -174,32 +174,7 @@ main {
   cursor: pointer;
 }
 
-.home_chat-info {
-  @include flex-center;
-  position: fixed;
-  z-index: 20;
-  bottom: 25px;
-  right: 15px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: $green;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(8, 166, 82, 0.3);
-}
-
 .d_none {
   width: 100%;
   opacity: 0;
-}
-
-.red_circle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 16px;
-  height: 16px;
-  background-color: #FF4560;
-  border: 2px solid white;
-  border-radius: 50%;
 }

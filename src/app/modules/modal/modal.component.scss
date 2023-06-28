@@ -1,0 +1,72 @@
+@import '/src/assets/variables/variables';
+
+.overlay {
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: fixed;
+  z-index: 50;
+}
+
+.modal-wrapper {
+  width: 520px;
+  height: auto;
+  position: fixed;
+  background-color: $white;
+  border: 1px solid $gray;
+  box-shadow: $light-gray;
+  border-radius: 8px;
+  right: 50%;
+  top: 120px;
+  transform: translateX(50%);
+
+  @media screen and (max-width: 750px){
+    width: 90%;
+  }
+}
+.one{
+  margin-top: 80px;
+}
+
+.inner-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  width: 100%;
+  min-height: 50px;
+  padding: 15px;
+  border-bottom: 1px solid $gray;
+  .title {
+    color: $green;
+  }
+
+.close-icon {
+  font-size: 16px;
+  font-weight: 900;
+  color: $gray;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+}
+
+}
+
+.content {
+  padding: 15px;
+}
+
+.footer {
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

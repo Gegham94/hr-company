@@ -1,21 +1,19 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input} from "@angular/core";
+import {ISearchedSettings} from "../../shared/interfaces/add-vacancy.interface";
 
 @Component({
   selector: "hr-job-skills",
   templateUrl: "./job-skills.component.html",
   styleUrls: ["./job-skills.component.scss"]
 })
-export class JobSkillsComponent implements OnInit {
+export class JobSkillsComponent {
 
- @Input() jobSkills :any;
+ @Input() jobSkills!: ISearchedSettings;
 
   constructor() { }
 
   public isArray(vacancy: unknown): boolean {
     return typeof vacancy === "object";
-  }
-
-  ngOnInit(): void {
   }
 
 }

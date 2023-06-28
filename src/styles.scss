@@ -10,6 +10,7 @@
 }
 
 body {
+  height: auto;
   overflow-x: hidden;
 
   &::-webkit-scrollbar-track {
@@ -51,7 +52,7 @@ a {
 }
 
 body.active {
-  overflow: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .tooltip--new-styles {
@@ -267,4 +268,9 @@ body.active {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.modal-open {
+  position: fixed;
+  width: 100%;
 }

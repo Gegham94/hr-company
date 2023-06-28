@@ -12,24 +12,24 @@
         <hr-file-input
           [logo]="(logo() | async) ?? ''"
           [formControl]="companyForm.getFormControl('logo')"
-          [feedback-text]="isLogo.value !== undefined && !isLogo.value ? 'Логотип обязательное' : ''"
+          [feedback-text]="isLogo.value !== undefined && !isLogo.value ? ('PROFILE.COMPANY.LOGO_REQUIRED' | translate) : ''"
           [error-status]="isLogo.value !== undefined && !isLogo.value ? inputStatusList.invalid : inputStatusList.valid"
         ></hr-file-input>
       </div>
       <div class="fill-information__inputs-wrapper" *ngLet="isInnSelected$ | async as isInn">
-        <div class="fill-information__searchable-select__inn" *ngLet="isInnRegistered$ | async as isRegistered">
-          <hr-search-select
-            [inputTypeNumber]="true"
-            [label]="'PROFILE.COMPANY.INN' | translate"
-            [formControl]="companyForm.getFormControl('inn')"
-            [isLoading]="(isInnLoading$ | async) ?? false"
-            [dataInputAsString]="true"
-            [isInn]="true"
-            [options]="getCompanyInn$ | async"
-            (filterQueryChange)="searchByInn($event)"
-            [valid]="companyForm.getFormControl('inn').touched ? companyForm.getFormControl('inn').valid : undefined"
-          ></hr-search-select>
-        </div>
+          <div class="fill-information__searchable-select__inn">
+            <hr-search-select
+              [inputTypeNumber]="true"
+              [label]="'PROFILE.COMPANY.INN' | translate"
+              [formControl]="companyForm.getFormControl('inn')"
+              [isLoading]="(isInnLoading$ | async) ?? false"
+              [dataInputAsString]="true"
+              [isInn]="true"
+              [options]="getCompanyInn$ | async"
+              (filterQueryChange)="searchByInn($event)"
+              [valid]="companyForm.getFormControl('inn').touched ? companyForm.getFormControl('inn').valid : undefined"
+            ></hr-search-select>
+          </div>
         <div class="fill-information__input">
           <hr-input
             [disabled]="isInn"

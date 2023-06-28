@@ -1,0 +1,47 @@
+<div style="width: 100%; height: 100%" [style.overflowY]="modalList.length > 0 ? 'hidden' : 'auto'">
+  <div *ngIf="modalList.length" class="overlay" (click)="closeModal(null)"></div>
+  <div *ngFor="let modal of modalList; let index = index">
+    <div class="modal-wrapper" [class.one]="index === 1" [style.zIndex]="51 + index">
+      <div class="header">
+        <ng-container *ngIf="modal.title">
+          <ng-container *ngIf="getDataAsTemplate(modal.title) as template">
+            <div class="title">
+              <ng-container *ngTemplateOutlet="template"></ng-container>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="getDataAsString(modal.title) as string">
+            <h3 class="title">{{ string }}</h3>
+          </ng-container>
+        </ng-container>
+        <div class="close-icon" (click)="closeModal(modal)">
+          <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+            <path fill-rule='evenodd' clip-rule='evenodd'
+                  d='M10.2623 8.0002L15.5308 2.73153C16.1564 2.10595 16.1564 1.09477 15.5308 0.469188C14.9053 -0.156396 13.8941 -0.156396 13.2685 0.469188L8 5.73786L2.73146 0.469188C2.10589 -0.156396 1.09475 -0.156396 0.469177 0.469188C-0.156392 1.09477 -0.156392 2.10595 0.469177 2.73153L5.73771 8.0002L0.469177 13.2689C-0.156392 13.8945 -0.156392 14.9056 0.469177 15.5312C0.781161 15.8432 1.19074 16 1.60032 16C2.0099 16 2.41948 15.8432 2.73146 15.5312L8 10.2625L13.2685 15.5312C13.5805 15.8432 13.9901 16 14.3997 16C14.8093 16 15.2188 15.8432 15.5308 15.5312C16.1564 14.9056 16.1564 13.8945 15.5308 13.2689L10.2623 8.0002Z'
+                  fill='#6F7985'/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="content" *ngIf="modal.content">
+        <ng-container *ngIf="getDataAsTemplate(modal.content) as template">
+          <ng-container *ngTemplateOutlet="template"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="getDataAsString(modal.content) as string">
+          <p>{{ string }}</p>
+        </ng-container>
+      </div>
+
+      <div class="footer" *ngIf="modal.onOk || (modal.onCancel && modal.hasCustomCloseMethod)">
+        <hr-button
+          *ngIf="modal.onOk"
+          (clickEvent)="modal.onOk()"
+          [type]="buttonTypesList.default"
+          text="OK"
+        ></hr-button>
+        <hr-button *ngIf="modal.onCancel && modal.hasCustomCloseMethod" (clickEvent)="modal.onCancel()"
+                   [type]="buttonTypesList.default" text="Close"></hr-button>
+      </div>
+    </div>
+    <div class="inner-overlay" (click)="closeModal(null)" [style.zIndex]="21 + index - 1" *ngIf="index !== 0"></div>
+  </div>
+</div>

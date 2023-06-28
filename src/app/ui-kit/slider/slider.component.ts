@@ -7,18 +7,18 @@ import {
   Renderer2, TemplateRef,
 } from "@angular/core";
 import {SafeHtml} from "@angular/platform-browser";
-import {BalanceFacade} from "../../modules/balance/balance.facade";
+import {BalanceFacade} from "../../modules/balance/services/balance.facade";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ChatFacade} from "../../modules/chat/chat.facade";
-import {ObjectType} from "../../shared-modules/types/object.type";
+import {ObjectType} from "../../shared/types/object.type";
 import {Router} from "@angular/router";
 import {Observable, of, switchMap} from "rxjs";
-import {CompanyInterface} from "../../modules/app/interfaces/company.interface";
-import {LocalStorageService} from "../../modules/app/services/local-storage.service";
-import {RoutesEnum} from "../../modules/app/constants/routes.enum";
-import {RobotHelperService} from "../../modules/app/services/robot-helper.service";
+import {ICompany} from "../../shared/interfaces/company.interface";
+import {LocalStorageService} from "../../shared/services/local-storage.service";
+import {RoutesEnum} from "../../shared/enum/routes.enum";
+import {RobotHelperService} from "../../shared/services/robot-helper.service";
 import {NavigateButtonFacade} from "../navigate-button/navigate-button.facade";
-import {CompanyFacade} from "../../modules/company/company.facade";
+import {CompanyFacade} from "../../modules/company/services/company.facade";
 
 @Component({
   selector: "hr-slider",
@@ -43,7 +43,7 @@ export class SliderComponent {
   @Output() public close: EventEmitter<boolean> = new EventEmitter();
 
   public counter: number = 0;
-  public company$: Observable<CompanyInterface> = of(JSON.parse(this._localStorage.getItem("company")));
+  public company$: Observable<ICompany> = this._companyFacade.getCompanyData$();
   public Routes = RoutesEnum;
 
   constructor(
@@ -158,7 +158,7 @@ export class SliderComponent {
         }
         return of(company);
       }),
-      switchMap((company: CompanyInterface) => {
+      switchMap((company: ICompany) => {
         const balancePageIndex = company.helper?.findIndex((data) =>
           data["link"] === this.Routes.balance + "/isActive") ?? -1;
         if (company?.helper && balancePageIndex >= 0) {

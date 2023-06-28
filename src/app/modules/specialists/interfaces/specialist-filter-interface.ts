@@ -1,14 +1,5 @@
-export enum SpecialistInterviewStatusEnum {
-  ACCEPTED = "accepted",
-  FAVORITES = "favorites",
-  REJECTED = "rejected",
-  AWAITS = "awaits",
-  SUCCESS = "success",
-  FAILED = "failed",
-  InProgress = "inProgress"
-}
-
-export interface SpecialistFilterInterface {
+import { SpecialistInterviewStatusEnum } from "../constants/interviev-status.enum";
+export interface ISpecialistFilter {
   status?: SpecialistInterviewStatusEnum;
   vacancyUuid?: string;
   take?: number;

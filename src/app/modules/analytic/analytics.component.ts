@@ -1,74 +1,109 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from "@angular/core";
-import {VacancyInterface} from "src/app/modules/app/interfaces/vacancy.interface";
-import {EChartsOption} from "echarts/types/dist/echarts";
-import {AnalyticData, VacancyStatisticInterface} from "src/app/modules/app/interfaces/vacancy-statistic.interface";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {VacancyFacade} from "../vacancy/vacancy.facade";
-import {BehaviorSubject, filter, forkJoin, mergeMap, Observable, of, takeUntil} from "rxjs";
-import {Unsubscribe} from "../../shared-modules/unsubscriber/unsubscribe";
-import {AddVacancyInterface} from "../app/interfaces/add-vacancy.interface";
-import {SearchableSelectDataInterface} from "../app/interfaces/searchable-select-data.interface";
-import {analyticMock} from "./mock/analytic-mock";
-import {HomeLayoutState} from "../home/home-layout/home-layout.state";
-import {RobotHelperService} from "../app/services/robot-helper.service";
-import {LocalStorageService} from "../app/services/local-storage.service";
-import {CompanyInterface} from "../app/interfaces/company.interface";
-import {PayedVacancyEnum, VacancyStatusEnum} from "../vacancy/constants/filter-by-status.enum";
-import {SelectAllData} from "../app/constants";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, Observable, filter, forkJoin, mergeMap, of, takeUntil } from "rxjs";
+import { ISearchableSelectData, StringOrNumberType } from "src/app/shared/interfaces/searchable-select-data.interface";
+import { Unsubscribe } from "src/app/shared/unsubscriber/unsubscribe";
+import { PayedVacancyEnum, VacancyStatusEnum } from "../vacancy/constants/filter-by-status.enum";
+import { RoutesEnum } from "src/app/shared/enum/routes.enum";
+import { SelectAllData } from "../app/constants";
+import { ICompany } from "src/app/shared/interfaces/company.interface";
+import { IAnalyticData, IAnalytics } from "./interfaces/vacancy-analytics.interface";
+import { AnalyticsFacade } from "./service/analytics.facade";
+import { ActivatedRoute, Router } from "@angular/router";
+import { LocalStorageService } from "src/app/shared/services/local-storage.service";
+import { RobotHelperService } from "src/app/shared/services/robot-helper.service";
+import { CompanyFacade } from "../company/services/company.facade";
 
 @Component({
   selector: "hr-analytics",
   templateUrl: "./analytics.component.html",
-  styleUrls: ["./analytics.component.scss"]
+  styleUrls: ["./analytics.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnalyticsComponent extends Unsubscribe implements OnInit, OnDestroy {
-
-  public all = {
-    id: 0,
-    value: "Все",
-    displayName: "Все",
-    count: -1
-  };
-
-  public statisticAllCount: number = 0;
-  public showAnalytic: boolean = false;
-  public showVacancyName: boolean = false;
-  public isSelectShow: boolean = false;
-  public vacancyAnalyticList!: VacancyInterface;
-  public option!: EChartsOption;
-  public vacancyStatisticList: VacancyStatisticInterface[] = [];
-  public vacancyStatisticListByPercents: VacancyStatisticInterface[] = [];
-  private userId!: string;
-  public isRobotHelper: Observable<boolean> = this._homeLayoutState.getIsRobotHelper$();
-  public company$: Observable<CompanyInterface> = of(JSON.parse(this._localStorage.getItem("company")));
   public readonly VacancyStatusEnum = VacancyStatusEnum;
   public readonly PayedVacancyEnum = PayedVacancyEnum;
-  public defaultValue1: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  public defaultValue2: BehaviorSubject<string> = new BehaviorSubject<string>(SelectAllData);
+  public readonly RoutesEnum = RoutesEnum;
+  public readonly uuid?: string;
+  public analyticsData!: IAnalytics | null;
+
   public isChooseModalOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public uuid?: string;
   public isLoader$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly _translateService: TranslateService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private _vacancyFacade: VacancyFacade,
-              private _homeLayoutState: HomeLayoutState,
-              private readonly _robotHelperService: RobotHelperService,
-              private readonly _localStorage: LocalStorageService,
-              private cdr: ChangeDetectorRef) {
+  private company$: Observable<ICompany> = this._companyFacade.getCompanyData$();
+  private defaultValue1: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  private defaultValue2: BehaviorSubject<string> = new BehaviorSubject<string>(SelectAllData);
+  private vacancyUuid!: StringOrNumberType;
+
+  constructor(
+    private readonly _analyticsFacade: AnalyticsFacade,
+    private readonly _companyFacade: CompanyFacade,
+    private readonly _route: ActivatedRoute,
+    private readonly _router: Router,
+    private readonly _localStorage: LocalStorageService,
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _robotHelperService: RobotHelperService
+  ) {
     super();
-    this.uuid = this.route.snapshot.queryParams?.["uuid"];
+    this.uuid = this._route.snapshot.queryParams?.["uuid"];
   }
 
   public ngOnInit(): void {
-    if (this.router.url.includes("payment")) {
+    if (this._router.url.includes("payment")) {
       this.isChooseModalOpen.next(true);
     } else {
       this.isRobot();
     }
-    this.getRouteUrl();
+    if (!this.uuid) {
+      this.getAllAnalyticsByStatus(false);
+    } else {
+      this.getRouteUrl();
+    }
+    this.getAnalytics();
+  }
+
+  private getRouteUrl(): void {
+    this._route.queryParams
+      .pipe(
+        filter((params) => {
+          const hasParams = Object.values(params).length;
+          return hasParams > 0;
+        }),
+        mergeMap((params) => {
+          this.vacancyUuid = Object.values(params)[0];
+          this.isLoader$.next(true);
+          return forkJoin([
+            this._analyticsFacade.getVacancyByUuid(this.vacancyUuid),
+            this._analyticsFacade.getVacancyAnalytics(this.vacancyUuid),
+          ]);
+        }),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe({
+        next: ([vacancy, vacancyAnalytics]) => {
+          this._analyticsFacade.setAnalytics(vacancy, vacancyAnalytics);
+          this.isLoader$.next(false);
+        },
+        error: () => {
+          this.isLoader$.next(false);
+        },
+      });
+  }
+
+  private getAnalytics(): void {
+    this.isLoader$.next(true);
+    this._analyticsFacade
+      .getAnalytics()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (data) => {
+          this.analyticsData = data;
+          this.isLoader$.next(false);
+          this._cdr.detectChanges();
+        },
+        error: () => {
+          this.handleError();
+        },
+      });
   }
 
   public checkIsRobot(): void {
@@ -76,117 +111,45 @@ export class AnalyticsComponent extends Unsubscribe implements OnInit, OnDestroy
     this.isRobot();
   }
 
-  public isRobot(): void {
-    if (this._localStorage.getItem("company")) {
-      this.company$ = of(JSON.parse(this._localStorage.getItem("company")));
-    }
-    this.company$
-      .pipe(filter(data => !!data?.phone))
-      .subscribe(data => {
-        const analytics = data.helper?.find((item => item.link === "/analytic"));
-
-        this._robotHelperService.setRobotSettings({
+  private isRobot(): void {
+      this.company$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
+        const analytics = data.helper?.find((item) => item.link === RoutesEnum.analytic);
+        this._analyticsFacade.setRobotSettings({
           content: "Analytics - helper text",
           navigationItemId: 4,
           isContentActive: true,
         });
-
-        if (analytics && !analytics?.hidden) {
-          this._robotHelperService.setRobotSettings({
+        if (analytics && !analytics.hidden) {
+          this._analyticsFacade.setRobotSettings({
             content: "Analytics",
             navigationItemId: 4,
             isContentActive: true,
-            uuid: analytics?.uuid
+            uuid: analytics.uuid,
           });
-          this._robotHelperService.isRobotOpen$.next(true);
+          this._analyticsFacade.openRobot();
         }
       });
   }
 
-  public getDefaultValue1() {
+  public getDefaultValue1(): Observable<string> {
     return this.defaultValue1.asObservable();
   }
 
-  public getDefaultValue2() {
+  public getDefaultValue2(): Observable<string> {
     return this.defaultValue2.asObservable();
   }
 
-  private getRouteUrl(): void {
-    this.route.queryParams.pipe(
-      filter((params) => {
-        const hasParams = Object.values(params).length;
-        if (!hasParams) {
-          this.isSelectShow = true;
-        }
-        return hasParams > 0;
-      }),
-      mergeMap((params) => {
-        const uuid = Object.values(params)[0];
-        return forkJoin([
-          this._vacancyFacade.getVacancie(uuid),
-          this._vacancyFacade.getVacancyAnalytics(uuid)]);
-      }),
-      takeUntil(this.ngUnsubscribe))
-      .subscribe(([vacancy, vacancyAnalytic]) => {
-        this.getVacancyAndAnalytics(vacancy, vacancyAnalytic);
-        this.isSelectShow = false;
-        this.showVacancyName = true;
-        this.showAnalytic = true;
-        this.cdr.detectChanges();
-      });
-  }
-
-  private getOptions(): void {
-    this.option = {
-      tooltip: {
-        trigger: "item",
-        formatter: "{b} : {c}"
-      },
-      series: [
-        {
-          name: "Access From",
-          type: "pie",
-          radius: "68%",
-          itemStyle: {
-            borderColor: "white",
-            borderWidth: 2
-          },
-          data: this.vacancyStatisticListByPercents,
-          label: {
-            formatter: "{d}%",
-            edgeDistance: 1,
-            lineHeight: 1,
-            fontWeight: 500
-          },
-          labelLine: {
-            length: 4,
-            length2: 4,
-          },
-        }
-      ],
-      animation: false,
-      color: ["#008FFB", "#3BD252", "#FF4560", "#775DD0", "#FEB019", "brown"]
-    };
-  }
-
-  private statisticsCount(): void {
-    this.statisticAllCount = 0;
-    this.vacancyStatisticList.map(vacancy => {
-      this.statisticAllCount += vacancy.value;
-    });
-  }
-
-  public countPercent(value: number): number {
-    this.statisticsCount();
-    const analyticValueForPercent = ((value / this.statisticAllCount) * 100).toFixed(2);
+  public countPercent(value: number, totalCandidates: number): number {
+    const analyticValueForPercent = ((value / totalCandidates) * 100).toFixed(2);
     return isNaN(+analyticValueForPercent) ? 0 : +analyticValueForPercent;
   }
 
-  public showSpecialistAnalytic(): void {
-    this.router.navigate([`/vacancy-info`], {queryParams: {uuid: this.userId}});
+  public showVacancyInfo(): void {
+    this._router.navigate([`/vacancy-info`], { queryParams: { uuid: this.vacancyUuid } });
   }
 
-  public getVacancyFromSelect(selectedVacancy: SearchableSelectDataInterface, type?: VacancyStatusEnum): void {
+  public getVacancyFromSelect(selectedVacancy: ISearchableSelectData, type?: VacancyStatusEnum): void {
+    this.isLoader$.next(true);
     if (type === VacancyStatusEnum.Archived) {
       this.defaultValue2.next("");
       this.defaultValue1.next(selectedVacancy.displayName);
@@ -194,79 +157,57 @@ export class AnalyticsComponent extends Unsubscribe implements OnInit, OnDestroy
       this.defaultValue1.next("");
       this.defaultValue2.next(selectedVacancy.displayName);
     }
-    this.isLoader$.next(true);
-    if (selectedVacancy.id === 0 && !Boolean(this.uuid)) {
-      const isArchived = type === VacancyStatusEnum.Archived;
-      this._vacancyFacade.getAllAnalytics(isArchived)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe((allAnalytics) => {
 
-          this.getVacancyAnalytic(allAnalytics);
-          this.showAnalytic = true;
-          this.showVacancyName = false;
-          this.isLoader$.next(false);
-          this.cdr.detectChanges();
-        }, () => {
-          this.showAnalytic = true;
-          this.showVacancyName = false;
-          this.vacancyStatisticList = [];
-          this.vacancyStatisticListByPercents = [];
-          this.isLoader$.next(false);
-          this.cdr.detectChanges();
-        });
+    // When filter analytics of all vacancies by status
+    if (selectedVacancy.id === 0) {
+      const isArchived = type === VacancyStatusEnum.Archived;
+      this.getAllAnalyticsByStatus(isArchived);
       return;
     }
 
+      this.getVacancyAndItsAnalytic(selectedVacancy);
+  }
+
+  private getVacancyAndItsAnalytic(selectedVacancy: ISearchableSelectData) {
     forkJoin([
-      this._vacancyFacade.getVacancie(selectedVacancy.id),
-      this._vacancyFacade.getVacancyAnalytics(selectedVacancy.id)])
+      this._analyticsFacade.getVacancyByUuid(selectedVacancy.id),
+      this._analyticsFacade.getVacancyAnalytics(selectedVacancy.id),
+    ])
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(([v, vacancyAnalytic]) => {
-        this.getVacancyAndAnalytics(v, vacancyAnalytic);
-        this.showAnalytic = true;
-        this.showVacancyName = true;
-        this.isLoader$.next(false);
-        this.cdr.detectChanges();
-      }, () => {
-        this.isLoader$.next(false);
+      .subscribe({
+        next: ([vacancy, analyticsOfVacancy]) => {
+          this.vacancyUuid = selectedVacancy.id;
+          this._analyticsFacade.setAnalytics(vacancy, analyticsOfVacancy);
+          this.isLoader$.next(false);
+        },
+        error: () => {
+          this.handleError();
+        },
       });
   }
 
-  private getVacancyAndAnalytics(_analyticVacancy: AddVacancyInterface, analyticStatistics: AnalyticData) {
-    const analyticVacancy = _analyticVacancy.result[0];
-    this.vacancyAnalyticList = {
-      name: analyticVacancy?.name,
-      deadlineDate: analyticVacancy?.deadlineDate,
-      payedStatus: analyticVacancy?.payedStatus
-    };
-    this.userId = analyticVacancy?.uuid;
-    this.getVacancyAnalytic(analyticStatistics);
+  private getAllAnalyticsByStatus(isArchived: boolean) {
+    this._analyticsFacade
+      .getAllAnalytics(isArchived)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (allAnalytics: IAnalyticData) => {
+          this._analyticsFacade.setAnalytics(null, allAnalytics);
+          this.isLoader$.next(false);
+        },
+        error: () => {
+          this.handleError();
+        },
+      });
   }
 
-  private getVacancyAnalytic(analyticStatistics: AnalyticData): void {
-    this.vacancyStatisticList = [];
-    this.vacancyStatisticListByPercents = [];
-    analyticMock.forEach((item) => {
-      for (const [key, value] of Object.entries(item)) {
-        const match = analyticStatistics.data.find(
-          (status) => status.interviewStatus === key
-        );
-        this.vacancyStatisticList.push({
-          name: value.name,
-          value: match ? match.count : 0,
-        });
-        this.vacancyStatisticListByPercents.push({
-          name: value.name,
-          value: match ? match.count : 0,
-        });
-      }
-    });
-    this.getOptions();
-    this.statisticsCount();
+  private handleError(): void {
+    this.analyticsData = null;
+    this.isLoader$.next(false);
+    this._cdr.detectChanges();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.unsubscribe();
   }
-
 }

@@ -1,16 +1,16 @@
-import {Component, Input} from "@angular/core";
-import {ButtonTypeEnum} from "../../modules/app/constants/button-type.enum";
-import {ListTypesEnum} from "../../modules/app/constants/list-types.enum";
+import {Component, Input, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
-import {searchFormatDate} from "../../helpers/search-format-date";
-import {SpecialistFacade} from "../../modules/specialists/specialist.facade";
+import {searchFormatDate} from "../../shared/helpers/search-format-date.helper";
+import {SpecialistFacade} from "../../modules/specialists/services/specialist.facade";
+import { ButtonTypeEnum } from "src/app/shared/enum/button-type.enum";
+import { ListTypesEnum } from "src/app/shared/enum/list-types.enum";
 
 @Component({
   selector: "hr-list",
   templateUrl: "./list.component.html",
   styleUrls: ["./list.component.scss"]
 })
-export class ListComponent {
+export class ListComponent implements OnDestroy {
   public buttonTypesList = ButtonTypeEnum;
   @Input("type") typeProps?: ListTypesEnum = ListTypesEnum.default;
   @Input("person-name") personName?: string = "";
@@ -26,6 +26,9 @@ export class ListComponent {
   constructor(
     private readonly router: Router,
     private readonly _specialistsFacade: SpecialistFacade) {
+  }
+  ngOnDestroy(): void {
+    this._specialistsFacade.destroySetSpecialistsNotificationCount();
   }
 
   public specProfile() {

@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Observable, of} from "rxjs";
-import {CompanyState} from "../../modules/company/company.state";
-import {VacancyFacade} from "../../modules/vacancy/vacancy.facade";
-import {SpecialistFacade} from "../../modules/specialists/specialist.facade";
+import {CompanyState} from "../../modules/company/services/company.state";
+import {VacancyFacade} from "../../modules/vacancy/services/vacancy.facade";
+import {SpecialistFacade} from "../../modules/specialists/services/specialist.facade";
 import {HomeLayoutState} from "../../modules/home/home-layout/home-layout.state";
 import {Router} from "@angular/router";
-import {RobotHelperService} from "../../modules/app/services/robot-helper.service";
-import {LocalStorageService} from "../../modules/app/services/local-storage.service";
-import {CompanyFacade} from "../../modules/company/company.facade";
-import {BalanceState} from "../../modules/balance/balance.state";
-import {Unsubscribe} from "../../shared-modules/unsubscriber/unsubscribe";
-import {CompanyInterface} from "../../modules/app/interfaces/company.interface";
+import {RobotHelperService} from "../../shared/services/robot-helper.service";
+import {LocalStorageService} from "../../shared/services/local-storage.service";
+import {CompanyFacade} from "../../modules/company/services/company.facade";
+import {BalanceState} from "../../modules/balance/services/balance.state";
+import {Unsubscribe} from "../../shared/unsubscriber/unsubscribe";
+import {ICompany} from "../../shared/interfaces/company.interface";
 
 @Component({
   selector: "hr-buy-tariff-modal",
@@ -19,7 +19,6 @@ import {CompanyInterface} from "../../modules/app/interfaces/company.interface";
 })
 export class BuyTariffModalComponent extends Unsubscribe implements OnInit {
   public paymentMessage!: string;
-  public company$: Observable<CompanyInterface> = of(JSON.parse(this._localStorage.getItem("company")));
   @Input() isOpen: boolean = false;
   @Output() checkIsRobot: EventEmitter<boolean> = new EventEmitter<boolean>();
 

@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, Input} from "@angular/core";
-import {NavigateButtonTypesEnum} from "../../modules/app/constants/navigate-button-types.enum";
+import {NavigateButtonTypesEnum} from "../../shared/enum/navigate-button-types.enum";
 import {Observable} from "rxjs";
-import {RobotHelper} from "../../modules/app/interfaces/robot-helper.interface";
-import {RobotHelperService} from "../../modules/app/services/robot-helper.service";
-import {ShowLoaderService} from "../../modules/app/services/show-loader.service";
+import {RobotHelper} from "../../shared/interfaces/robot-helper.interface";
+import {RobotHelperService} from "../../shared/services/robot-helper.service";
+import {ShowLoaderService} from "../../shared/services/show-loader.service";
 
 @Component({
   selector: "hr-navigate-button",

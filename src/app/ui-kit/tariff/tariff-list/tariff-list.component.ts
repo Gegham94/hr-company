@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {BalanceTariffInterface} from "../../../modules/app/interfaces/balance-tariff.interface";
-import {BalanceInterface} from "../../../modules/app/interfaces/balance.interface";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { IBalanceTariff } from "src/app/shared/interfaces/balance-tariff.interface";
+import { IBalance } from "src/app/shared/interfaces/balance.interface";
 
 
 @Component({
@@ -10,12 +10,12 @@ import {BalanceInterface} from "../../../modules/app/interfaces/balance.interfac
 })
 export class TariffListComponent implements OnInit {
 
-  @Input("balanceTariff") balance!: BalanceTariffInterface;
+  @Input("balanceTariff") balance!: IBalanceTariff;
   @Input("listCardInfo") listCardInfo!: [];
   public listCardInfoList: [] = [];
   public interval: number = 4;
   public isShowMore: boolean = true;
-  @Output() buyTariffEmitter = new EventEmitter<BalanceInterface>();
+  @Output() buyTariffEmitter = new EventEmitter<IBalance>();
 
   constructor() {
   }

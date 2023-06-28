@@ -1,30 +1,24 @@
-<section class='analytics'>
+<section class='analytics' *ngIf="analyticsData; else emptyContentTmpl">
   <hr-go-back></hr-go-back>
   <div class='analytics__title'>
     <div class="analytics__title-keeper">
-      <!--      <div class='analytics__title'>-->
-      <!--        <span *ngIf="this.isSelectShow;else elseBlockTitle">-->
-      <!--          {{"ANALYTICS.GLOBAL_TITLE" | translate }}-->
-      <!--        </span>-->
-      <!--        <ng-template #elseBlockTitle>-->
-      <!--          {{  "ANALYTICS.TITLE" | translate}}-->
-      <!--        </ng-template>-->
-      <!--      </div>-->
-      <div class='analytics__title-keeper-vacancy-info' *ngIf="showVacancyName">
+      <div class='analytics__title-keeper-vacancy-info' *ngIf="analyticsData.selectedVacancy">
         <div class='analytics__title-keeper-vacancy-description'>
           <div class='analytics__title-keeper-vacancy-name'
-               (click)="showSpecialistAnalytic()"
-          >{{vacancyAnalyticList.name}}</div>
-          <div class='analytics__title-keeper-vacancy-date'>{{vacancyAnalyticList.deadlineDate }}</div>
+               (click)="showVacancyInfo()">
+            {{analyticsData.selectedVacancy.name}}
+          </div>
+          <div class='analytics__title-keeper-vacancy-date'>
+            {{analyticsData.selectedVacancy.deadlineDate | date: 'mediumDate'}}
+          </div>
         </div>
       </div>
-
       <div class='analytics__filter'>
-        <div class="analytics__filter--vacancy">
-          <p class="title"> Фильтр вакансии </p>
+        <div class="analytics__filter--vacancy" *ngIf="!uuid">
+          <p class="title"> {{"ANALYTICS.ALL.FILTERS" | translate}} </p>
           <div class="fields">
             <div class="wrapper">
-              <p class="subtitle"> Откритые </p>
+              <p class="subtitle"> {{"ANALYTICS.ALL.COMPLETED" | translate}} </p>
               <hr-vacancies-list
                 [defaultValue]="getDefaultValue2()"
                 [status]="VacancyStatusEnum.NotArchived"
@@ -34,7 +28,7 @@
               </hr-vacancies-list>
             </div>
             <div class="wrapper">
-              <p class="subtitle"> Завершенные </p>
+              <p class="subtitle"> {{"ANALYTICS.ALL.ARCHIVED" | translate}} </p>
               <hr-vacancies-list
                 [defaultValue]="getDefaultValue1()"
                 [status]="VacancyStatusEnum.Archived"
@@ -46,15 +40,15 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
-  <div class='analytics__container-wrapper' *ngIf="vacancyStatisticList.length && showAnalytic; else emptyContentTmpl">
+  <div class='analytics__container-wrapper'>
     <div class='analytics__container'>
       <div class='analytics__container-title'>
         {{"ANALYTICS.DIAGRAM" | translate}}
       </div>
-      <div class='analytics__container-content analytics__container-content_diagram' echarts [options]="option">
+      <div class='analytics__container-content analytics__container-content_diagram' echarts
+           [options]="analyticsData.analyticsChartOptions">
       </div>
     </div>
     <div class='analytics__container'>
@@ -62,7 +56,7 @@
         {{"ANALYTICS.PERCENTAGE.TITLE" | translate}}
       </div>
       <div class='analytics__container-content analytics__container-content_percent'>
-        <div class='analytics__container-element' *ngFor='let element of vacancyStatisticList'>
+        <div class='analytics__container-element' *ngFor='let element of analyticsData.vacancyStatisticList'>
           <div class='analytics__container-element-image'>
             <img src='../../../assets/img/icon/star-circle.svg' alt='icon'>
           </div>
@@ -71,7 +65,7 @@
               {{element.name | translate}}
             </div>
             <div class='analytics__container-element-percent'>
-              {{countPercent(element.value)}} %
+              {{countPercent(element.value, analyticsData.totalCandidates)}} %
             </div>
           </div>
         </div>
@@ -79,7 +73,7 @@
     </div>
     <div class='analytics__container'>
       <div class='analytics__container-title'>
-        Результат
+        {{"ANALYTICS.ALL.RESULT" | translate}}
       </div>
       <div class='analytics__container-content analytics__container-content_all'>
         <div class='analytics__container-content-header'>
@@ -87,10 +81,10 @@
             {{"ANALYTICS.ALL.CANDIDATES" | translate}}
           </div>
           <div class='analytics__container-content-header-count'>
-            {{statisticAllCount}}
+            {{analyticsData.totalCandidates}}
           </div>
         </div>
-        <div class='analytics__container-list' *ngFor='let element of vacancyStatisticList'>
+        <div class='analytics__container-list' *ngFor='let element of analyticsData.vacancyStatisticList'>
           <div class='analytics__container-list-color'></div>
           <div class='analytics__container-list-description'>
             <div class='analytics__container-list-title'>
@@ -104,11 +98,11 @@
       </div>
     </div>
   </div>
-
-  <ng-template #emptyContentTmpl>
-    <hr-empty-content></hr-empty-content>
-  </ng-template>
 </section>
+
+<ng-template #emptyContentTmpl>
+  <hr-empty-content></hr-empty-content>
+</ng-template>
 
 <hr-loader *ngIf="!!(isLoader$ | async)"></hr-loader>
 

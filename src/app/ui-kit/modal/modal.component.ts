@@ -19,7 +19,7 @@ export class ModalComponent implements OnDestroy {
   public outsideClose() {
     if (this.isClickOutside) {
       this.isOpenProps = false;
-      document.body.style.overflowY = "scroll";
+      document.body.style.overflowY = "auto";
       this.whenModalClose.emit(false);
       this._chatFacade.setCandidatesPopupStatus(false);
     }
@@ -27,20 +27,12 @@ export class ModalComponent implements OnDestroy {
 
   public closeModal() {
     this.isOpenProps = false;
-    document.body.style.overflowY = "scroll";
+    document.body.style.overflowY = "auto";
     this.whenModalClose.emit(false);
     this._chatFacade.setCandidatesPopupStatus(false);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["isOpenProps"]?.currentValue) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "scroll";
-    }
-  }
-
   ngOnDestroy(): void {
-    document.body.style.overflowY = "scroll";
+    // document.body.style.overflowY = "auto";
   }
 }

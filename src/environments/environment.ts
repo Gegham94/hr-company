@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   jsonUrl: "http://localhost:3000",
+  footerUrl: "http://80.249.146.197:3110",
   url: "http://80.249.146.197:3010/api/v1",
   analytic: "http://80.249.146.197:3120/api/v1",
   searchUrl: "http://80.249.146.197:3030/api/v1",

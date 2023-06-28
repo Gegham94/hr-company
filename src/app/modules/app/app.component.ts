@@ -1,11 +1,11 @@
 import {Component, OnInit} from "@angular/core";
-import {ShowLoaderService} from "./services/show-loader.service";
+import {ShowLoaderService} from "../../shared/services/show-loader.service";
 import {Observable} from "rxjs";
 import {defaultLang, Languages} from "./constants";
 import {TranslateService} from "@ngx-translate/core";
-import {LocalStorageService} from "./services/local-storage.service";
-import {StatusTypeEnum} from "./constants/status-type.enum";
-import {ToastsService} from "./services/toasts.service";
+import {LocalStorageService} from "../../shared/services/local-storage.service";
+import {StatusTypeEnum} from "../../shared/enum/status-type.enum";
+import {ToastsService} from "../../shared/services/toasts.service";
 
 
 @Component({

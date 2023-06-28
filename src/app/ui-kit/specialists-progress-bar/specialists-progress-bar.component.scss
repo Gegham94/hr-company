@@ -1,0 +1,81 @@
+@import "src/assets/variables/variables.scss";
+@import 'src/assets/mixins/util/util';
+
+.content {
+  width: 100%;
+  @include flex-center;
+}
+
+.label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  color: $light-gray;
+  margin-bottom: 10px;
+}
+.progress-bar {
+  width: 100%;
+  background-color: $light-gray;
+  height: 30px;
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid $very-light-gray;
+}
+
+.progress-bar .fill {
+  height: 100%;
+  transition: width 0.5s;
+  border-radius: 8px;
+}
+
+.progress-bar.green .fill {
+  background-color: $green;
+}
+
+.progress-bar.orange .fill {
+  background-color: $orange;
+}
+
+.progress-bar.red .fill {
+  background-color: $red;
+}
+
+.progress-bar .text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+}
+
+.loader {
+  border: 5px solid $light-gray;
+  border-radius: 50%;
+  border-top: 5px solid $green;
+  width: 25px;
+  height: 25px;
+  animation: spin 4s linear infinite;
+  position: relative;
+  top: 54%;
+  left: 50%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

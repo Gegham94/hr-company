@@ -1,35 +1,42 @@
-import {Component, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
-import {map, Observable} from "rxjs";
-import {SpecialistAnswers} from "../../interfaces/tests.interface";
-import {SpecialistService} from "../../../../specialist.service";
+import {map, Observable, takeUntil} from "rxjs";
+import {ISpecialistAnswers} from "../../interfaces/tests.interface";
+import {SpecialistService} from "../../../../services/specialist.service";
+import {Unsubscribe} from "../../../../../../shared-modules/unsubscriber/unsubscribe";
 
 @Component({
   selector: "app-tests",
   templateUrl: "./test.component.html",
-  styleUrls: ["./test.component.scss"]
+  styleUrls: ["./test.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TestComponent implements OnInit {
-  public question$!: Observable<SpecialistAnswers[]>;
+export class TestComponent extends Unsubscribe implements OnInit, OnDestroy {
+  public question$!: Observable<ISpecialistAnswers[]>;
   public questionsCount: number = 0;
 
-  constructor(private route: ActivatedRoute, private service: SpecialistService) {
+  constructor(
+    private route: ActivatedRoute,
+    private service: SpecialistService) {
+    super();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const userId = this.route.snapshot.queryParams?.["uuid"];
     const testId = this.route.snapshot.queryParams?.["testId"];
 
     this.question$ = this.service.getSpecialistCard(userId)
-      .pipe(
-        map((spec) => spec?.specialist?.test_answers.find(
-          (specTest) => specTest.questionAnswerList.testUuid === testId)
+      .pipe(takeUntil(this.ngUnsubscribe),
+        map((specialistData) =>
+          specialistData?.specialist?.test_answers.find(
+            (specTest) => specTest.questionAnswerList.testUuid === testId)
         ),
-        map((specialist: any) => {
+        map((specialist) => {
             const questionsList = specialist?.questionAnswerList?.questions;
             const elem = [];
             // tslint:disable-next-line:forin
             for (const questionsListKey in questionsList) {
+              // @ts-ignore
               const question = questionsList[questionsListKey];
               elem.push({
                 answerId: question?.answerId,
@@ -46,4 +53,7 @@ export class TestComponent implements OnInit {
       );
   }
 
+  public ngOnDestroy(): void {
+    this.unsubscribe();
+  }
 }

@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from "@angular/core";
-import {InputStatusEnum} from "../../modules/app/constants/input-status.enum";
+import {InputStatusEnum} from "../../shared/enum/input-status.enum";
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {InputTypeEnum} from "../enum/input-type.enum";
 
@@ -35,6 +35,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input("mask-pattern") maskPatternProps: string = "";
   @Input("prefix") prefix: string = "";
   @Input("isRequared") isRequared: boolean = true;
+  @Input("minRange") minRange?: number;
 
   @Input() valid?: boolean;
   @Input() showPassword?: boolean = false;
@@ -60,6 +61,14 @@ export class InputComponent implements ControlValueAccessor {
     // Check if "e" key is pressed
     if (this.inputTypeProps == "number" && (event.key === "e" || event.key === "E")) {
       event.preventDefault();
+    }
+
+    // Check if user type numbers and the first number is "0"
+    if(this.minRange === 1){
+      const key = event.key;
+      if (key >= '0' && key <= '9' && this.inputValue.startsWith('0')) {
+        this.inputValue = '';
+      }
     }
   }
 

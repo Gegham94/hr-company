@@ -5,21 +5,24 @@
   </div>
   <ng-container>
     <div class='job-skills__tag-wrapper' *ngFor="let job of jobSkills | objectValue">
-      <div class='job-skills__tag-name'>
-        {{"ANALYTICS.STATISTIC." + (job.key | uppercase) | translate }}
-      </div>
-      <div class='job-skills__tag' *ngIf="isArray(job.value);else element">
-        <hr-tag *ngFor="let value of job.value" [isRemove]="false">
-          {{value}}
-        </hr-tag>
-      </div>
-      <ng-template #element>
-        <div class='job-skills__tag'>
-          <hr-tag [isRemove]="false">
-            {{job.value}}
+      <ng-container *ngIf="job.key !== 'questions'">
+        <div class='job-skills__tag-name'>
+          {{"ANALYTICS.STATISTIC." + (job.key | uppercase) | translate }}
+        </div>
+        <div class='job-skills__tag' *ngIf="isArray(job.value);else element">
+          <hr-tag *ngFor="let value of job.value" [isRemove]="false">
+            {{value}}
           </hr-tag>
         </div>
-      </ng-template>
+        <ng-template #element>
+          <div class='job-skills__tag'>
+            <hr-tag [isRemove]="false">
+              {{job.value}}
+            </hr-tag>
+          </div>
+        </ng-template>
+      </ng-container>
+
     </div>
   </ng-container>
 </section>

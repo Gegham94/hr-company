@@ -92,18 +92,18 @@
   <img src="/assets/img/icon/info.svg" alt="info" class="home_robot-img">
 </div>
 
-<div class="home_chat-info" *ngIf="(conversations$ | async)?.length || (bottomChatStateSettings | async)?.isOpen" (click)="openChat()">
-  <img src="./assets/img/icon/chat-icon.svg" alt="chat">
-  <span class="red_circle" *ngIf="isUnreadMessage$ | async"></span>
-</div>
-
-<div *ngIf="(bottomChatStateSettings | async)?.isOpen">
-  <hr-bottom-chat></hr-bottom-chat>
+<div>
+  <hr-chat></hr-chat>
 </div>
 
 <div
   [ngClass]="{'pointer-none': isRobotOpen$ | async, 'content_on_robot-bg': (robotSettings$ | async)?.isContentActive && !isBalancePage}">
   <router-outlet></router-outlet>
+
+  <div>
+    <app-chat-open-modal (openConversationModals)="openConversationModals()"></app-chat-open-modal>
+  </div>
+
 </div>
 
 <hr-footer></hr-footer>

@@ -2,43 +2,25 @@
   <div class="footer_block-1">
     <p class="footer_block-1--title" (click)="redirectToHomePage()">HR-hunt</p>
     <div class="footer_block-1--info">
-      <a class="footer_block-1--info-hrefText" href="mailto:info@hrhunt.ru">
+      <a class="footer_block-1--info-hrefText" *ngFor="let socialItem of socialItems" [href]="socialItem.href">
         <div class="footer_block-1--info-block">
-          <img src="assets/img/footer/msg.svg"/>
-          <p>info@hrhunt.ru</p>
+          <img [src]="'assets/img/footer'+ socialItem.image_path"/>
+          <p>{{socialItem.display_name}}</p>
         </div>
-        </a>
-        <a class="footer_block-1--info-hrefText" href="tel:+7 (915) 093-77-88">
-        <div class="footer_block-1--info-block">
-          <img src="assets/img/footer/phone.svg"/>
-          <p>+7 (915) 093-77-88</p>
-        </div>
-        </a>
-        <a class="footer_block-1--info-hrefText" href="https://t.me/">
-        <div class="footer_block-1--info-block">
-          <img src="assets/img/footer/telegram.svg"/>
-          <p>Telegram</p>
-        </div>
-        </a>
-        <a class="footer_block-1--info-hrefText" href="https://wa.me/">
-        <div class="footer_block-1--info-block">
-          <img src="assets/img/footer/whatsapp.svg"/>
-          <p>Whatsapp</p>
-        </div>
-        </a>
+      </a>
     </div>
   </div>
-  <hr>
+  <hr />
   <div class="footer_block-2">
-    <a (click)="redirectTo('/')">Контакты</a>
-    <a (click)="redirectTo('/user-agreement')">Пользовательское соглашение</a>
-    <a (click)="redirectTo('/privacy-policy')">Политика конфиденциальности</a>
-    <p>Все права защищены</p>
+    <a (click)="redirectTo('/')">{{"FOOTER.CONTACTS" | translate}}</a>
+    <a (click)="redirectTo('/user-agreement')">{{"FOOTER.TERMS_OF_USE" | translate}}</a>
+    <a (click)="redirectTo('/privacy-policy')">{{"FOOTER.PRIVACY_POLICY" | translate}}</a>
+    <p>{{"FOOTER.ALL_RIGHTS_RESERVED" | translate}}</p>
   </div>
-  <hr>
+  <hr />
   <div class="footer_block-3">
-    <p>ИП Арутюнян Артем Ваганович </p>
+    <p>ИП Арутюнян Артем Ваганович</p>
     <p>ОГРНИП 321602700026381 / ИНН 602726841613</p>
-    <p>© HR-Robot, 2021 — 2022 </p>
+    <p>© HR-Robot, 2021 — {{currentYear}}</p>
   </div>
 </section>

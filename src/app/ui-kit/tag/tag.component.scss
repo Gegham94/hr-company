@@ -33,8 +33,10 @@
     background: $white;
     border: 1px solid $green;
     border-radius: 35px;
-    display: inline-block;
-    padding: 8px 37px 8px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 20px;
     margin-right: 20px;
 
     .tag__text {

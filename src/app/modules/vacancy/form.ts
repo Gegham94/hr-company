@@ -3,6 +3,7 @@ import {
   FormBuilder, FormControl, FormGroup,
   Validators
 } from "@angular/forms";
+import {MaxDeadlineDateVacancy, MinDeadlineDateVacancy} from "../app/constants";
 
 @Injectable({providedIn: "root"})
 export class CreateVacancyForm {
@@ -17,7 +18,7 @@ export class CreateVacancyForm {
       description: ["", [Validators.required]],
       responsibility: ["", [Validators.required]],
       conditions: ["", [Validators.required]],
-      deadlineDate: [null, [Validators.required, Validators.min(7), Validators.max(70)]],
+      deadlineDate: [null, [Validators.required, Validators.min(MinDeadlineDateVacancy), Validators.max(MaxDeadlineDateVacancy)]],
       salary: [0, [Validators.required]],
       valute: ["", [Validators.required]],
       searchedSettings: formBuilder.group(

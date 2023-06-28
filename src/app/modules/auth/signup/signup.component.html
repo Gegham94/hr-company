@@ -46,15 +46,15 @@
           [formControl]="signUpPrivacyPolicyControl"
         ></hr-checkbox>
         <span class="register__privacy-policy__checkbox__label-text" (click)="changeSignUpPrivacyPolicy()">
-          Соглашаюсь с
+          {{"AUTHORIZATION.SIGN_UP.AGREE" | translate}}
           <a
             (click)="changeSignUpPrivacyPolicy($event)"
             href="https://hrhunt.ru/user-agreement"
             style="color: green"
             target="_blank"
-            >пользовательским соглашением
+            >{{"AUTHORIZATION.SIGN_UP.AGREEMENT" | translate}}
           </a>
-          об обработке личных данных
+          {{"AUTHORIZATION.SIGN_UP.PERSONAL_DATA" | translate}}
         </span>
       </div>
       <div class="register__button">
@@ -62,7 +62,7 @@
           [disabled]="isFormValid || !!(this.alreadyBeenLoggedError | async)"
           [text]="'ACTIONS.REGISTER' | translate"
           [type]="buttonType.outlineGreen"
-          (click)="signUpCompleted(signUpForm)"
+          (click)="signUpCompleted()"
         ></hr-button>
       </div>
       <div class="register__login-wrapper">

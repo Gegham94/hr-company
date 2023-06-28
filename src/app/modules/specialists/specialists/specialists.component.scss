@@ -23,6 +23,30 @@
     padding: 20px;
   }
 
+  &__progress {
+    width: 30%;
+    @media screen and (max-width: 1200px) {
+      width: 450px;
+      margin: 0 20px;
+    }
+
+    @media screen and (max-width: 750px) {
+      width: 250px;
+      margin: 0 20px;
+    }
+  }
+
+  &__top-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+    }
+  }
+
   &__block {
     &--blur {
       -webkit-filter: blur(3px);

@@ -7,8 +7,8 @@ import {
 } from "@angular/core";
 import {MessageTimeService} from "./message-time.service";
 import {filter, takeUntil} from "rxjs";
-import {Unsubscribe} from "../../shared-modules/unsubscriber/unsubscribe";
-import {SignInFacade} from "../../modules/auth/signin/signin.facade";
+import {Unsubscribe} from "../../shared/unsubscriber/unsubscribe";
+import {SignInFacade} from "../../modules/auth/signin/services/signin.facade";
 import Timeout = NodeJS.Timeout;
 
 @Component({

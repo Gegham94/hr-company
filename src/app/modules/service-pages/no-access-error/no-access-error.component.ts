@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ButtonTypeEnum } from "../../app/constants/button-type.enum";
+import { ButtonTypeEnum } from "../../../shared/enum/button-type.enum";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 

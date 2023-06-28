@@ -1,0 +1,48 @@
+<section class="vacancy" *ngIf="!!vacancies; else emptyContentTmpl"
+         [ngClass]="(isRobotHelper | async) ? 'content_under_robot-bg' : 'content_on_robot-bg'"
+>
+  <section class="vacancy__wrapper">
+    <hr-go-back></hr-go-back>
+    <div class="vacancy__info">
+      <div class="vacancy__title">
+        <h1>{{vacancies.name}}</h1>
+      </div>
+      <div class="vacancy__description">
+        <p *ngIf="vacancies.createdAt">
+          <b> {{"VACANCY_INFO.CREATED" | translate}} </b> {{getCreatedDate(vacancies.createdAt)}}
+        </p>
+        <div class="vacancy__description--progress">
+          <b> {{"VACANCY_INFO.UNTIL_COMPLETION" | translate}} </b>
+          <hr-progress-bar
+            [text]='progress(vacancies)'
+            [value]='getProgressPercent(vacancies)'
+            [max-value]='100'
+            progress-bar-color='#08A652'
+            [value-direction-top]='true'
+            [type-props]='ProgressBarEnum.small'
+          ></hr-progress-bar>
+        </div>
+      </div>
+    </div>
+    <div>
+      <hr-job-description
+        [jobInfo]="vacancies"
+        [jobSkills]="vacancies.searchedSettings"
+      >
+      </hr-job-description>
+    </div>
+  </section>
+
+  <section class="vacancy__wrapper--skills">
+    <hr-job-skills
+      [jobSkills]="vacancies.searchedSettings"
+    >
+    </hr-job-skills>
+  </section>
+</section>
+
+<hr-loader *ngIf="!!(isLoader$ | async)"></hr-loader>
+
+<ng-template #emptyContentTmpl>
+  <hr-empty-content></hr-empty-content>
+</ng-template>

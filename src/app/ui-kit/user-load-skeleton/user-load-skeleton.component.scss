@@ -1,0 +1,53 @@
+@import "src/assets/mixins/input/input-mixins";
+@import "src/assets/variables/variables";
+
+.user-card {
+  padding: 21px 14px 27px 30px;
+  width: 300px;
+  background: #F8F9FA;
+  border: 1px solid $light-gray;
+  border-radius: 8px;
+  position: relative;
+  opacity: 0.8;
+
+  &__test-title {
+    font-style: normal;
+    font-weight: $font-normal;
+    font-size: $text-xs;
+    line-height: 18px;
+    color: #718096;
+    opacity: 0.5;
+  }
+
+  &__new {
+    font-size: 12px;
+    line-height: 140%;
+    padding: 6px 20px;
+    color: white;
+    font-weight: 500;
+    background-color: $green;
+    border-radius: 201px;
+    max-height: 30px;
+  }
+  &__interviewStatus {
+    text-align: center;
+    font-size: 11px;
+    line-height: 100%;
+    padding: 5px 15px;
+    color: $green;
+    font-weight: 500;
+    border: 1px solid $green;
+    background-color: transparent;
+    border-radius: 201px;
+    max-height: 30px;
+  }
+
+  &__actions {
+    display: flex;
+    column-gap: 5px;
+    position: absolute;
+    bottom: 25px;
+    right: 14px;
+  }
+}
+

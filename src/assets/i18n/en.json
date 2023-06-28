@@ -45,12 +45,24 @@
   },
   "HEADER": {
     "LOGO": "HR-Robot",
+    "TARIFF": {
+      "NO_ACTIVE_TARIFF": "No active tariff",
+      "ALL_TARIFFS": "All",
+      "UNUSED": "Unused"
+    },
     "DROPDOWN": {
       "COMPANY": "Company",
       "BALANCE": "Balance",
       "MY_CHAT": "My Chats",
-      "LOGOUT": "Exit"
+      "LOGOUT": "Exit",
+      "TARIFF": "Tariff"
     }
+  },
+  "FOOTER": {
+    "CONTACTS": "Contacts",
+    "TERMS_OF_USE": "Terms of use",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "ALL_RIGHTS_RESERVED": "All rights reserved"
   },
   "AUTHORIZATION": {
     "TITLE": "Welcome",
@@ -70,11 +82,14 @@
       "ERROR": "User {{ prefix }} {{ phone }} exists",
       "PRIVACY_POLICY": "I agree on the processing of personal data  with the user agreement",
       "SUCCESS_MESSAGE": {
-        "1" : "Thank you for registering!",
-        "2" : "You have successfully registered on our platform. ",
-        "3" : "Please sign in to your account.",
-        "4" : "We wish you good luck!"
-      }
+        "1": "Thank you for registering!",
+        "2": "You have successfully registered on our platform. ",
+        "3": "Please sign in to your account.",
+        "4": "We wish you good luck!"
+      },
+      "AGREE": "I agree with",
+      "AGREEMENT": "user agreement",
+      "PERSONAL_DATA": "on the processing of personal data"
     },
     "RESET_PASSWORD": {
       "TITLE": "Password Recovery",
@@ -113,7 +128,9 @@
         "COMPLETION_DATE": "Completion date",
         "COMPANY_DESCRIPTION": "Description of the company",
         "RESPONSIBILITIES": "Duties",
-        "TERMS": "Conditions"
+        "TERMS": "Conditions",
+        "DOWNLOAD_QUESTIONS": "Download questions",
+        "MONTH_INCOME": "Estimated monthly income"
       }
     }
   },
@@ -128,7 +145,8 @@
       "COUNTRY": "Country",
       "CITY": "City",
       "LINK": "Link to the company's website",
-      "DESCRIPTION": "Description of the company"
+      "DESCRIPTION": "Description of the company",
+      "LOGO_REQUIRED": "Logo is required"
     }
   },
   "MY_VACANCY": {
@@ -154,7 +172,13 @@
         "FROM": "From",
         "TO": "Before"
       }
-    }
+    },
+    "OVERPAY": "Overpay",
+    "PAY_JOB": "Are you sure you want to pay for the job?",
+    "PAID_VACANCIES": "You have paid vacancies",
+    "YES": "Yes",
+    "NO": "No",
+    "THANKS": "Thank you for using our service"
   },
   "ANALYTICS": {
     "TITLE": "Detailed vacancy statistics",
@@ -173,6 +197,10 @@
       "REJECTED": "Rejected"
     },
     "ALL": {
+      "RESULT": "Result",
+      "FILTERS": "Job filters",
+      "ARCHIVED": "Archived",
+      "COMPLETED": "Completed",
       "TEXT": "Altogether",
       "CANDIDATES": "Total Candidates",
       "CANDIDATE": "Candidate"
@@ -189,11 +217,34 @@
     "UNPAID_VACANCIES": "Unpaid vacancies",
     "AMOUNT_PAYABLE": "Amount payable",
     "VACANCY_NAME": "Vacancy name",
-    "NOTE": "Do you want to remove this vacancy?"
+    "NOTE": "Do you want to remove this vacancy?",
+    "PAY": "Pay",
+    "VACANCY_PAY_CONFIRM_MESSAGE": "Are You sure You want to pay for vacancy?",
+    "PAYED_VACANCY_COUNT": "You have payed vacancies ",
+    "YES": "YES",
+    "NO": "NO",
+    "THANK_YOU_FOR_SERVICE": "thank you for using our service "
   },
   "SPECIALISTS": {
     "PROFESSION": "Angular Developer",
     "VIEW_ALL": "View all",
+    "VACANCY_FILTER": "Vacancy filter",
+    "OPENED": "Opened",
+    "SPECIALISTS_FILTER": "Specialists filter",
+    "ALL": "All",
+    "WARNING": "warning!",
+    "DATA_PLAN_EXPIERED": "Dear user Your data plan has expired. To continue to take advantage of the system, please go to the balance page and select the tariff.",
+    "USER": {
+      "NEW": "New",
+      "PSYCHOLOGICAL_TEST": "Psychological test",
+      "PROFESSIONAL_TEST": "Professional test",
+      "INTERVIEW": "Interview",
+      "VIEWED": "Viewed",
+      "INTO_ENLIGHTENMENT": "В проссещение",
+      "PASSED_THE_TEST": "Passed the test",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected"
+    },
     "PERSONAL_INFORMATION": {
       "TITLE": "Personal information",
       "FULL_NAME": "",
@@ -210,6 +261,11 @@
       "POSITIVE_REVIEWS": "Positive feedback",
       "NEGATIVE_REVIEWS": "Negative reviews",
       "INVITE_TO_CHAT": "Invite to Chat",
+      "ALL": "All",
+      "PASSED_THE_TEST": "Passed test",
+      "IN_PROGRESS": "In progress",
+      "ACCEPTED": "Accepted",
+      "FAVORITES": "Favorites",
       "TEST": {
         "TITLE": "Results of the psychological test",
         "VIEW_TEST": "View the test",
@@ -218,6 +274,103 @@
         "INTELLECT": "Intelligence Test",
         "PASSING_BY": "Testing { PROGRAMMING_LANGUAGE }"
       }
+    }
+  },
+  "VACANCY_INFO": {
+    "CREATED": "Created in:",
+    "UNTIL_COMPLETION": "Until completion:",
+    "DESCRIPTION": "Description",
+    "RESPONSIBILITIES": "Responsibilities",
+    "CONDITIONS": "Conditions",
+    "QUESTIONS": "Questions",
+    "NO_QUESTIONS": "No questions"
+  },
+  "CHAT_INFO_MODAL": {
+    "STEP_1": {
+      "TITLE": "Attention!",
+      "INFO": "You are about to start a chat with this candidate. After confirming\n the action, information about other candidates in the list will be temporarily hidden.\n If this candidate does not suit you, you can cancel the action and access the list again\n. "
+    },
+    "STEP_2": {
+      "TITLE": "Attention!",
+      "SUBTITLE": "You started a chat with ",
+      "INFO": "At this stage, the rest of the results of other candidates\n will be temporarily unavailable. The list will be available again if you decide that this candidate \n does not suit you and close the chat with him."
+    },
+    "STEP_3": {
+      "TITLE": "Attention!",
+      "SUBTITLE": "You started a chat with ",
+      "INFO": "In the lower left corner you have the option to accept an employee with\n the green button and cancel the action with the red button",
+      "TEXT_1": "Employ an employee.",
+      "TEXT_2": "This button is for accepting a candidate for a job, after\n this action the vacancy will be closed.",
+      "TEXT_3": "Reject trade",
+      "TEXT_4": "Clicking this button will close the chat with the candidate and you\n will again be able to access the list of other candidates."
+    },
+    "STEP_4": {
+      "TITLE": "Attention!",
+      "INFO": " This action means that you are hiring this candidate,\n as soon as you confirm your action, the vacancy will end and\n be closed.",
+      "BUTTON_1": "Cancel",
+      "BUTTON_2": "Start Chat"
+    }
+  },
+  "CHAT": {
+    "NOT_MESSAGES_YET": "You haven't started a chat yet",
+    "IS_UNREAD_MESSAGE": "You have an unread message ⮟",
+    "WRITE_SOMETHING": "Write something"
+  },
+  "CHAT_ACCEPT_POPUP": {
+    "1": "All fields are required",
+    "2": "Dear",
+    "3": "(candidate's name)",
+    "4": "We were all very happy to meet and get to know you over the past few days.",
+    "5": "We were impressed by your experience and would like to formally offer you a position",
+    "6": "(position)",
+    "7": "This",
+    "8": "(full/partial)",
+    "9": "position indicate the working days and hours. You will report to the head of the department",
+    "10": "(department name)",
+    "11": "We will offer you an annual gross salary of",
+    "12": "($X)",
+    "13": "and",
+    "14": "(specify bonus programs if applicable)",
+    "15": "You will also have ",
+    "16": "indicate benefits as per company policy, such as health care and insurance plan,\n corporate mobile phone, or travel expenses",
+    "17": "and",
+    "18": "(X days)",
+    "19": "Paid vacation per year.",
+    "20": "Expected start date:",
+    "21": "(date)",
+    "22": "We would like to receive your reply before",
+    "23": "(date)",
+    "24": "In the meantime, if you have any questions feel free to contact me or",
+    "25": "(manager_name)",
+    "26": "by e-mail or telephone",
+    "27": "please provide contact information",
+    "28": "We all look forward to having you on our team.",
+    "29": "Best regards,",
+    "30": "(company name)",
+    "31": "Confirm"
+  },
+  "CHAT_REJECT_POPUP": {
+    "TITLE": "Lorem Ipsum is simply dummy text of the printing",
+    "SEND": "Send"
+  },
+  "CHAT_CONFIRMATION": {
+    "TITLE": "Attention!",
+    "TEXT_1": "Are you sure you want to chat with this specialist?",
+    "TEXT_2": "To start a chat with a new specialist, you must renew payment for the vacancy. Continue?",
+    "YES": "YES",
+    "NO": "NO"
+  },
+  "SPECIALIST_PROFILE": {
+    "TITLE": "Personal information",
+    "FULL_NAME": "Full name:",
+    "PHONE": "Phone:",
+    "EMAIL": "Email:",
+    "ADDRESS": "Country .city:",
+    "ANALYTICS": {
+      "TITLE": "Test Pass Specialist Analytics",
+      "DIAGRAM": "Diagram",
+      "RESULT": "Results",
+      "TESTS": "tests"
     }
   }
 }

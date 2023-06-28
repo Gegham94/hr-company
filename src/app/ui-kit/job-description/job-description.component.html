@@ -1,26 +1,34 @@
 <section class="job-description">
   <div class="job-description__wrapper">
-    <span class="job-description__title">Описание</span>
+    <span class="job-description__title">{{"VACANCY_INFO.DESCRIPTION" | translate}}</span>
     <div class="job-description__description">
       {{jobInfo.description | removeTag}}
     </div>
   </div>
   <div class="job-description__wrapper">
-    <span class="job-description__title">Обязанности</span>
+    <span class="job-description__title">{{"VACANCY_INFO.RESPONSIBILITIES" | translate}}</span>
     <div class="job-description__description">
       {{jobInfo.responsibility | removeTag}}
     </div>
   </div>
   <div class="job-description__wrapper">
-    <span class="job-description__title">Условия</span>
+    <span class="job-description__title">{{"VACANCY_INFO.CONDITIONS" | translate}}</span>
     <div class="job-description__description">
       {{jobInfo.conditions | removeTag}}
     </div>
   </div>
   <div class="job-description__wrapper">
-    <span class="job-description__title">Вопросы</span>
-    <div class="job-description__description">
-      {{jobInfo.questions ?? "Нет вопросов" | removeTag }}
+    <span class="job-description__title">{{"VACANCY_INFO.QUESTIONS" | translate}}</span>
+
+    <div class='job-skills__tag' *ngIf="jobSkills.questions?.length; else NoDataTmpl">
+      <div class="job-description__description" *ngFor="let value of jobSkills.questions; let i = index">
+        {{i + 1}}. {{value}}
+      </div>
     </div>
+
+    <ng-template #NoDataTmpl>
+      <div class="job-description__description">{{"VACANCY_INFO.NO_QUESTIONS" | translate}}</div>
+    </ng-template>
+
   </div>
 </section>

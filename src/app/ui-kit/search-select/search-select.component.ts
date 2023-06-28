@@ -1,9 +1,12 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { SearchableSelectDataInterface } from "src/app/modules/app/interfaces/searchable-select-data.interface";
+import { ISearchableSelectData } from "src/app/shared/interfaces/searchable-select-data.interface";
 import { SelectAllData } from "../../modules/app/constants";
 import { BehaviorSubject } from "rxjs";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import {ScreenSizeType} from "../../shared/interfaces/screen-size.type";
+import {ScreenSizeService} from "../../shared/services/screen-size.service";
+import {ScreenSizeEnum} from "../../shared/enum/screen-size.enum";
 
 @Component({
   selector: "hr-search-select",
@@ -21,10 +24,10 @@ export class SearchSelectComponent implements ControlValueAccessor {
   public isDropdownOpen: boolean = false;
   public filterQuery: string = "";
   public selectedOptionsForDisplay: string = "";
-  public dropdownOptions: SearchableSelectDataInterface[] | null = [];
-  public selectedOptions: SearchableSelectDataInterface[] = [];
+  public dropdownOptions: ISearchableSelectData[] | null = [];
+  public selectedOptions: ISearchableSelectData[] = [];
   private isTouched: boolean = false;
-  private optionsBackup!: SearchableSelectDataInterface[] | null;
+  private optionsBackup!: ISearchableSelectData[] | null;
   private placeholderCopy: string = "";
   private _defaultValue: string = "";
   private _placeholder = "";
@@ -93,7 +96,7 @@ export class SearchSelectComponent implements ControlValueAccessor {
   @Input() inputTypeNumber: boolean = false;
 
   /**Опции дропдаун меню*/
-  @Input() set options(value: SearchableSelectDataInterface[] | null) {
+  @Input() set options(value: ISearchableSelectData[] | null) {
     this.dropdownOptions = value;
     this.optionsBackup = value;
     this.isSelectOptionsVisible.next(true);
@@ -103,8 +106,8 @@ export class SearchSelectComponent implements ControlValueAccessor {
     this.setPreSelectedOptions();
   }
 
-  @Output() selectedOptionOutput: EventEmitter<SearchableSelectDataInterface> =
-    new EventEmitter<SearchableSelectDataInterface>();
+  @Output() selectedOptionOutput: EventEmitter<ISearchableSelectData> =
+    new EventEmitter<ISearchableSelectData>();
 
   @Output() filterQueryChange: EventEmitter<string> = new EventEmitter<string>();
 
@@ -135,6 +138,14 @@ export class SearchSelectComponent implements ControlValueAccessor {
     displayName: "Все",
     count: -1,
   };
+
+  constructor(private screenSizeService: ScreenSizeService) {}
+
+  public readonly ScreenSizeEnum = ScreenSizeEnum;
+
+  get screenSize(): ScreenSizeType {
+    return this.screenSizeService.calcScreenSize;
+  }
 
   public get selectWidth(): number {
     return this.select?.nativeElement.clientWidth + 2;
@@ -188,11 +199,11 @@ export class SearchSelectComponent implements ControlValueAccessor {
   }
 
   // checked state functions
-  public isOptionChecked(option: SearchableSelectDataInterface): boolean {
+  public isOptionChecked(option: ISearchableSelectData): boolean {
     return this.selectedOptions ? !!this.selectedOptions.find((selected) => selected.id === option.id) : false;
   }
 
-  public toggleCheckedState(option: SearchableSelectDataInterface) {
+  public toggleCheckedState(option: ISearchableSelectData) {
     this.isTouched = true;
     if (this.isMultiSelect) {
       if (!this.isOptionChecked(option)) {
@@ -253,11 +264,11 @@ export class SearchSelectComponent implements ControlValueAccessor {
   }
 
   // NgValueAccessor functions
-  onChange: any = (value: SearchableSelectDataInterface[]) => {};
+  onChange: any = (value: ISearchableSelectData[]) => {};
 
   onTouch: any = () => {};
 
-  writeValue(selectedValues: SearchableSelectDataInterface[] | string | null): void {
+  writeValue(selectedValues: ISearchableSelectData[] | string | null): void {
     if (this.isMultiSelect) {
       if (selectedValues && selectedValues.length) {
         this.selectedOptionsForDisplay = this.convertSelectedOptionsToStringArray(selectedValues);
@@ -284,7 +295,7 @@ export class SearchSelectComponent implements ControlValueAccessor {
   }
 
   // helper/utility functions
-  private convertSelectedOptionsToStringArray(selectedOptions: SearchableSelectDataInterface[] | string): string {
+  private convertSelectedOptionsToStringArray(selectedOptions: ISearchableSelectData[] | string): string {
     if (this.isInn) {
       return this.selectedOptions.map((option) => option.value).join(", ");
     }
@@ -304,6 +315,13 @@ export class SearchSelectComponent implements ControlValueAccessor {
       const selectedOptions = this.dropdownOptions.filter((option) => preSelectedValues.includes(option.value));
       this.selectedOptions = selectedOptions;
       this.onChange(this.selectedOptions);
+    }
+  }
+
+  public validateInput(event: KeyboardEvent): void {
+    // Check if "e" key is pressed
+    if (this.inputTypeNumber && (event.key === "e" || event.key === "E")) {
+      event.preventDefault();
     }
   }
 }

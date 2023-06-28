@@ -1,41 +1,29 @@
-<hr-modal
-  [is-open]="true"
-  (whenModalClose)="closeModal()"
->
+<ng-template #titleTpl>
+  <h1>{{"CHAT_CONFIRMATION.TITLE" | translate}}</h1>
+</ng-template>
+<ng-template #contentTpl>
   <div class='modal_content'>
-    <div class='modal_title'>
-      <ng-container *ngIf="isFirstChat; else notFirstChatTmpl">
-        <h1> внимание! </h1>
-      </ng-container>
-
-      <ng-template #notFirstChatTmpl>
-        <h1> внимание! </h1>
-      </ng-template>
-
-    </div>
-    <div>
       <div class='modal_content'>
         <ng-container *ngIf="isFirstChat; else notFirstChatTextTmpl">
-          <p> Вы уверены что хотите начать чат с этим специалистом? </p>
+          <p> {{"CHAT_CONFIRMATION.TEXT_1" | translate}} </p>
         </ng-container>
         <ng-template #notFirstChatTextTmpl>
-          <p> Чтобы начать чат с новым специалистом, Вы должны возобновлять оплату на вакансию. Продолжить? </p>
+          <p> {{"CHAT_CONFIRMATION.TEXT_2" | translate}} </p>
         </ng-template>
       </div>
       <div class="modal_actions">
         <hr-button
-          [text]="'НЕТ'"
+          [text]='"CHAT_CONFIRMATION.NO" | translate'
           [type]="ButtonTypeEnum.outlineGreen"
           (clickEvent)="closeModal()"
         ></hr-button>
 
         <hr-button
-          [text]="'ДА'"
+          [text]='"CHAT_CONFIRMATION.YES" | translate'
           [type]="ButtonTypeEnum.outlineGreen"
           (clickEvent)="openChat()"
         ></hr-button>
       </div>
-    </div>
   </div>
-</hr-modal>
+</ng-template>
 

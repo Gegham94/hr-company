@@ -2,8 +2,8 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { HomeLayoutComponent } from "./home-layout/home-layout.component";
 import { UiKitViewComponent } from "../../ui-kit-view/ui-kit-view.component";
-import {SpecialistAnalyticComponent} from "../analytic/specialist-analytic/specialist-analytic.component";
-import { AccountGuard } from "src/app/helpers/account.guard";
+import { VacancyInfoComponent  } from "../analytic/vacancy-info/vacancy-info.component";
+import { AccountGuard } from "src/app/shared/guards/account.guard";
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: "balance",
-        loadChildren: () => import("../balance/balance.module").then(m => m.BalanceModule)
+        loadChildren: () => import("../balance/modules/balance.module").then(m => m.BalanceModule)
       },
       {
         path: "vacancy",
@@ -20,32 +20,32 @@ const routes: Routes = [
           {
             path: "create-filter",
             loadChildren: () =>
-              import("../vacancy/components/create-vacancy-filter/create-vacancy-filter.module")
+              import("../vacancy/components/create-vacancy-filter/module/create-vacancy-filter.module")
                 .then(m => m.CreateVacancyFilterModule)
           },
           {
             path: "create-information",
             loadChildren: () =>
-              import("../vacancy/components/create-vacancy-information/create-vacancy-information.module")
+              import("../vacancy/components/create-vacancy-information/module/create-vacancy-information.module")
                 .then(m => m.CreateVacancyInformationModule)
           }
         ]
       },
       {
         path: "company",
-        loadChildren: () => import("../company/company.module").then(m => m.CompanyModule),
+        loadChildren: () => import("../company/modules/company.module").then(m => m.CompanyModule),
       },
       {
         path: "vacancies",
-        loadChildren: () => import("../vacancy/components/my-vacancy/my-vacancy.module").then(m => m.MyVacancyModule)
+        loadChildren: () => import("../vacancy/components/my-vacancy/module/my-vacancy.module").then(m => m.MyVacancyModule)
       },
       {
         path: "analytic",
-        loadChildren: () => import("../analytic/analytic.module").then(m => m.AnalyticModule)
+        loadChildren: () => import("../analytic/module/analytic.module").then(m => m.AnalyticModule)
       },
       {
         path: "specialists",
-        loadChildren: () => import("../specialists/specialists.module").then(m => m.SpecialistsModule),
+        loadChildren: () => import("../specialists/modules/specialists.module").then(m => m.SpecialistsModule),
       },
       {
         path: "ui-kit",
@@ -53,7 +53,7 @@ const routes: Routes = [
       },
       {
         path: "vacancy-info",
-        component: SpecialistAnalyticComponent
+        component: VacancyInfoComponent
       }
     ],
     canActivateChild: [AccountGuard]

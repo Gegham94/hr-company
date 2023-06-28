@@ -3,7 +3,7 @@ import { BrowserModule, HammerModule } from "@angular/platform-browser";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { UiModule } from "../../ui-kit/ui.module";
-import { SharedModule } from "../../shared-modules/shared.module";
+import { SharedModule } from "../../shared/shared.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UiKitViewModule } from "../../ui-kit-view/ui-kit-view.module";
 import {
@@ -11,8 +11,8 @@ import {
   HttpClient,
   HttpClientModule,
 } from "@angular/common/http";
-import { JwtInterceptor } from "../../helpers/jwt.interceptor";
-import { HeaderModule } from "../header/header.module";
+
+import { HeaderModule } from "../header/modules/header.module";
 import {
   TranslateLoader,
   TranslateModule,
@@ -26,7 +26,8 @@ import {
   HammerGestureConfig,
   HAMMER_GESTURE_CONFIG,
 } from "@angular/platform-browser";
-import { CredentialsInterceptor } from "./http.interceptor";
+import {ModalComponent} from "../modal/modal.component";
+import { JwtInterceptor } from "src/app/shared/interceptors/jwt.interceptor";
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -44,7 +45,7 @@ export function httpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [AppComponent],
+    declarations: [AppComponent, ModalComponent],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

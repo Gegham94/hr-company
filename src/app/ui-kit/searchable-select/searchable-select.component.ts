@@ -17,9 +17,9 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {BehaviorSubject, debounceTime, distinctUntilChanged, filter, fromEvent, map, Subscription} from "rxjs";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {
-  SearchableSelectDataInterface,
-  StringOrNumber
-} from "../../modules/app/interfaces/searchable-select-data.interface";
+  ISearchableSelectData,
+  StringOrNumberType
+} from "../../shared/interfaces/searchable-select-data.interface";
 
 @Component({
   selector: "hr-searchable-select",
@@ -45,7 +45,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
   @Input("placeholder-text") public placeholderTextProps?: string = "";
   @Input("disabled") public disabledProps: boolean | string = false;
   @Input("search") public isSearch: boolean = false;
-  @Input("search-list") public searchListProps!: SearchableSelectDataInterface[] | null;
+  @Input("search-list") public searchListProps!: ISearchableSelectData[] | null;
   @Input("field-name") public fieldName!: string;
   @Input("edit") edit = false;
   @Input("loader") isLoader = false;
@@ -53,7 +53,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
   @Output() changes: EventEmitter<string> = new EventEmitter<string>();
   @Output() changeRequest: EventEmitter<string> = new EventEmitter<string>();
   // @ts-ignore
-  @Output() changedItemId: EventEmitter<StringOrNumber> = new EventEmitter<StringOrNumber>();
+  @Output() changedItemId: EventEmitter<StringOrNumberType> = new EventEmitter<StringOrNumberType>();
   @Output() uncheckedField: EventEmitter<string> = new EventEmitter<string>();
   @Output() isClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() scrollDown: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -61,7 +61,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
   @Output() clickOutside: EventEmitter<boolean> = new EventEmitter<boolean>();
   public value!: string;
   public isOpen = false;
-  public filteredSearchList!: SearchableSelectDataInterface[] | null;
+  public filteredSearchList!: ISearchableSelectData[] | null;
   public currentItemIndex: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public editable = false;
   public startSearch = false;
@@ -139,7 +139,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
 
           if (this.isSearch && this.searchListProps) {
             if (this.searchListProps && val) {
-              this.filteredSearchList = this.searchListProps.filter((item: SearchableSelectDataInterface): boolean =>
+              this.filteredSearchList = this.searchListProps.filter((item: ISearchableSelectData): boolean =>
                 item.value.toLowerCase().includes(val?.toLowerCase().trim()));
             } else {
               this.filteredSearchList = this.searchListProps;
@@ -168,7 +168,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
     this.filteredSearchList = this.searchListProps;
   }
 
-  public select(ev: Event | boolean, value: string, id: StringOrNumber = 0): void {
+  public select(ev: Event | boolean, value: string, id: StringOrNumberType = 0): void {
     this.multiSelectedListProps = this.multiSelectedListProps ?? [];
     const selectIndexId = this.multiSelectedListProps?.indexOf(value);
     this.changedItemId.emit(id);
@@ -235,7 +235,7 @@ export class SearchableSelectComponent implements OnInit, OnChanges, ControlValu
       this.changeRequest.emit(`${val}`);
       if (this.isSearch && this.searchListProps) {
         if (this.searchListProps && val) {
-          this.filteredSearchList = this.searchListProps.filter((item: SearchableSelectDataInterface): boolean =>
+          this.filteredSearchList = this.searchListProps.filter((item: ISearchableSelectData): boolean =>
             item.value.toLowerCase().includes(val?.toLowerCase().trim()));
         } else {
           this.filteredSearchList = this.searchListProps;

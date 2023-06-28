@@ -1,0 +1,13 @@
+<div class="wrapper">
+  <p class="label">Найти специалист процесс в процессе</p>
+  <div class="content">
+    <div class="progress-bar" [ngClass]="getProgressBarColor()">
+      <div class="fill" [ngStyle]="{ 'width.%': percentage }"></div>
+      <div class="text">{{ percentage }} %</div>
+    </div>
+<!--    <div class="loader-content">-->
+<!--      <div class="loader"></div>-->
+<!--    </div>-->
+  </div>
+</div>
+

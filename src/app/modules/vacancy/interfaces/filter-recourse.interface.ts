@@ -1,31 +1,31 @@
-import { ObjectType } from "src/app/shared-modules/types/object.type";
+import { ObjectType } from "src/app/shared/types/object.type";
 
-export interface FilterRecourseLocationCountries {
+export interface IFilterRecourseLocationCountries {
   key?: string;
-  data?: FilterRecourseLocationCountries[];
+  data?: IFilterRecourseLocationCountries[];
   total?: number;
 }
 
-export interface FilterRecourseLocationCities {
+export interface IFilterRecourseLocationCities {
   key?: string;
   data?: ObjectType;
   total?: number;
 }
 
-export interface FilterRecourseProgrammingLanguages {
+export interface IFilterRecourseProgrammingLanguages {
   uuid?: string;
   joinedName?: string;
   defaultName?: string;
-  data?: FilterRecourseProgrammingLanguages[];
+  data?: IFilterRecourseProgrammingLanguages[];
   total?: number;
 }
 
-export interface FilterRecourseProgrammingFrameworks {
+export interface IFilterRecourseProgrammingFrameworks {
   uuid?: string;
   joinedName?: string;
   defaultName?: string;
   programmingLanguageUuid?: string;
-  programming_language?: FilterRecourseProgrammingLanguages;
-  data?: FilterRecourseProgrammingFrameworks[];
+  programming_language?: IFilterRecourseProgrammingLanguages;
+  data?: IFilterRecourseProgrammingFrameworks[];
   total?: number;
 }

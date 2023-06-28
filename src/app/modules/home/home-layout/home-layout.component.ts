@@ -8,31 +8,29 @@ import {
   QueryList,
   ViewChildren,
 } from "@angular/core";
-import {AuthService} from "../../auth/auth.service";
+import {AuthService} from "../../auth/service/auth.service";
 import {NavigateButtonFacade} from "../../../ui-kit/navigate-button/navigate-button.facade";
-import {Router, Scroll} from "@angular/router";
+import {Router} from "@angular/router";
 import {HomeLayoutState} from "./home-layout.state";
 import {BehaviorSubject, Observable, of, switchMap, takeUntil, tap} from "rxjs";
-import {CompanyFacade} from "../../company/company.facade";
-import {VacancyFacade} from "../../vacancy/vacancy.facade";
-import {SpecialistFacade} from "../../specialists/specialist.facade";
-import {NavigateButton} from "./home-layout.interface";
-import {LocalStorageService} from "../../app/services/local-storage.service";
-import {CompanyInterface} from "../../app/interfaces/company.interface";
-import {RobotHelperService} from "../../app/services/robot-helper.service";
-import {RobotHelper} from "../../app/interfaces/robot-helper.interface";
-import {Unsubscribe} from "src/app/shared-modules/unsubscriber/unsubscribe";
+import {CompanyFacade} from "../../company/services/company.facade";
+import {LocalStorageService} from "../../../shared/services/local-storage.service";
+import {ICompany} from "../../../shared/interfaces/company.interface";
+import {RobotHelperService} from "../../../shared/services/robot-helper.service";
+import {RobotHelper} from "../../../shared/interfaces/robot-helper.interface";
+import {Unsubscribe} from "src/app/shared/unsubscriber/unsubscribe";
 import {ChatFacade} from "../../chat/chat.facade";
-import {BottomChatSettings, ChatHelperService} from "../../app/services/chat-helper.service";
-import {CompanyState} from "../../company/company.state";
-import {IConversation} from "../../chat/interfaces/conversations";
-import {MessageInterface} from "../../chat/chat.component";
+import {ChatHelperService} from "../../../shared/services/chat-helper.service";
+import {CompanyState} from "../../company/services/company.state";
 import {SocketService} from "../../chat/socket.service";
-import {WindowNotificationService} from "../../app/services/window-notification.service";
+import {WindowNotificationService} from "../../../shared/services/window-notification.service";
 import {ChatState} from "../../chat/chat.state";
-import {SignInFacade} from "../../auth/signin/signin.facade";
-import {RedirectUrls} from "../../app/constants/redirectRoutes.constant";
-import {BalanceService} from "../../balance/balance.service";
+import {SignInFacade} from "../../auth/signin/services/signin.facade";
+import {RedirectUrls} from "../../../shared/constants/redirectRoutes.constant";
+import {BalanceService} from "../../balance/services/balance.service";
+import {VacancyFacade} from "../../vacancy/services/vacancy.facade";
+import {SpecialistFacade} from "../../specialists/services/specialist.facade";
+import {BalanceFacade} from "../../balance/services/balance.facade";
 
 @Component({
   selector: "hr-home-layout",
@@ -55,24 +53,13 @@ export class HomeLayoutComponent extends Unsubscribe implements OnInit, OnDestro
     this.isCompletedVacancyCreate = data;
   });
 
-  public company!: CompanyInterface;
+  public company!: ICompany;
 
   public readonly isModalOpened: Observable<boolean> = this._chatFacade.getCandidatesPopupStatus$();
   public readonly isChatOpened: Observable<boolean> = this._chatFacade.getChatPopupStatus$();
   public readonly isLoader$: Observable<boolean> = this._signInFacade.getIsLoader$();
 
   @ViewChildren("slickItem") slickItem!: QueryList<ElementRef<HTMLDivElement>>;
-
-  public bottomChatStateSettings: Observable<BottomChatSettings> =
-    this._chatHelperService.getIsBottomChatOpen()
-    .pipe(tap(data => {
-      this.isChat = data.isOpen;
-    }));
-
-  public conversations$: Observable<IConversation[]> = this._chatFacade.getConversations$();
-  public isUnreadMessage$: Observable<boolean> = this._chatFacade.getIsUnreadMessage();
-
-  public isChat: boolean = false;
 
   public slideConfig = {
     slidesToShow: 5,
@@ -131,7 +118,9 @@ export class HomeLayoutComponent extends Unsubscribe implements OnInit, OnDestro
     private readonly _windowNotificationService: WindowNotificationService,
     private readonly _chatState: ChatState,
     private readonly _signInFacade: SignInFacade,
-    private readonly _balanceService: BalanceService
+    private readonly _balanceService: BalanceService,
+    private readonly _balanceFacade: BalanceFacade,
+    private readonly _specialistsFacade: SpecialistFacade
   ) {
     super();
     this._windowNotificationService.askPermission();
@@ -142,29 +131,23 @@ export class HomeLayoutComponent extends Unsubscribe implements OnInit, OnDestro
   }
 
   public ngOnInit(): void {
+    this.getTariffInfo();
     this._socketService.setSocket(this._authService.getToken || "");
-    this._companyFacade.setCompanyData$()
-      .pipe(takeUntil(this.ngUnsubscribe),
-        switchMap((company: CompanyInterface) => {
+    this._companyFacade.setCompanyData$().pipe(
+        takeUntil(this.ngUnsubscribe),
+        switchMap((company: ICompany) => {
           if (this._localStorage.getItem("tariffUuid")) {
             const uuid = JSON.parse(this._localStorage.getItem("tariffUuid"));
             if (company && company?.helper && uuid) {
               for (let i = 0; i < RedirectUrls.length; i++) {
                 for (let k = 0; k < company.helper.length; k++) {
                   if (company.helper[k].link === RedirectUrls[i][0] + "/isActive") {
-                    if (!Boolean(company.helper[k].hidden)) {
-                      return this._balanceService.buyTariff(uuid, RedirectUrls[i][1]).pipe(
-                        tap((payment) => {
-                          window.location.replace(payment["robokassa_url"]);
-                        })
-                      );
-                    } else {
-                      return this._balanceService.buyTariff(uuid).pipe(
-                        tap((payment) => {
-                          window.location.replace(payment["robokassa_url"]);
-                        })
-                      );
-                    }
+                    const url = !Boolean(company.helper[k].hidden) ? RedirectUrls[i][1] : undefined;
+                    return this._balanceService.buyTariff(uuid, url).pipe(
+                      tap((payment) => {
+                        window.location.replace(payment.robokassa_url);
+                      })
+                    );
                   }
                 }
               }
@@ -176,120 +159,21 @@ export class HomeLayoutComponent extends Unsubscribe implements OnInit, OnDestro
             return of(null);
           }
         })
-      ).subscribe((data) => {
+      )
+      .subscribe((data) => {
         if (data) {
           this._localStorage.removeData("tariffUuid");
-        }
-      }
-    );
-
-
-    this._router.events.subscribe((navigation) => {
-        if (navigation instanceof Scroll) {
-          this.company$
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe((data) => {
-              if (Object.keys(data).length) {
-                this.getConversations();
-              }
-            });
-        }
-      }
-    );
-
-    this._chatFacade.getConversations$()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(data => {
-        this.conversations$ = of(data);
-      });
-
-    this._chatFacade.getMessageFromCompanyToSpecialistHandler$()
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        switchMap((message: MessageInterface) => {
-          const conversations = this._chatFacade.getConversations();
-          const index = conversations?.findIndex(item =>
-            item.last_message?.conversationUuid === message.conversationUuid);
-          if (conversations && index > -1) {
-            const unread_conversation = {...conversations[index]};
-            conversations?.splice(index, 1);
-            conversations.unshift(unread_conversation);
-            conversations[0].last_message.messageStatus = false;
-            conversations[0].last_message.messageUuid = message?.uuid;
-            conversations[0].last_message.message = message?.message;
-            conversations[0].last_message.senderUuid = message?.senderUuid ?? "";
-          }
-          this._chatState.setChatMessage(message);
-          return of(conversations);
-        }),
-      )
-      .subscribe((conversations) => {
-        if (conversations) {
-          const unreadConversations =
-            conversations.filter((item) => !item.last_message.messageStatus && !!item.last_message.senderUuid);
-          if (unreadConversations.length) {
-            this._chatFacade.setIsUnreadMessage(true);
-          } else {
-            this._chatFacade.setIsUnreadMessage(false);
-          }
-          this._windowNotificationService.createNotification(
-            conversations[0].last_message.message,
-            unreadConversations.length
-          );
-          this.conversations$ = of(conversations);
-          this._chatFacade.setConversations(conversations);
         }
       });
 
 
     this._specialistFacade.updateSpecialistsNotificationCount();
-    this._homeLayoutState.isNavigationButtonsUpdate().subscribe(() => {
-      if (this._localStorage.getItem("company")) {
-        this.company = JSON.parse(this._localStorage.getItem("company"));
-        if (this.company?.logo) {
-          this._companyState.setCompanyLogo$(this.company.logo);
-        }
-      }
-      this.company?.helper?.forEach((page) => {
-        const button = this.buttonsStatuses.find((btn: NavigateButton) => btn["link"] === page["link"]);
-        if (button) {
-          button.status = page["hidden"];
-        }
-      });
-      this.cdr.detectChanges();
-    });
 
     this._specialistFacade.getSpecialistsNotificationCount$().subscribe((data: number) => {
       if (data) {
         this.notificationCount.next(data);
       }
     });
-  }
-
-  private getConversations() {
-    this._chatFacade
-      .emitGetConversationsRequest()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((conversations) => {
-        // this.conversations$ = of([]);
-        if (!!conversations && conversations?.length) {
-          const unreadConversations =
-            conversations.filter((item) => !item.last_message.messageStatus && !!item.last_message.senderUuid);
-          if (unreadConversations.length) {
-            this._chatFacade.setIsUnreadMessage(true);
-          } else {
-            this._chatFacade.setIsUnreadMessage(false);
-          }
-          this._windowNotificationService.createNotification("", unreadConversations.length);
-          this._chatFacade.setConversations(conversations);
-          this.conversations$ = of(conversations);
-          this.cdr.detectChanges();
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe();
   }
 
   public get isLogged(): boolean {
@@ -307,21 +191,15 @@ export class HomeLayoutComponent extends Unsubscribe implements OnInit, OnDestro
     this._robotHelperService.isRobotOpen$.next(true);
   }
 
-  public openChat(): void {
-    this.isChat = !this.isChat;
-    this._chatFacade.setConversation(null);
-    if (this.isChat) {
-      this._chatHelperService.isBottomChatOpen$.next({
-        isOpen: true,
-        isMessagesContent: false,
-        isConversationNeedSort: true
-      });
-    } else {
-      this._chatHelperService.isBottomChatOpen$.next({
-        isOpen: false,
-        isMessagesContent: false,
-        isConversationNeedSort: true
-      });
-    }
+  public openConversationModals(): void {
+    this._specialistFacade.openConversationModals$.next();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe();
+  }
+
+  private getTariffInfo(): void {
+    this._balanceFacade.setAllBalanceTariff().pipe(takeUntil(this.ngUnsubscribe)).subscribe();
   }
 }

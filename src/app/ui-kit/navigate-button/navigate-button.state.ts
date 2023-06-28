@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable, of} from "rxjs";
-import {NavigateButtonInterface, NavigationButton} from "../../modules/app/interfaces/navigateButton.interface";
+import {NavigateButtonInterface, NavigationButton} from "../../shared/interfaces/navigateButton.interface";
 import {TranslateService} from "@ngx-translate/core";
-import {RobotHelperEnum} from "../../modules/app/constants/robot-helper.enum";
+import {RobotHelperEnum} from "../../shared/enum/robot-helper.enum";
 
 
 @Injectable({

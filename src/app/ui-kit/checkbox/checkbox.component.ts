@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, Input, Output, ViewEncapsulation} from "@angular/core";
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: "hr-checkbox",
   templateUrl: "./checkbox.component.html",
   styleUrls: ["./checkbox.component.scss"],
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -17,7 +17,6 @@
             [formControlName]="'country'"
             [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.COUNTRY' | translate"
             [isEditModeActive]="edit"
-            [isLoading]="(isSelectionLoader | async) ?? false"
             [options]="countryOptions$ | async"
             [valid]="getFormControlByName('country').touched ? getFormControlByName('country').valid : undefined"
           ></hr-search-select>
@@ -28,7 +27,8 @@
             [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.CITY' | translate"
             [isInputDisabled]="isCityDisabled"
             [isEditModeActive]="edit"
-            [isLoading]="(isSelectionLoader | async) ?? false"
+            [isLoading]="isSelectionLoader.value"
+            [dataInputAsString]="true"
             [options]="cityOptions$ | async"
             [valid]="getFormControlByName('city').touched ? getFormControlByName('city').valid : undefined"
           ></hr-search-select>
@@ -57,7 +57,7 @@
             [label]="'VACANCY.SEARCH_SPECIALIST.FILTER.VACANCY_LANGUAGE' | translate"
             [isMultiSelect]="true"
             [isEditModeActive]="edit"
-            [isLoading]="(isSelectionLoader | async) ?? false"
+            [isLoading]="isSelectionLoader.value"
             [options]="programmingLanguageOptions$ | async"
             [valid]="getFormControlByName('programmingLanguages').touched ? getFormControlByName('programmingLanguages').valid : undefined"
           ></hr-search-select>
@@ -70,7 +70,7 @@
             [isMultiSelect]="true"
             [isEditModeActive]="edit"
             [isInputDisabled]="!createVacancyForm.getFormControl('programmingLanguages', 'searchedSettings').valid"
-            [isLoading]="(isSelectionLoader | async) ?? false"
+            [isLoading]="isSelectionLoader.value"
             [options]="frameworkOptions$ | async"
             [valid]="getFormControlByName('programmingFrameworks').touched ? getFormControlByName('programmingFrameworks').valid : undefined"
           ></hr-search-select>

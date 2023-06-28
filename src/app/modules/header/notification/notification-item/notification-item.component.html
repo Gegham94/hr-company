@@ -1,0 +1,26 @@
+<div class='company-notification-item'
+     *ngIf="hasNotification > 0 && notificationItem; else doesNotHaveNotification"
+     (click)="selectNotification(notificationItem.uuid)"
+     [ngClass]='{"company-notification-item--unread": !notificationItem.viewed }'>
+  <div class='notification-item-logo'> S </div>
+  <div class='notification-item-description-content'>
+    <div class='notification-item-description'>
+      <p class="notification-item-description-vacancy_name" *ngIf="notificationItem.info?.vacancyInfo"> {{notificationItem.info.vacancyInfo.name}}</p>
+      <p> {{notificationItem.info.content}}</p>
+    </div>
+
+    <div class='notification-item-date'>
+      <p *ngIf="notificationItem.viewed;else elseBlock ">
+        {{notificationItem.updatedAt | dateDifference:end}}
+      </p>
+
+      <ng-template #elseBlock>
+        {{notificationItem.createdAt | dateDifference:end}}
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<ng-template #doesNotHaveNotification>
+  <hr-empty-content></hr-empty-content>
+</ng-template>

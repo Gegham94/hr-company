@@ -1,4 +1,4 @@
-export interface MyVacancyFilterInterface {
+export interface IMyVacancyFilter {
   name_query?: string;
   from?: string;
   to?: string;

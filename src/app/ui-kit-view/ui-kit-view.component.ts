@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { ButtonTypeEnum } from "../modules/app/constants/button-type.enum";
-import { NavigateButtonTypesEnum } from "../modules/app/constants/navigate-button-types.enum";
-import { TagTypesEnum } from "../modules/app/constants/tag-types.enum";
-import { InputStatusEnum } from "../modules/app/constants/input-status.enum";
-import { ListTypesEnum } from "../modules/app/constants/list-types.enum";
-import { SearchableSelectDataInterface } from "../modules/app/interfaces/searchable-select-data.interface";
-import { VacancyInterface } from "../modules/app/interfaces/vacancy.interface";
+import { ButtonTypeEnum } from "../shared/enum/button-type.enum";
+import { NavigateButtonTypesEnum } from "../shared/enum/navigate-button-types.enum";
+import { TagTypesEnum } from "../shared/enum/tag-types.enum";
+import { InputStatusEnum } from "../shared/enum/input-status.enum";
+import { ListTypesEnum } from "../shared/enum/list-types.enum";
+import { ISearchableSelectData } from "../shared/interfaces/searchable-select-data.interface";
+import { IVacancy } from "../shared/interfaces/vacancy.interface";
 
 @Component({
   selector: "hr-ui-kit-view",
@@ -25,7 +25,7 @@ export class UiKitViewComponent {
   public isModalOpen: boolean = false;
   title = "hr-bot";
 
-  public searchList: SearchableSelectDataInterface[] = [
+  public searchList: ISearchableSelectData[] = [
     { id: 0, value: "armenia", displayName: "Armenia" },
     { id: 1, value: "russia", displayName: "Russia" },
     { id: 2, value: "angola", displayName: "Angola" },
@@ -38,7 +38,7 @@ export class UiKitViewComponent {
     this.isModalOpen = (val !== undefined) ? val : !this.isModalOpen;
   }
 
-  public vacancyAnalyticList: VacancyInterface = {
+  public vacancyAnalyticList: IVacancy = {
     uuid: "",
     name: "Angular  Developer   dev",
     deadlineDate: "22/07/2021",

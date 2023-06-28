@@ -15,9 +15,7 @@
       <table class='my-vacancy__list-table'>
         <tr class='my-vacancy__list-header'>
           <th class='my-vacancy__element my-vacancy__element_name'>{{"MY_VACANCY.NAME" | translate}}</th>
-          <!-- <th class='my-vacancy__element my-vacancy__element_hide_header'></th> -->
           <th class='my-vacancy__element my-vacancy__element_progress'>{{"MY_VACANCY.END_DATE" | translate}}</th>
-          <!-- <th class='my-vacancy__element my-vacancy__element_hide_header'></th> -->
           <th class='my-vacancy__element my-vacancy__element_analytic'>{{"MY_VACANCY.ANALYTICS" | translate}}</th>
           <th class='my-vacancy__element my-vacancy__element_hide_header'></th>
           <th class='my-vacancy__element my-vacancy__element_payment'>{{"MY_VACANCY.PAYMENT" | translate}} </th>
@@ -28,7 +26,6 @@
           <td class='vacancy__name'
               (click)='openVacancyInfoPage(vacancyProps)'
           >{{vacancyProps.name}}</td>
-          <!-- <td class='vacancy__status'></td> -->
           <td class='vacancy__progress'>
             <hr-progress-bar
               [text]='progress(vacancyProps)'
@@ -39,27 +36,16 @@
               [type-props]='progressTypeProps.small'
             ></hr-progress-bar>
           </td>
-          <!-- <td class='vacancy__status'></td> -->
           <td class='vacancy__image'
               style="display: table-cell; text-align: center"
               [ngClass]='{"vacancy__image--disable": vacancyProps.payedStatus !== "completed"}'
               (click)='openVacancyAnalytics(vacancyProps)'
           >
-            <svg widtd="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M24.3129 12.4555H15.6485C15.2698 12.4555 14.9612 12.7641 14.9612 13.1427C14.9612 13.3356 15.0431 13.5093 15.1709 13.6346L21.272 19.7356C21.3973 19.8707 21.5783 19.9552 21.7761 19.9552C22.0148 19.9552 22.2245 19.8346 22.3475 19.6513C23.8475 17.9102 24.8121 15.6988 24.9858 13.2656C24.9955 13.2247 25.0003 13.1837 25.0003 13.1426C25.0003 12.7641 24.694 12.4555 24.3129 12.4555Z"
-                fill="#08A652"/>
-              <path
-                d="M13.0318 0C12.6531 0.00231504 12.3469 0.308672 12.3469 0.687259V10.3164C12.3469 10.6974 12.6531 11.0061 13.0318 11.0061H22.6633C23.042 11.0061 23.3506 10.6974 23.3506 10.3164C23.0105 4.77485 18.5757 0.34008 13.0318 0Z"
-                fill="#3362AB"/>
-              <path
-                d="M18.325 19.1738L11.2208 12.0696C11.1002 11.9466 11.0279 11.7753 11.0279 11.5897L11.0254 1.55537C11.0254 1.17678 10.7192 0.870499 10.3405 0.870499C4.56981 1.22262 0 6.0166 0 11.8743C0 17.9633 4.93644 22.9021 11.0254 22.9021C13.8034 22.9021 16.3403 21.8748 18.2792 20.1794C18.4287 20.0539 18.5228 19.866 18.5228 19.6561C18.5228 19.4704 18.4479 19.2992 18.325 19.1738Z"
-                fill="#016F5D"/>
-            </svg>
+            <img [src]="ANALYITIC_ICON">
           </td>
           <td class='vacancy__status'></td>
           <td class='button'>
-            <button *ngIf=" vacancyProps.payedStatus===filterByStatusEnum.COMPLETED"
+            <button *ngIf="vacancyProps.payedStatus===filterByStatusEnum.COMPLETED && !checkIsRepay(vacancyProps)"
                     class="completed-button">Оплачен
             </button>
             <button *ngIf="vacancyProps.payedStatus===filterByStatusEnum.NOT_PAYED
@@ -71,7 +57,7 @@
             <button
               class="archived-button" (click)="buyNotPayedVacancy(vacancyProps.uuid)"
               *ngIf="checkIsRepay(vacancyProps)">
-              Переоплатить
+              {{"MY_VACANCY.OVERPAY" | translate}}
             </button>
           </td>
 
@@ -81,6 +67,7 @@
   </div>
   <div class='my-vacancy__pagination'>
     <hr-pagination *ngIf='vacanciesCount > 1'
+                   [updatePagination]="updatePagination.value"
                    (selectPagination)="getSelectedPaginationValue($event)"
                    [total-page-count]='vacanciesCount'></hr-pagination>
   </div>
@@ -96,18 +83,18 @@
 >
   <div class='add-vacancy-description__modal'>
     <div class='add-vacancy-description__modal-title'>
-      <span>Вы уверены, что хотите оплатить за вакансию?</span>
+      <span>{{"MY_VACANCY.PAY_JOB" | translate}}</span>
     </div>
     <div>
       <div class='add-vacancy-description__modal-description'>
-        <p>У вас оплаченных вакансии {{tariffCount}} </p>
+        <p>{{"MY_VACANCY.PAID_VACANCIES" | translate}} {{tariffCount}} </p>
       </div>
       <div class="add-vacancy-description__modal-button-content">
         <button class="add-vacancy-description__modal-field"
-                (click)="questionForBuyVacancyField ()">НЕТ
+                (click)="questionForBuyVacancyField ()">{{"MY_VACANCY.NO" | translate}}
         </button>
         <button class="add-vacancy-description__modal-accept"
-                (click)=" questionForBuyVacancyAccept()">ДА
+                (click)=" questionForBuyVacancyAccept()">{{"MY_VACANCY.YES" | translate}}
         </button>
       </div>
     </div>
@@ -123,7 +110,7 @@
       <span>{{paymentMessage | async}}</span>
     </div>
     <div class='add-vacancy-description__modal-description'>
-      <p>благодарим за использование нашей услуги</p>
+      <p>{{"MY_VACANCY.THANKS" | translate}}</p>
     </div>
   </div>
 </hr-modal>

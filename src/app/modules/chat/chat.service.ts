@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { MessageInterface } from "./chat.component";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { ObjectType } from "../../shared-modules/types/object.type";
+import { ObjectType } from "../../shared/types/object.type";
 import { AcceptOrDeclineEnum } from "./constants/accept-or-decline.enum";
 import { IConversation } from "./interfaces/conversations";
 import { SocketService } from "./socket.service";
+import { IMessage } from "./interfaces/messages";
 
 @Injectable({
   providedIn: "root",
@@ -19,14 +19,14 @@ export class ChatService {
   constructor(private readonly _chatSocketService: SocketService, private readonly _http: HttpClient) {
   }
 
-  public updateConversationMessage(messageUuid: string, messageData: any) {
-    return this._http.put(this.UPDATE_COMPANY_CONVERSATION_API, {
+  public updateConversationMessage(messageUuid: string, messageData: { status: boolean }): Observable<IMessage> {
+    return this._http.put<IMessage>(this.UPDATE_COMPANY_CONVERSATION_API, {
       messageUuid,
       messageData,
     });
   }
 
-  public emitGetConversationsRequest$(companyUuid: string): Observable<IConversation[]> {
+  public getConversationsRequest$(companyUuid: string): Observable<IConversation[]> {
     return this._http.get<IConversation[]>(this.GET_COMPANY_CONVERSATION_API, {
       params: {
         companyUuid,
@@ -34,22 +34,21 @@ export class ChatService {
     });
   }
 
-  public emitConversationCompanyToSpecialist(companyUuid: string, specialistUuid: string, foundSpecialistUuid: string) {
+  public emitConversationCompanyToSpecialist(companyUuid: string, specialistUuid: string, foundSpecialistUuid: string): void {
     this._chatSocketService.getSocket().emit("emitConversationCompanyToSpecialist", {
       companyUuid,
       specialistUuid,
       foundSpecialistUuid,
     });
-    console.log("conversation is created....");
   }
 
-  public getConversationMessagesRequest(conversationUuid: string): Observable<MessageInterface[]> {
-    return this._http.get<MessageInterface[]>(this.GET_CONVERSATION_MESSAGES_API, {
+  public getConversationMessagesRequest(conversationUuid: string): Observable<IMessage[]> {
+    return this._http.get<IMessage[]>(this.GET_CONVERSATION_MESSAGES_API, {
       params: { conversationUuid },
     });
   }
 
-  public getMessageFromSpecialistToCompanyHandler$(): Observable<MessageInterface> {
+  public getMessageFromSpecialistToCompanyHandler$(): Observable<IMessage> {
     return this._chatSocketService.getSocket().fromEvent("getMessageFromSpecialistToCompany");
   }
 
@@ -64,7 +63,7 @@ export class ChatService {
     });
   }
 
-  public emitSendMessageFromCompanyToSpecialist(message: MessageInterface) {
+  public emitSendMessageFromCompanyToSpecialist(message: IMessage): void {
     this._chatSocketService.getSocket().emit("emitSendMessageFromCompanyToSpecialist", message);
   }
 

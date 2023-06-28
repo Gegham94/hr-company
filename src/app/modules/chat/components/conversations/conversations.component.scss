@@ -1,0 +1,76 @@
+@import "src/assets/variables/variables";
+@import "src/assets/mixins/util/util";
+
+.conversations {
+  height: 100%;
+
+  .specialists {
+    min-width: 50px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-right: 1px solid $light-gray;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    overflow: auto;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $light-gray;
+      border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $light-gray;
+    }
+
+    &::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+      background-color: $light-gray;
+    }
+
+    @media screen and (max-width: 750px) {
+      justify-content: flex-start;
+      flex-direction: row;
+      border-radius: 0px;
+      border-bottom: 1px solid $light-gray;
+    }
+
+
+  }
+
+  .red_circle {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    background-color: #FF4560;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+
+  .specialist {
+    @include flex-center;
+    position: relative;
+
+    img {
+      width: 41px;
+      height: 41px;
+      margin: 15px 10px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 10px $light-gray;
+    }
+  }
+
+  .isActive {
+    img {
+      border: 3px solid $green;
+      box-shadow: none;
+      pointer-events: none;
+    }
+  }
+}
+
